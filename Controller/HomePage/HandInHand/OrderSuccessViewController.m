@@ -8,7 +8,7 @@
 
 #import "OrderSuccessViewController.h"
 #import "RentSelfViewController.h"
-#import "HandInHandViewController.h"
+#import "HandInHandSViewController.h"
 #import "MyRentViewController.h"
 #import "MyRentPersonViewController.h"
 @interface OrderSuccessViewController ()

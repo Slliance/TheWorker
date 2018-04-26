@@ -7,7 +7,7 @@
 //
 
 #import "HandInHandHeadView.h"
-#import "HandInHandViewController.h"
+#import "HandInHandSViewController.h"
 #import "UIView+HYExtension.h"
 #import "WorkerDetailViewController.h"
 @implementation HandInHandHeadView
@@ -91,7 +91,7 @@
         next = [next nextResponder];
     }
     BannerModel *model = [self.bannerArr objectAtIndex:pages.currentIndex];
-    HandInHandViewController *homevc = (HandInHandViewController *)next;
+    HandInHandSViewController *homevc = (HandInHandSViewController *)next;
     [self bannerSkipActionWithModel:model skipVC:homevc];
    
     NSLog(@"pages selected, the current index is %zd", pages.currentIndex);

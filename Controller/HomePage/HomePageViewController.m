@@ -15,7 +15,7 @@
 #import "WelfareViewController.h"
 #import "CareViewController.h"
 #import "BusinessViewController.h"
-#import "HandInHandViewController.h"
+#import "HandInHandSViewController.h"
 #import "WantedJobViewController.h"
 #import "HomeViewModel.h"
 #import "BaseDataViewModel.h"
@@ -95,7 +95,7 @@
                 break;
                 case 2:
             {
-                HandInHandViewController *vc = [[HandInHandViewController alloc]init];
+                HandInHandSViewController *vc = [[HandInHandSViewController alloc]init];
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 
             }
