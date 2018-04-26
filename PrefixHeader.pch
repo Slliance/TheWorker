@@ -1,0 +1,147 @@
+//
+//  PrefixHeader.pch
+//  TheWorker
+//
+//  Created by yanghao on 8/9/17.
+//  Copyright © 2017 huying. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "UIColor+ValueString.h"
+#import "UIImageView+AFNetworking.h"
+#import "UIImageView+Extension.h"
+#import "AFNetworking.h"
+#import "SVProgressHUD.h"
+#import "CustomTool.h"
+#import "UserDefaults.h"
+#import "H_Single_PickerView.h"
+#import "H_YearMonthDay_PickerView.h"
+#import "singletonClass.h"
+#import "HYNetwork.h"
+#import "HYNetWorkHead.h"
+#import "HYNotification.h"
+#import "NSObject_Extension.h"
+#import "NSString+MD5.h"
+#import "UIViewControler+Extension.h"
+#import "IQKeyboardManager.h"
+#import "FMDB.h"
+#import "FMDBHandle.h"
+//#import "EaseUI.h"
+#import "UIButton+SSEdgeInsets.h"
+#import "MJRefresh.h"
+
+#import <NIMSDK/NIMSDK.h>
+#import <NIMAVChat/NIMAVChat.h>
+#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "NTESGlobalMacro.h"
+
+#import "NIMKit.h"
+#import <Masonry.h>
+//定义返回请求数据的block类型
+typedef void (^ReturnValueBlock) (id returnValue);
+typedef void (^ErrorCodeBlock) (id errorCode);
+typedef void (^SuccessCodeBlock) (id successCode);
+#ifdef DEBUG
+static DDLogLevel ddLogLevel = DDLogLevelVerbose;
+#else
+static DDLogLevel ddLogLevel = DDLogLevelInfo;
+#endif
+
+#define NTES_USE_CLEAR_BAR - (BOOL)useClearBar{return YES;}
+
+#define NTES_FORBID_INTERACTIVE_POP - (BOOL)forbidInteractivePop{return YES;}
+
+
+#define NAGA_BACKGROUND_COLOR               @"#699cf1"
+#define NAGA_TITLE_COLOR                    @"#1073db"
+
+/**
+ *  导航栏标题颜色
+ */
+#define TABBAR_ITEMTITLE_COLOR              @"#ffffff"
+//分享宣传页
+#define URL_SHARE_GENERAL                   @"jhgk/rest/Share/sharePage.jsp"
+
+
+#define token_key                           @"token"
+#define im_token_key                        @"im_token"
+/**
+ *  全局字体大小
+ */
+#define FONT 13
+
+/**
+ *  设置字体大小
+ */
+#define FONT_SIZE(_font) [UIFont systemFontOfSize:_font]
+/**
+ *  屏幕宽度
+ */
+#define ScreenWidth [UIScreen mainScreen].bounds.size.width
+/**
+ *  屏幕高度
+ */
+#define ScreenHeight [UIScreen mainScreen].bounds.size.height
+/**
+ *  封装颜色
+ */
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+#define DSColorMake(r, g, b)            [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1]
+#define DSColorAlphaMake(r, g, b, a)    [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
+#define DSColorFromHex(rgb)     [UIColor colorWithRed:((float)((rgb & 0xFF0000) >> 16))/255.0 green:((float)((rgb & 0xFF00) >> 8))/255.0 blue:((float)(rgb & 0xFF))/255.0 alpha:1.0]
+#define DSColorAlphaFromHex(rgb,a)     [UIColor colorWithRed:((float)((rgb & 0xFF0000) >> 16))/255.0 green:((float)((rgb & 0xFF00) >> 8))/255.0 blue:((float)(rgb & 0xFF))/255.0 alpha:a]
+
+/**
+ *   定义颜色
+ */
+
+#define color_all_custom_red                @"ff460e"
+
+//数据库文件名字
+#define sql_file_name                       @"address_citys.db"
+
+//SQL语句
+
+//获取所有的省份数据列表
+#define sql_get_province        @"select * from addr_position where pcode = 0"
+
+//获取对应省份的城市列表
+#define sql_get_city_by_code    @"select * from addr_position where pcode = %@"
+
+//统计数量
+#define sql_get_count_by_code   @"select count (*) from addr_position where pcode = %@"
+
+
+/**
+ *  默认图片，定义
+ */
+//首页
+#define  placeholderImage_home_banner                   @"bg_no_pictures"
+//头像
+#define  placeholderImage_user_headimg                  @"icon_personal_center_default_avatar"
+//详情
+#define  placeholderImage_shop_detail                   @"img_details_default"
+//封面
+#define  placeholderImage_shop_logo                     @"img_goods_default"
+
+
+
+//定位
+#define user_location_info                              @"user_location_info"
+//定位城市
+#define user_location_city                              @"user_location_city"
+//选择的城市
+#define user_choose_city                                @"user_choose_city"
+#endif
+
+
+#endif /* PrefixHeader_pch */

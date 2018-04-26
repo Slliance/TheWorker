@@ -1,0 +1,243 @@
+//
+//  HouseListSQ.m
+//  Sotao
+//
+//  Created by 李新 on 14-10-7.
+//  Copyright (c) 2014年 搜淘APP. All rights reserved.
+//
+
+#import "HouseListSQ.h"
+#import "FMDatabase.h"
+#import "FMDatabaseAdditions.h"
+@implementation HouseListSQ
+
+-(void)saveHouseList:(NSDictionary *)list Contrast:(int)contrast
+{
+    if ([list isKindOfClass:[NSNull class]] || [list count] == 0) {
+        list = [[NSDictionary alloc] init];
+    }
+    NSString *name = [NSString stringWithFormat:@"%@",[list objectForKey:@"name"]];//999999
+    name = [self changeString:name AddString1:@"" AddString2:@""];
+    NSString *hid = [NSString stringWithFormat:@"%@",[list objectForKey:@"hid"]];
+    hid = [self changeString:hid AddString1:@"" AddString2:@""];
+
+    //地址
+    NSString *address = [NSString stringWithFormat:@"%@",[list objectForKey:@"address"]];
+    address = [self changeString:address AddString1:@"" AddString2:@""];
+
+    //开盘时间
+    NSString *openingtime = [NSString stringWithFormat:@"%@",[list objectForKey:@"openingtime"]];
+    openingtime = [self changeString:openingtime AddString1:@"" AddString2:@""];
+    
+    NSString *submitTime = [NSString stringWithFormat:@"%@", [list objectForKey:@"submittedtime"]];
+    submitTime = [self changeString:submitTime
+                         AddString1:@""
+                         AddString2:@""];
+
+    //特色
+    NSString *features = [NSString stringWithFormat:@"%@",[list objectForKey:@"features"]];
+    features = [self changeString:features AddString1:@"" AddString2:@""];
+
+    //楼盘价格
+    NSString *averageprice1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"averageprice"]];
+    averageprice1 = [self changeString:averageprice1 AddString1:@"" AddString2:@""];
+    int averageprice = [averageprice1 intValue];//averageprice	int	12356	12356
+
+    //门头图片
+    NSString *imgurl = [NSString stringWithFormat:@"%@",[list objectForKey:@"imgurl"]];
+    imgurl = [self changeString:imgurl AddString1:@"" AddString2:@""];
+
+    //可售套数
+    NSString *yesmarket1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"yesmarket"]];
+    yesmarket1 = [self changeString:yesmarket1 AddString1:@"" AddString2:@""];
+    int yesmarket = [yesmarket1 intValue];
+    
+    NSString *business = [list objectForKey:@"business"];
+    //标签 1、热门2、推荐
+    NSString *tagtype1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"tagtype"]];
+    tagtype1 = [self changeString:tagtype1 AddString1:@"" AddString2:@""];
+    int tagtype = [tagtype1 intValue];
+    //客服在线标记
+    NSString *dcrc1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"dcrc"]];
+    dcrc1 = [self changeString:dcrc1 AddString1:@"" AddString2:@""];
+    int dcrc = [dcrc1 intValue];
+    //视频
+    NSString *video1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"video"]];
+    video1 = [self changeString:video1 AddString1:@"" AddString2:@""];
+    NSString *hasdwell1 = [NSString stringWithFormat:@"%@",[[list objectForKey:@"htypes"] objectForKey:@"hasdwell"]];
+    hasdwell1 = [self changeString:hasdwell1 AddString1:@"" AddString2:@""];
+    NSString *hasshop1 = [NSString stringWithFormat:@"%@",[[list objectForKey:@"htypes"] objectForKey:@"hasshop"]];
+    hasshop1 = [self changeString:hasshop1 AddString1:@"" AddString2:@""];
+    NSString *hasoffice1 = [NSString stringWithFormat:@"%@",[[list objectForKey:@"htypes"] objectForKey:@"hasoffice"]];
+    hasoffice1 = [self changeString:hasoffice1 AddString1:@"" AddString2:@""];
+    NSString *htype1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"htype"]];
+    htype1 = [self changeString:htype1 AddString1:@"" AddString2:@""];
+    NSString *state1 = [NSString stringWithFormat:@"%@",[list objectForKey:@"state"]];
+    state1 = [self changeString:state1 AddString1:@"" AddString2:@""];
+
+    int video = [video1 intValue];
+    int hasdwell  = [hasdwell1 intValue];
+    int hasshop   = [hasshop1 intValue];
+    int hasoffice = [hasoffice1 intValue];
+
+    int htype = [htype1 intValue];
+    int state = [state1 intValue];
+    NSString *coord = [NSString stringWithFormat:@"%@",[list objectForKey:@"coord"]];
+    coord = [self changeString:coord AddString1:@"" AddString2:@""];
+    NSString *areaname = [NSString stringWithFormat:@"%@",[list objectForKey:@"areaname"]];
+    areaname = [self changeString:areaname AddString1:@"" AddString2:@""];
+
+    //paths： ios下Document路径，Document为ios中可读写的文件夹
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    //dbPath： 数据库路径，在Document中。
+    NSString *dbPath = [documentDirectory stringByAppendingPathComponent:@"HouseList.db"];
+    //创建数据库实例 db  这里说明下:如果路径中不存在"Test.db"的文件,sqlite会自动创建"Test.db"
+    FMDatabase *db= [FMDatabase databaseWithPath:dbPath] ;
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        return ;
+    }
+//    [db setShouldCacheStatements:YES];
+#pragma mark - 创建表
+    /*
+     *创建一个名为HouseList的表，
+     *有两个字段分别为string类型的Name，integer类型的 Age Age
+     */
+    
+    BOOL b = [db executeUpdate:@"CREATE TABLE HouseList (isContrast integer,name text,hid text,address text,openingtime text,features text,averageprice integer,imgurl text,yesmarket integer,tagtype integer,dcrc integer,video integer,htype integer,hasdwell integer,hasoffice integer,hasshop integer,state integer,coord text,areaname text,addtime text,business text,submittedtime text)"];
+    if (b) {
+        NSLog(@"创建数据库成功");
+    }
+    /*
+     *.插入
+     */
+#pragma mark - 插入数据
+    
+    //返回数据库中第一条满足条件的结果
+    NSString *SQLStr2 = [NSString stringWithFormat:@"SELECT name FROM HouseList WHERE hid='%@'",hid];
+    
+    NSString *aa=[db stringForQuery:SQLStr2];
+    if (aa) {
+        NSLog(@"更新数据");
+        
+        NSString *str = [NSString stringWithFormat:@"UPDATE HouseList SET isContrast = '%d' ,name = '%@',address = '%@',openingtime = '%@',features = '%@',averageprice = '%d',imgurl = '%@',yesmarket = '%d',tagtype = '%d',dcrc = '%d',video = '%d',htype = '%d',hasdwell = '%d',hasoffice = '%d',hasshop = '%d',state = '%d',coord = '%@',areaname = '%@',addtime = '%@',business = '%@', submittedtime='%@' WHERE hid = '%@'",contrast,name,address,openingtime,features,averageprice,imgurl,yesmarket,tagtype,dcrc,video,htype,hasdwell,hasoffice,hasshop,state,coord,areaname,[NSString stringWithFormat:@"%@",[NSDate date]],business, submitTime,hid];
+        BOOL suc = [db executeUpdate:str];
+        if (suc) {
+            NSLog(@"更新成功");
+        }
+        
+//        [db executeUpdate:@"delete from HouseList where hid='%@'",hid];
+//        
+//        	[db close];
+    
+    }
+    else{//插入
+        if ([db open]) {
+            NSString *sqlstr = [NSString stringWithFormat:@"INSERT INTO HouseList(isContrast,name,hid,address,openingtime,features,averageprice,imgurl,yesmarket,tagtype,dcrc,video,htype,hasdwell,hasoffice,hasshop,state,coord,areaname,addtime,business,submittedtime) VALUES (%d,'%@','%@','%@','%@','%@','%d','%@','%d','%d','%d','%d','%d','%d','%d','%d','%d','%@','%@','%@','%@','%@')",contrast,name,hid,address,openingtime,features,averageprice,imgurl,yesmarket,tagtype,dcrc,video,htype,hasdwell,hasoffice,hasshop,state,coord,areaname,[NSString stringWithFormat:@"%@",[NSDate date]],business, submitTime];
+            
+            BOOL issucces = [db executeUpdate:sqlstr];
+            if (issucces) {
+                NSLog(@"插入成功");
+            }
+        }
+    }
+}
+#pragma mark - 房屋对比数据列表
+-(NSMutableArray *)readHouseContrastList
+{
+    //paths： ios下Document路径，Document为ios中可读写的文件夹
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    
+    //dbPath： 数据库路径，在Document中。
+    NSString *dbPath = [documentDirectory stringByAppendingPathComponent:@"HouseList.db"];
+    
+    //创建数据库实例 db  这里说明下:如果路径中不存在"Test.db"的文件,sqlite会自动创建"Test.db"
+    FMDatabase *db= [FMDatabase databaseWithPath:dbPath] ;
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        return nil;
+    }
+    [db setShouldCacheStatements:YES];//缓存
+
+    //返回全部查询结果
+    NSMutableArray *list2222 = [[NSMutableArray alloc] init];
+    FMResultSet *rs=[db executeQuery:@"SELECT * FROM HouseList WHERE isContrast = 1 order by addtime desc"];
+    
+    while ([rs next]){
+        [list2222 addObject:[rs resultDictionary]];
+    }
+    [rs close];
+    return list2222;
+}
+
+- (void)deleteHistory:(NSString*)hid
+{
+    //paths： ios下Document路径，Document为ios中可读写的文件夹
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    //dbPath： 数据库路径，在Document中。
+    NSString *dbPath = [documentDirectory stringByAppendingPathComponent:@"HouseList.db"];
+    //创建数据库实例 db  这里说明下:如果路径中不存在"Test.db"的文件,sqlite会自动创建"Test.db"
+    FMDatabase *db= [FMDatabase databaseWithPath:dbPath] ;
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+    }
+    [db setShouldCacheStatements:YES];
+    [db executeStatements:[NSString stringWithFormat:@"DELETE FROM HouseList WHERE isContrast=3 and hid='%@'", hid]];
+}
+
+#pragma mark - 历史列表(我的搜淘)
+-(NSMutableArray *)readHouseHistoryList
+{
+    //paths： ios下Document路径，Document为ios中可读写的文件夹
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    //dbPath： 数据库路径，在Document中。
+    NSString *dbPath = [documentDirectory stringByAppendingPathComponent:@"HouseList.db"];
+    //创建数据库实例 db  这里说明下:如果路径中不存在"Test.db"的文件,sqlite会自动创建"Test.db"
+    FMDatabase *db= [FMDatabase databaseWithPath:dbPath] ;
+    if (![db open]) {
+        NSLog(@"Could not open db.");
+        return nil;
+    }
+    [db setShouldCacheStatements:YES];
+    
+    //返回一条数据
+    FMResultSet *aa=[db executeQuery:@"SELECT * FROM HouseList WHERE isContrast = 3"];
+    while ([aa next]) {
+        NSLog(@"%@",aa.resultDictionary);
+    }
+    //返回全部查询结果
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    FMResultSet *rs=[db executeQuery:@"SELECT * FROM HouseList"];
+    rs=[db executeQuery:@"SELECT * FROM HouseList"];
+    while ([rs next]){
+        [list addObject:[rs resultDictionary]];
+        NSLog(@"%@ %@",[rs stringForColumn:@"Name"],[rs stringForColumn:@"Age"]);
+    }
+    [rs close];
+    return [[[list reverseObjectEnumerator] allObjects] mutableCopy];
+}
+#pragma mark - 设置请求数据展示格式
+//添加前缀
+-(NSString *)changeString:(NSString *)string AddString1:(NSString *)addString AddString2:(NSString *)change
+{
+    if ([string isKindOfClass:[NSNull class]] || string == nil|| [string isEqualToString:@"<null>"]||string.length == 0 ) {
+        return string = [NSString stringWithFormat:@"%@%@",addString,change];
+    }
+    return string = [NSString stringWithFormat:@"%@%@",addString,string];
+}
+//添加后缀
+-(NSString *)changeString:(NSString *)string AddPrdfix:(NSString *)addPrdfix AddSuffix:(NSString *)addSuffix
+{
+    if ([string isKindOfClass:[NSNull class]] || string == nil|| [string isEqualToString:@"<null>"]||string.length == 0 ) {
+        string = @"";
+        return string = [NSString stringWithFormat:@"%@%@",string,addSuffix];
+    }
+    return string = [NSString stringWithFormat:@"%@%@",string,addPrdfix];
+}
+
+
+@end

@@ -1,0 +1,17 @@
+//
+//  HouseListSQ.h
+//  Sotao
+//
+//  Created by 李新 on 14-10-7.
+//  Copyright (c) 2014年 搜淘APP. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface HouseListSQ : NSObject
+-(void)saveHouseList:(NSDictionary *)list Contrast:(int)contrast;//保存 //1 为房屋对比； 2 为收藏 3 为浏览历史；
+-(NSMutableArray *)readHouseContrastList;//读取房屋对比列表
+-(NSMutableArray *)readHouseHistoryList;//读取历史列表
+
+- (void)deleteHistory:(NSString*)hid;
+@end

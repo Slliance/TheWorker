@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ActiveListCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="120" height="180"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="120" height="180"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mjc-t2-beU">
+                        <rect key="frame" x="0.0" y="10" width="120" height="120"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_banner2" translatesAutoresizingMaskIntoConstraints="NO" id="TDG-6O-lJT">
+                                <rect key="frame" x="5" y="5" width="110" height="110"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21人领取" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Iw-Jh-Wdw">
+                                <rect key="frame" x="40" y="105" width="75" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="75" id="mCQ-cZ-2KC"/>
+                                    <constraint firstAttribute="height" constant="15" id="oeq-rm-Ofu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="TDG-6O-lJT" firstAttribute="leading" secondItem="Mjc-t2-beU" secondAttribute="leading" constant="5" id="9PN-LT-5cF"/>
+                            <constraint firstAttribute="width" constant="120" id="EJ1-ye-E0k"/>
+                            <constraint firstItem="TDG-6O-lJT" firstAttribute="top" secondItem="Mjc-t2-beU" secondAttribute="top" constant="5" id="F1l-Jm-3OH"/>
+                            <constraint firstAttribute="bottom" secondItem="TDG-6O-lJT" secondAttribute="bottom" constant="5" id="O1I-hs-Z5A"/>
+                            <constraint firstAttribute="trailing" secondItem="9Iw-Jh-Wdw" secondAttribute="trailing" constant="5" id="oMe-Je-nrV"/>
+                            <constraint firstAttribute="width" secondItem="Mjc-t2-beU" secondAttribute="height" multiplier="1:1" id="x7r-1t-yui"/>
+                            <constraint firstAttribute="bottom" secondItem="9Iw-Jh-Wdw" secondAttribute="bottom" id="xau-HI-yj4"/>
+                            <constraint firstAttribute="trailing" secondItem="TDG-6O-lJT" secondAttribute="trailing" constant="5" id="yEk-Ep-Wgh"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oRl-2H-Gu8">
+                        <rect key="frame" x="0.0" y="165" width="120" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="yf6-fc-bog"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="凯利来" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zku-kH-H3V">
+                        <rect key="frame" x="0.0" y="140" width="120" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="x5g-EP-M7h"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="zku-kH-H3V" secondAttribute="trailing" id="5rI-Uh-N7O"/>
+                <constraint firstItem="zku-kH-H3V" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="7bm-wI-rSc"/>
+                <constraint firstAttribute="trailing" secondItem="Mjc-t2-beU" secondAttribute="trailing" id="Ja5-Tf-sgU"/>
+                <constraint firstItem="zku-kH-H3V" firstAttribute="top" secondItem="Mjc-t2-beU" secondAttribute="bottom" constant="10" id="Pbi-6O-VCe"/>
+                <constraint firstAttribute="trailing" secondItem="oRl-2H-Gu8" secondAttribute="trailing" id="YAw-63-tiX"/>
+                <constraint firstItem="Mjc-t2-beU" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="cOM-un-B70"/>
+                <constraint firstItem="Mjc-t2-beU" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="fMc-a3-yZE"/>
+                <constraint firstItem="oRl-2H-Gu8" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="j5v-MM-uPc"/>
+                <constraint firstItem="oRl-2H-Gu8" firstAttribute="top" secondItem="zku-kH-H3V" secondAttribute="bottom" constant="10" id="ofm-dO-0OY"/>
+            </constraints>
+            <connections>
+                <outlet property="goodsImageView" destination="TDG-6O-lJT" id="6aI-jh-aBf"/>
+                <outlet property="imgBgView" destination="Mjc-t2-beU" id="tGe-BQ-Kep"/>
+                <outlet property="labelCount" destination="9Iw-Jh-Wdw" id="y6Q-pC-Ome"/>
+                <outlet property="labelName" destination="zku-kH-H3V" id="pHr-y3-fc0"/>
+                <outlet property="labelPrice" destination="oRl-2H-Gu8" id="FhG-MG-mTp"/>
+            </connections>
+            <point key="canvasLocation" x="-732" y="-707"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="bg_banner2" width="96" height="72"/>
+    </resources>
+</document>
