@@ -97,9 +97,9 @@ static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/so
     _topNavigationView = [UIView new];
     _topNavigationView.frame = CGRectMake(0, 0, ScreenWidth, 64);
     _topNavigationView.backgroundColor = UIColorFromRGB(0xffffff);
+    
     [self.view addSubview:_topNavigationView];
     [self.view bringSubviewToFront:_topNavigationView];
-    
     UILabel *titleLabel = [UILabel new];
     titleLabel.frame = CGRectMake((ScreenWidth - 200) / 2, 20, 200, 44);
     titleLabel.textColor = UIColorFromRGB(0x1e83ee);

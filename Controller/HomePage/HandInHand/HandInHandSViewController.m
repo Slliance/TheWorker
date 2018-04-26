@@ -7,16 +7,41 @@
 //
 
 #import "HandInHandSViewController.h"
-
+#import "NavgationView.h"
 @interface HandInHandSViewController ()
-
+@property(nonatomic,strong)UIImageView *bgImageView;
+@property(nonatomic,strong)NavgationView *navView;
 @end
 
 @implementation HandInHandSViewController
-
+-(UIImageView *)bgImageView{
+    if (!_bgImageView) {
+        _bgImageView = [[UIImageView alloc]init];
+        _bgImageView.image = [UIImage imageNamed:@"handInhand_banner"];
+        
+    }
+    return _bgImageView;
+}
+-(NavgationView *)navView{
+    if (!_navView) {
+        _navView = [[NavgationView alloc]init];
+    }
+    return _navView;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    [self.view addSubview:self.navView];
+    [self.view addSubview:self.bgImageView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view);
+        make.height.mas_equalTo(64);
+    }];
+    [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.mas_topLayoutGuide).offset(44);
+    }];
+    
+   
 }
 
 - (void)didReceiveMemoryWarning {
