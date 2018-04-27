@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "UIColor+ValueString.h"
 #import "H_Date_PickerView.h"
-
+#import "NavgationView.h"
 //#import "UIImageView+AFNetworking.h"
-@interface HYBaseViewController : UIViewController
+@interface HYBaseViewController : UIViewController<NavgationViewDelegate>
 typedef enum
 {
     code_success = 0,
@@ -24,6 +24,8 @@ typedef enum
 }CodeStae;
 
 @property (strong, nonatomic) UIView *topNavigationView;
+@property(nonatomic,strong)NavgationView *navView;
+
 -(UIImage*)imageWithColor:(UIColor*)color;
 - (void)initNavgationBarWithTitle:(NSString *)titleStr;
 -(void)setNavgationBackGroundImgWithImgName:(NSString *)imgName;

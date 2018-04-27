@@ -84,18 +84,22 @@
                 case 0:
             {
                 WelfareViewController *vc = [[WelfareViewController alloc]init];
+                weakSelf.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
                 break;
                 case 1:
             {
+                
                 WantedJobViewController *vc = [[WantedJobViewController alloc]init];
+                weakSelf.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
                 break;
                 case 2:
             {
                 HandInHandSViewController *vc = [[HandInHandSViewController alloc]init];
+                weakSelf.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 
             }
@@ -104,6 +108,7 @@
             {
                 
                 CareViewController *vc = [[CareViewController alloc]init];
+                weakSelf.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             
             }
@@ -111,6 +116,7 @@
                 case 4:
             {
                 BusinessViewController *vc = [[BusinessViewController alloc]init];
+                weakSelf.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 
             }
@@ -160,6 +166,7 @@
 //        }
 //        [weakSelf showJGProgressWithMsg:errorCode];
 //    }];
+    
     [self reloadUI];
     [self setupRefresh];
 }
@@ -188,6 +195,7 @@
     self.homeSearchField.clipsToBounds = NO;
     UIImage *image = [UIImage imageNamed:@"icon- 首页"];
    self.tabBarItem.selectedImage=[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    
 }
 
 ///定位

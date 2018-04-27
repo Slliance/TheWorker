@@ -82,6 +82,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     //初始化视图
     self.headBtn.layer.cornerRadius = 30.f;
     self.headBtn.layer.masksToBounds = YES;

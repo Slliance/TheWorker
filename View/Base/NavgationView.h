@@ -7,8 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+@protocol NavgationViewDelegate<NSObject>
+-(void)pressBackBtn;
+
+@end
 
 @interface NavgationView : UIView
+@property(nonatomic,weak)id<NavgationViewDelegate>delegate;
+
 @property(nonatomic,strong)UIImageView *bgView;
 @property(nonatomic,strong)UIButton *backBtn;
 @property(nonatomic,strong)UILabel *titleLabel;

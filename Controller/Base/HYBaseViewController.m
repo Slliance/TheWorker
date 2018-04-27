@@ -43,7 +43,19 @@ static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/so
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     }     // Do any additional setup after loading the view from its nib.
     // Do any additional setup after loading the view.
+    
+    
 }
+
+
+-(NavgationView *)navView{
+    if (!_navView) {
+        _navView = [[NavgationView alloc]init];
+        _navView.delegate = self;
+    }
+    return _navView;
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     if([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
@@ -81,6 +93,7 @@ static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/so
     self.navigationItem.titleView = labelNavigation;
     [self setNavgationBackGroundImg];
 }
+
 /**
  *  设置导航条背景图片
  */
@@ -121,10 +134,10 @@ static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/so
     [btnBack addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [_topNavigationView addSubview:btnBack];
 }
--(void)back
-{
-     [self.navigationController popViewControllerAnimated:YES];
-}
+//-(void)back
+//{
+//     [self.navigationController popViewControllerAnimated:YES];
+//}
 -(void)setNavgationBackGroundImg{
     [self setNavgationBackGroundImgWithImg:[self imageWithColor:[UIColor colorWithHexString:NAGA_BACKGROUND_COLOR]]];
 

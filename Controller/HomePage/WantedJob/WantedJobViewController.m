@@ -25,6 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.bannerArr = [[NSMutableArray alloc]init];
     self.articleArr = [[NSMutableArray alloc]init];
     self.headView = [[[NSBundle mainBundle] loadNibNamed:@"JobHeaderView" owner:self options:nil] firstObject];

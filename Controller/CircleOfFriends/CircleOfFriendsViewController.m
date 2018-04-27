@@ -33,6 +33,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.itemTableView.estimatedRowHeight = 80.0f;
     self.itemTableView.rowHeight = UITableViewAutomaticDimension;
