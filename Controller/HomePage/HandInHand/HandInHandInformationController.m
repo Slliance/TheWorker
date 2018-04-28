@@ -8,6 +8,7 @@
 
 #import "HandInHandInformationController.h"
 #import "CommonChooseBtn.h"
+#import "ChooseMatchMakingController.h"
 
 @interface HandInHandInformationController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate>
 {
@@ -639,7 +640,8 @@
     NSLog(@"11");
 }
 -(void)pressFinishBtn:(UIButton*)sender{
-    NSLog(@"");
+    ChooseMatchMakingController *matchVC = [[ChooseMatchMakingController alloc]init];
+    [self.navigationController pushViewController:matchVC animated:YES];
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];
