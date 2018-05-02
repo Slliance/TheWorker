@@ -43,7 +43,7 @@
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1aI-eW-VrB">
                     <rect key="frame" x="0.0" y="24" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="details_arrow_left"/>
+                    <state key="normal" image="icon_return"/>
                     <connections>
                         <action selector="backAction:" destination="-1" eventType="touchUpInside" id="drX-J8-oxh"/>
                     </connections>
@@ -283,13 +283,13 @@
         </view>
     </objects>
     <resources>
-        <image name="details_arrow_left" width="7" height="13"/>
         <image name="details_icon_application" width="17" height="17"/>
         <image name="details_icon_collection" width="17" height="17"/>
         <image name="details_icon_collection_selected" width="17" height="17"/>
         <image name="details_icon_money" width="15" height="15"/>
         <image name="details_icon_share" width="17" height="17"/>
-        <image name="icon_company" width="15" height="15"/>
+        <image name="icon_company" width="13" height="13"/>
+        <image name="icon_return" width="7" height="13"/>
         <image name="welfare_icon_eye" width="12" height="12"/>
         <image name="顶部渐变色" width="375" height="64"/>
     </resources>

@@ -15,4 +15,6 @@
 @property(nonatomic,strong)UILabel *distanceLabel;
 @property(nonatomic,strong)UILabel *loveLabel;
 @property(nonatomic,strong)UILabel *loveContentLabel;
+@property(nonatomic,strong)UIButton *inputBtn;
+
 @end

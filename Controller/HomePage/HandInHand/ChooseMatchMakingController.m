@@ -8,9 +8,14 @@
 
 #import "ChooseMatchMakingController.h"
 #import "HandInHandInformationController.h"
+#import "MatchMakingInformationView.h"
+#import "MatchMakingInformationController.h"
+
+
 @interface ChooseMatchMakingController ()
 @property(nonatomic,strong)UIImageView *bgImageView;
 @property(nonatomic,strong)UIImageView *backgroundImage;
+@property(nonatomic,strong)MatchMakingInformationView *matchView;
 @property(nonatomic,strong)UIButton *backBtn;
 @property(nonatomic,strong)UIButton *editBtn;
 @end
@@ -23,6 +28,7 @@
     [self.bgImageView addSubview:self.backBtn];
     [self.bgImageView addSubview:self.editBtn];
     [self.bgImageView addSubview:self.backgroundImage];
+    [self.backgroundImage addSubview:self.matchView];
     [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
@@ -44,12 +50,18 @@
         make.right.equalTo(self.bgImageView).offset(-7);
         make.bottom.equalTo(self.bgImageView).offset(-7);
     }];
+    [self.matchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).offset(31);
+        make.right.equalTo(self.view).offset(-31);
+        make.bottom.equalTo(self.view).offset(-85);
+        make.height.mas_equalTo(200);
+    }];
 }
 -(UIImageView *)bgImageView{
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc]init];
         _bgImageView.image = [UIImage imageNamed:@"bg_gradient"];
-        
+        _bgImageView.userInteractionEnabled = YES;
     }
     return _bgImageView;
 }
@@ -57,9 +69,19 @@
     if (!_backgroundImage) {
         _backgroundImage = [[UIImageView alloc]init];
         _backgroundImage.image = [UIImage imageNamed:@"pic_frame"];
-        
+        _backgroundImage.userInteractionEnabled = YES;
     }
     return _backgroundImage;
+}
+-(MatchMakingInformationView *)matchView{
+    if (!_matchView) {
+        _matchView = [[MatchMakingInformationView alloc]init];
+//        _matchView.alpha = 0.6;
+        _matchView.userInteractionEnabled = YES;
+        _matchView.backgroundColor = [UIColor whiteColor];
+        [_matchView.inputBtn addTarget:self action:@selector(pressInputBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _matchView;
 }
 -(UIButton *)backBtn{
     if (!_backBtn) {
@@ -76,6 +98,10 @@
         [_editBtn addTarget:self action:@selector(backBtnAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _editBtn;
+}
+-(void)pressInputBtn:(UIButton*)sender{
+    MatchMakingInformationController *informationVC = [[MatchMakingInformationController alloc]init];
+    [self.navigationController pushViewController:informationVC animated:YES];
 }
 -(void)backBtnAction{
     [self.navigationController popViewControllerAnimated:YES];

@@ -21,6 +21,7 @@
         self.btnJob.layer.masksToBounds = YES;
         self.btnJob.layer.cornerRadius = 3.f;
         self.titleLabel.text = model.title;
+    self.btnSeeCount.hidden = YES;
         [self.btnSeeCount setTitle:[NSString stringWithFormat:@"%@",model.click_count] forState:UIControlStateNormal];
         self.wagesLabel.text = [NSString stringWithFormat:@"%@-%@元/月",model.min_wages,model.max_wages];
         self.addressLabel.text = model.address;

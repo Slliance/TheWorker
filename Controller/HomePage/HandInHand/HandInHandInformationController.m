@@ -83,8 +83,6 @@
     [self.bgScrollow addSubview:self.countyBtn];
     [self.bgScrollow addSubview:self.birthdayLabel];
     [self.bgScrollow addSubview:self.yearBtn];
-    [self.bgScrollow addSubview:self.monthBtn];
-    [self.bgScrollow addSubview:self.dayBtn];
     [self.bgScrollow addSubview:self.heightLabel];
     [self.bgScrollow addSubview:self.heightField];
      [self.bgScrollow addSubview:self.heightUnitLabel];
@@ -215,21 +213,10 @@
     [self.yearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bgScrollow).offset(92);
         make.top.equalTo(self.cityBtn.mas_bottom).offset(10);
-        make.width.mas_equalTo(ScreenWidth/3-124/3);
+        make.width.mas_equalTo(ScreenWidth-104);
         make.height.mas_equalTo(40);
     }];
-    [self.monthBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.yearBtn.mas_right).offset(10);
-        make.top.equalTo(self.cityBtn.mas_bottom).offset(10);
-        make.width.mas_equalTo(ScreenWidth/3-124/3);
-        make.height.mas_equalTo(40);
-    }];
-    [self.dayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.monthBtn.mas_right).offset(10);
-        make.top.equalTo(self.cityBtn.mas_bottom).offset(10);
-        make.width.mas_equalTo(ScreenWidth/3-124/3);
-        make.height.mas_equalTo(40);
-    }];
+   
     [self.heightField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bgScrollow).offset(92);
         make.top.equalTo(self.yearBtn.mas_bottom).offset(10);
@@ -396,27 +383,12 @@
 -(CommonChooseBtn *)yearBtn{
     if (!_yearBtn) {
         _yearBtn = [[CommonChooseBtn alloc]init];
-        _yearBtn.titleLabel.text = @"年";
+        _yearBtn.titleLabel.text = @"2018-05-02";
         [_yearBtn.selectedBtn addTarget:self action:@selector(pressYearBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _yearBtn;
 }
--(CommonChooseBtn *)monthBtn{
-    if (!_monthBtn) {
-        _monthBtn = [[CommonChooseBtn alloc]init];
-        _monthBtn.titleLabel.text = @"月";
-        [_monthBtn.selectedBtn addTarget:self action:@selector(pressMonthBtn:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _monthBtn;
-}
--(CommonChooseBtn *)dayBtn{
-    if (!_dayBtn) {
-        _dayBtn = [[CommonChooseBtn alloc]init];
-        _dayBtn.titleLabel.text = @"日";
-        [_dayBtn.selectedBtn addTarget:self action:@selector(pressDayBtn:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _dayBtn;
-}
+
 - (UILabel *)heightLabel{
     if (!_heightLabel) {
         _heightLabel = [[UILabel alloc]init];
@@ -633,12 +605,7 @@
 -(void)pressYearBtn:(UIButton*)sednder{
     NSLog(@"11");
 }
--(void)pressMonthBtn:(UIButton*)sednder{
-    NSLog(@"11");
-}
--(void)pressDayBtn:(UIButton*)sednder{
-    NSLog(@"11");
-}
+
 -(void)pressFinishBtn:(UIButton*)sender{
     ChooseMatchMakingController *matchVC = [[ChooseMatchMakingController alloc]init];
     [self.navigationController pushViewController:matchVC animated:YES];

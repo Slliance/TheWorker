@@ -409,7 +409,7 @@
         [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -65)];
         [btn addTarget:self action:@selector(skipToEmplloyeeInfo) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *headImageView = [[UIImageView alloc]init];
-        headImageView.image = [UIImage imageNamed:@"home_zixun"];
+        headImageView.image = [UIImage imageNamed:@"资讯"];
         headImageView.frame = CGRectMake(10, 9,15, 15);
         UILabel *label = [[UILabel alloc]init];
         label.frame = CGRectMake(35, 0, 60, 34);
