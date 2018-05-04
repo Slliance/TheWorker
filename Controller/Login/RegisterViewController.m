@@ -64,12 +64,12 @@
         [noteStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"699cf1"] range:NSMakeRange(18, 6)];
         [self.labelProtocol setAttributedText:noteStr];
         [self.labelProtocol sizeToFit];
-        self.btnBinding.layer.masksToBounds = YES;
+    
         self.btnBinding.layer.cornerRadius = 4.f;
-        [self.btnBindingCode.layer setMasksToBounds:YES];
+        self.btnBinding.layer.masksToBounds = YES;
         [self.btnBindingCode.layer setBorderColor:[UIColor colorWithHexString:@"699cf1"].CGColor];
         [self.btnBindingCode.layer setBorderWidth:1];
-        [self.btnBindingCode.layer setCornerRadius:4.f];
+    
     [self setTextFieldLeftView:self.txtBindingMobile :@"icon_phone_number2":30];
     [self setTextFieldLeftView:self.txtBindingCode :@"icon_verification_code":30];
     

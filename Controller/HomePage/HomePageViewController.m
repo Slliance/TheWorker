@@ -25,6 +25,8 @@
 #import "JFLocation.h"
 #import "JFAreaDataManager.h"
 #import "JFCityViewController.h"
+#import "MyResumeViewController.h"
+#import "ActivityDescriptionController.h"
 #define KCURRENTCITYINFODEFAULTS [NSUserDefaults standardUserDefaults]
 @interface HomePageViewController ()<JFLocationDelegate, JFCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *HomePageTableView;
@@ -84,7 +86,7 @@
                 case 0:
             {
                 WelfareViewController *vc = [[WelfareViewController alloc]init];
-                weakSelf.hidesBottomBarWhenPushed = YES;
+               
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
                 break;
@@ -92,14 +94,13 @@
             {
                 
                 WantedJobViewController *vc = [[WantedJobViewController alloc]init];
-                weakSelf.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
                 break;
                 case 2:
             {
                 HandInHandSViewController *vc = [[HandInHandSViewController alloc]init];
-                weakSelf.hidesBottomBarWhenPushed = YES;
+                
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 
             }
@@ -379,19 +380,26 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 1) {
-        InfoDetailViewController *vc = [[InfoDetailViewController alloc]init];
-        ArticleModel *model = self.articleArr[indexPath.row];
-        vc.articleModel = model;
-        vc.bannerUrl = model.detail_url;
-        vc.articleId = model.Id;
-        vc.isCollect = [model.is_collect integerValue];
-        vc.type = @(6);
-        vc.articleModel = model;
-        [vc setReturnReloadBlock:^{
-            [self footerRefreshing];
-        }];
-        vc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController: vc animated:YES];
+//        InfoDetailViewController *vc = [[InfoDetailViewController alloc]init];
+//        ArticleModel *model = self.articleArr[indexPath.row];
+//        vc.articleModel = model;
+//        vc.bannerUrl = model.detail_url;
+//        vc.articleId = model.Id;
+//        vc.isCollect = [model.is_collect integerValue];
+//        vc.type = @(6);
+//        vc.articleModel = model;
+//        [vc setReturnReloadBlock:^{
+//            [self footerRefreshing];
+//        }];
+//
+//        [self.navigationController pushViewController: vc animated:YES];
+        ActivityDescriptionController *activityVC = [[ActivityDescriptionController alloc]init];
+        activityVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:activityVC animated:YES];
+    }else if (indexPath.section ==0){
+        ActivityDescriptionController *activityVC = [[ActivityDescriptionController alloc]init];
+        activityVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:activityVC animated:YES];
     }
 }
 

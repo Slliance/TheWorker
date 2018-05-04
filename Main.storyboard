@@ -88,7 +88,7 @@
                                             <outlet property="delegate" destination="dRi-EX-Xii" id="Byo-M2-QCz"/>
                                         </connections>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="上海" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lDs-XO-cFR">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lDs-XO-cFR">
                                         <rect key="frame" x="12" y="36" width="31" height="14"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -645,7 +645,7 @@
                                                 <rect key="frame" x="103" y="0.0" width="80" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <state key="normal" title="我的租赁" image="icon_my_lease">
+                                                <state key="normal" title="我的简历" image="icon_resume">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
@@ -656,7 +656,7 @@
                                                 <rect key="frame" x="191" y="0.0" width="80" height="80"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                <state key="normal" title="我的相亲" image="icon_my_blind_date">
+                                                <state key="normal" title="我喜欢的" image="icon_my_blind_date">
                                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
@@ -819,7 +819,6 @@
         <image name="icon_my_collection" width="30" height="30"/>
         <image name="icon_my_coupon" width="30" height="30"/>
         <image name="icon_my_dynamic" width="30" height="30"/>
-        <image name="icon_my_lease" width="30" height="30"/>
         <image name="icon_my_order" width="30" height="30"/>
         <image name="icon_my_points" width="35" height="35"/>
         <image name="icon_my_reward" width="35" height="35"/>
@@ -832,6 +831,7 @@
         <image name="icon_no_dynamic_at_this_moment" width="86" height="82"/>
         <image name="icon_no_login" width="104" height="118"/>
         <image name="icon_personal_center_default_avatar" width="60" height="60"/>
+        <image name="icon_resume" width="15" height="15"/>
         <image name="icon_scan" width="16" height="16"/>
         <image name="icon_set_up" width="17" height="16"/>
         <image name="input_search" width="270" height="30"/>

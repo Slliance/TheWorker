@@ -18,11 +18,18 @@
 @interface FillApplicationViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *btnSubmit;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseEdu;
+///期望薪资
+@property (weak, nonatomic) IBOutlet UILabel *chooseEduLabel;
+@property (weak, nonatomic) IBOutlet UILabel *chooseNationLabel;
+
+
+@property (weak, nonatomic) IBOutlet UITextView *introduceTextView;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseSex;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseNation;
 @property (weak, nonatomic) IBOutlet UIButton *btnResume;
 @property (weak, nonatomic) IBOutlet UIScrollView *jobScrollView;
 @property (weak, nonatomic) IBOutlet UITextField *txtReferrer;//推荐人
+@property (weak, nonatomic) IBOutlet UITextField *expectationField;
 @property (weak, nonatomic) IBOutlet UITextField *txtName;
 @property (weak, nonatomic) IBOutlet UITextField *txtMobile;
 @property (weak, nonatomic) IBOutlet UITextField *txtIdCardNo;
@@ -52,10 +59,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.imgArray = [[NSMutableArray alloc] init];
-//    self.curNationStr = [[NSString alloc]init];
-//    self.curSexStr = [[NSString alloc]init];
-//    self.curEduStr = [[NSString alloc]init];
-//    self.curResumeStr = [[NSString alloc]init];
+
     self.btnSubmit.layer.masksToBounds = YES;
     self.btnSubmit.layer.cornerRadius = 4.f;
     [self.btnChooseEdu setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
@@ -63,8 +67,39 @@
     [self.btnChooseNation setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
     [self.btnResume setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
     self.jobScrollView.contentSize = CGSizeMake(ScreenWidth, 875);
-    // Do any additional setup after loading the view from its nib.
-//    [sel f initView];
+    self.btnChooseEdu.layer.masksToBounds = YES;
+    [self.btnChooseEdu.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.btnChooseEdu.layer setBorderWidth:1];
+    self.btnChooseNation.layer.masksToBounds = YES;
+    [self.btnChooseNation.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.btnChooseNation.layer setBorderWidth:1];
+    self.expectationField.layer.masksToBounds = YES;
+    [self.expectationField.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.expectationField.layer setBorderWidth:1];
+    self.txtReferrer.layer.masksToBounds = YES;
+    [self.txtReferrer.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtReferrer.layer setBorderWidth:1];
+    self.txtName.layer.masksToBounds = YES;
+    [self.txtName.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtName.layer setBorderWidth:1];
+    self.txtMobile.layer.masksToBounds = YES;
+    [self.txtMobile.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtMobile.layer setBorderWidth:1];
+    self.txtIdCardNo.layer.masksToBounds = YES;
+    [self.txtIdCardNo.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtIdCardNo.layer setBorderWidth:1];
+    self.txtInterest.layer.masksToBounds = YES;
+    [self.txtInterest.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtInterest.layer setBorderWidth:1];
+    self.txtHealthCardNO.layer.masksToBounds = YES;
+    [self.txtHealthCardNO.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtHealthCardNO.layer setBorderWidth:1];
+    self.introduceTextView.layer.masksToBounds = YES;
+    [self.introduceTextView.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.introduceTextView.layer setBorderWidth:1];
+    self.txtContent.layer.masksToBounds = YES;
+    [self.txtContent.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
+    [self.txtContent.layer setBorderWidth:1];
 }
 
 -(void)initView{

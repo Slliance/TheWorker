@@ -18,10 +18,10 @@
 #import "MyCollectionViewController.h"
 #import "SettingViewController.h"
 #import "PublishMyInfoViewController.h"
-#import "MyRentViewController.h"
+#import "MyResumeViewController.h"
 #import "MyOrderFormViewController.h"
 #import "MyTeamViewController.h"
-
+#import "MyLikeListController.h"
 #import "MyShoppingCartViewController.h"
 
 #import "MyQrViewController.h"
@@ -468,24 +468,10 @@
 - (IBAction)myLoveAction:(id)sender {
     if ([self isLogin]) {
         
-        if ([self.userModel.auth integerValue] == 0) {
-            NotVertificationViewController *vc = [[NotVertificationViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }else if([self.userModel.auth integerValue] == 1){
-            VertificateResultViewController *vc = [[VertificateResultViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }else if ([self.userModel.auth integerValue] == 2){
-            PublishMyInfoViewController *vc = [[PublishMyInfoViewController alloc] init];
-            vc.type = 1;
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }else{
-            VertificateDefeatViewController *vc = [[VertificateDefeatViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-        }
+        MyLikeListController *mylikeVC = [[MyLikeListController alloc]init];
+        mylikeVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:mylikeVC animated:YES];
+        
     }else{
         [self skiptoLogin];
     }
@@ -494,7 +480,7 @@
 //我的租赁
 - (IBAction)myRentAction:(id)sender {
     if ([self isLogin]) {
-        MyRentViewController *vc = [[MyRentViewController alloc] init];
+        MyResumeViewController *vc = [[MyResumeViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
     }else{

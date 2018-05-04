@@ -10,9 +10,12 @@
 #import "HandInHandInformationController.h"
 #import "MatchMakingInformationView.h"
 #import "MatchMakingInformationController.h"
+#import <ZLSwipeableView.h>
 
-
-@interface ChooseMatchMakingController ()
+@interface ChooseMatchMakingController ()<ZLSwipeableViewDelegate, ZLSwipeableViewDataSource>
+@property (nonatomic, strong) NSArray *colors;
+@property (nonatomic) NSUInteger colorIndex;
+@property (nonatomic, strong) NSArray *titles;
 @property(nonatomic,strong)UIImageView *bgImageView;
 @property(nonatomic,strong)UIImageView *backgroundImage;
 @property(nonatomic,strong)MatchMakingInformationView *matchView;
@@ -28,7 +31,7 @@
     [self.bgImageView addSubview:self.backBtn];
     [self.bgImageView addSubview:self.editBtn];
     [self.bgImageView addSubview:self.backgroundImage];
-    [self.backgroundImage addSubview:self.matchView];
+//    [self.backgroundImage addSubview:self.matchView];
     [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
@@ -50,13 +53,192 @@
         make.right.equalTo(self.bgImageView).offset(-7);
         make.bottom.equalTo(self.bgImageView).offset(-7);
     }];
-    [self.matchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(31);
-        make.right.equalTo(self.view).offset(-31);
-        make.bottom.equalTo(self.view).offset(-85);
-        make.height.mas_equalTo(200);
-    }];
+//    [self.matchView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.backgroundImage).offset(38);
+//        make.right.equalTo(self.backgroundImage).offset(-38);
+//        make.bottom.equalTo(self.backgroundImage).offset(-38);
+//        make.top.equalTo(self.backgroundImage).offset(38);
+//    }];
+    [self setZl];
 }
+
+-(void)setZl{
+    self.colorIndex = 0;
+    self.colors = @[
+                    @"Turquoise",
+                    @"Green Sea",
+                    @"Emerald",
+                    @"Nephritis",
+                    @"Peter River",
+                    @"Belize Hole",
+                    @"Amethyst",
+                    @"Wisteria",
+                    @"Wet Asphalt",
+                    @"Midnight Blue",
+                    @"Sun Flower",
+                    @"Orange",
+                    @"Carrot",
+                    @"Pumpkin",
+                    @"Alizarin",
+                    @"Pomegranate",
+                    @"Clouds",
+                    @"Silver",
+                    @"Concrete",
+                    @"Asbestos"
+                    ];
+    self.titles = @[
+                    @"Turquoise",
+                    @"Green Sea",
+                    @"Emerald",
+                    @"Nephritis",
+                    @"Peter River",
+                    @"Belize Hole",
+                    @"Amethyst",
+                    @"Wisteria",
+                    @"Wet Asphalt",
+                    @"Midnight Blue",
+                    @"Sun Flower",
+                    @"Orange",
+                    @"Carrot",
+                    @"Pumpkin",
+                    @"Alizarin",
+                    @"Pomegranate",
+                    @"Clouds",
+                    @"Silver",
+                    @"Concrete",
+                    @"Asbestos"
+                    ];
+    
+    
+    [self.backgroundImage addSubview:self.swipeableView];
+    ZLSwipeableView *swipeableView = _swipeableView;
+    // Required Data Source
+    self.swipeableView.dataSource = self;
+    
+    // Optional Delegate
+    self.swipeableView.delegate = self;
+    
+    self.swipeableView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSDictionary *metrics = @{};
+    // Adding constraints
+    [self.view addConstraints:[NSLayoutConstraint
+                               constraintsWithVisualFormat:@"|-30-[swipeableView]-30-|"
+                               options:0
+                               metrics:metrics
+                               views:NSDictionaryOfVariableBindings(
+                                                                    swipeableView)]];
+    
+    [self.view addConstraints:[NSLayoutConstraint
+                               constraintsWithVisualFormat:@"V:|-50-[swipeableView]-100-|"
+                               options:0
+                               metrics:metrics
+                               views:NSDictionaryOfVariableBindings(
+                                                                    swipeableView)]];
+//    [self.view addConstraints:[NSLayoutConstraint
+//                               constraintsWithVisualFormat:@"V:|-50-[swipeableView]-100-|"
+//                               options:0
+//                               metrics:metrics
+//                               views:NSDictionaryOfVariableBindings(
+//                                                                    swipeableView)]];
+    
+    
+    // `1` `2` `3` `4`
+//    NSArray *items = @[@"😢", @"😄", @"😢", @"😄"];
+//    for (NSInteger i = 0; i < 4; i++) {
+//        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//        [self.view addSubview:button];
+//        button.frame = CGRectMake(50 + 60 * i, self.view.frame.size.height - 90, 50, 50);
+//        [button setTitle:items[i] forState:UIControlStateNormal];
+//        [button addTarget:self action:@selector(handle:) forControlEvents:UIControlEventTouchUpInside];
+//
+//    }
+//
+}
+// up down left right
+- (void)handle:(UIButton *)sender
+{
+    HandleDirectionType type = sender.tag;
+    switch (type) {
+        case HandleDirectionOn:
+            [self.swipeableView swipeTopViewToUp];
+            break;
+        case HandleDirectionDown:
+            [self.swipeableView swipeTopViewToDown];
+            break;
+        case HandleDirectionLeft:
+            [self.swipeableView swipeTopViewToLeft];
+            break;
+            
+        case HandleDirectionRight:
+            [self.swipeableView swipeTopViewToRight];
+            break;
+        default:
+            break;
+    }
+}
+- (ZLSwipeableView *)swipeableView
+{
+    if (_swipeableView == nil) {
+        _swipeableView = [[ZLSwipeableView alloc] initWithFrame:CGRectMake(37, 142, ScreenWidth-70, 538)];
+        
+    }
+    return _swipeableView;
+}
+- (void)viewDidLayoutSubviews {
+    [self.swipeableView loadViewsIfNeeded];
+}
+
+#pragma mark - ZLSwipeableViewDelegate
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView
+         didSwipeView:(UIView *)view
+          inDirection:(ZLSwipeableViewDirection)direction {
+    NSLog(@"did swipe in direction: %zd", direction);
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
+    NSLog(@"did cancel swipe");
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView
+  didStartSwipingView:(UIView *)view
+           atLocation:(CGPoint)location {
+    NSLog(@"did start swiping at location: x %f, y %f", location.x, location.y);
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView
+          swipingView:(UIView *)view
+           atLocation:(CGPoint)location
+          translation:(CGPoint)translation {
+    NSLog(@"swiping at location: x %f, y %f, translation: x %f, y %f", location.x, location.y,
+          translation.x, translation.y);
+}
+
+- (void)swipeableView:(ZLSwipeableView *)swipeableView
+    didEndSwipingView:(UIView *)view
+           atLocation:(CGPoint)location {
+    NSLog(@"did end swiping at location: x %f, y %f", location.x, location.y);
+}
+
+#pragma mark - ZLSwipeableViewDataSource
+
+- (UIView *)nextViewForSwipeableView:(ZLSwipeableView *)swipeableView {
+    if (self.colorIndex >= self.colors.count || self.colorIndex >= self.titles.count) {
+        self.colorIndex = 0;
+    }
+    
+    MatchMakingInformationView *view = [[MatchMakingInformationView alloc] init];
+    view.frame = CGRectMake(37, 142, ScreenWidth-70,538);
+    view.backgroundColor = [UIColor redColor];
+    view.bgImageView.image = [UIImage imageNamed:@"photo"];
+    self.colorIndex++;
+    return view;
+}
+
+
+
+
 -(UIImageView *)bgImageView{
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc]init];

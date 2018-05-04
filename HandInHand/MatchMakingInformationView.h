@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface MatchMakingInformationView : UIView
+@property(nonatomic,strong)UIImageView *bgImageView;
+@property(nonatomic,strong)UIView *bgview;
 @property(nonatomic,strong)UIImageView *sexImage;
 @property(nonatomic,strong)UILabel *nameLabel;
 @property(nonatomic,strong)UILabel *yearLabel;

@@ -18,47 +18,78 @@
 }
 
 -(void)setContentLayout{
-    [self addSubview:self.sexImage];
-    [self addSubview:self.nameLabel];
-    [self addSubview:self.yearLabel];
-    [self addSubview:self.distanceLabel];
-    [self addSubview:self.loveLabel];
-    [self addSubview:self.loveContentLabel];
-    [self addSubview:self.inputBtn];
+    [self addSubview:self.bgImageView];
+    [self.bgImageView addSubview:self.bgview];
+    [self.bgview addSubview:self.sexImage];
+    [self.bgview addSubview:self.nameLabel];
+    [self.bgview addSubview:self.yearLabel];
+    [self.bgview addSubview:self.distanceLabel];
+    [self.bgview addSubview:self.loveLabel];
+    [self.bgview addSubview:self.loveContentLabel];
+    [self.bgview addSubview:self.inputBtn];
+    [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self);
+        make.bottom.equalTo(self);
+//        make.width.mas_equalTo(305);
+//        make.height.mas_equalTo(538);
+    }];
+    [self.bgview mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.bgImageView);
+        make.height.mas_equalTo(200);
+        make.bottom.equalTo(self.bgImageView).offset(60);
+    }];
     [self.sexImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.equalTo(self).offset(15);
+        make.left.top.equalTo(self.bgview).offset(15);
         make.width.mas_equalTo(16);
         make.height.mas_equalTo(15);
         
     }];
     [self.distanceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.sexImage);
-        make.right.equalTo(self).offset(-15);
+        make.right.equalTo(self.bgview).offset(-15);
         make.width.mas_equalTo(60);
     }];
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(15);
+        make.top.equalTo(self.bgview).offset(15);
         make.left.equalTo(self.sexImage.mas_right).offset(10);
         make.right.equalTo(self.distanceLabel.mas_left).offset(-10);
     }];
     [self.yearLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(15);
-        make.right.equalTo(self).offset(-15);
+        make.left.equalTo(self.bgview).offset(15);
+        make.right.equalTo(self.bgview).offset(-15);
         make.top.equalTo(self.sexImage.mas_bottom).offset(18);
     }];
     [self.loveLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(15);
-        make.right.equalTo(self).offset(-15);
+        make.left.equalTo(self.bgview).offset(15);
+        make.right.equalTo(self.bgview).offset(-15);
         make.top.equalTo(self.yearLabel.mas_bottom).offset(30);
     }];
     [self.loveContentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(15);
-        make.right.equalTo(self).offset(-15);
+        make.left.equalTo(self.bgview).offset(15);
+        make.right.equalTo(self.bgview).offset(-15);
         make.top.equalTo(self.loveLabel.mas_bottom).offset(11);
     }];
     [self.inputBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.bottom.equalTo(self);
     }];
+}
+-(UIImageView *)bgImageView{
+    if (!_bgImageView) {
+        _bgImageView = [[UIImageView alloc]init];
+        _bgImageView.image =[UIImage imageNamed:@"photo"];
+        _bgImageView.userInteractionEnabled = YES;
+    }
+    return _bgImageView;
+}
+-(UIView *)bgview{
+    if (!_bgview) {
+        _bgview = [[UIView alloc]init];
+        _bgview.userInteractionEnabled = YES;
+        _bgview.backgroundColor = [UIColor whiteColor];
+        _bgview.alpha = 0.6;
+    }
+    return _bgview;
 }
 -(UIImageView *)sexImage{
     if (!_sexImage) {
