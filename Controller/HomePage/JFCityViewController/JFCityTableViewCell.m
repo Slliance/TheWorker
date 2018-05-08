@@ -34,6 +34,7 @@ static NSString *ID = @"cityCollectionViewCell";
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    self.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.collectionView];
 }
 
@@ -43,7 +44,8 @@ static NSString *ID = @"cityCollectionViewCell";
         [_collectionView registerClass:[JFCityCollectionViewCell class] forCellWithReuseIdentifier:ID];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
-        _collectionView.backgroundColor = JFRGBColor(247, 247, 247);
+        _collectionView.backgroundColor = [UIColor whiteColor];
+
     }
     return _collectionView;
 }
@@ -60,7 +62,9 @@ static NSString *ID = @"cityCollectionViewCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JFCityCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ID forIndexPath:indexPath];
+    cell.backgroundColor = [UIColor whiteColor];
     cell.title = _cityNameArray[indexPath.row];
+    
     return cell;
 }
 

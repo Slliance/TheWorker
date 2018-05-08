@@ -78,30 +78,6 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" background="input_search" id="kAZ-z3-EPg">
-                                        <rect key="frame" x="63" y="27" width="270" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <color key="textColor" red="0.29803921568627451" green="0.29803921568627451" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="dRi-EX-Xii" id="Byo-M2-QCz"/>
-                                        </connections>
-                                    </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lDs-XO-cFR">
-                                        <rect key="frame" x="12" y="36" width="31" height="14"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eCs-hK-c4A">
-                                        <rect key="frame" x="12" y="36" width="46" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="homeLocation:" destination="yZU-at-gVz" eventType="touchUpInside" id="Sdq-Zd-ONG"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="SjE-lK-DHh">
                                         <rect key="frame" x="341" y="32" width="20" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -110,10 +86,6 @@
                                             <action selector="pressHomeShareBtn:" destination="yZU-at-gVz" eventType="touchUpInside" id="bEt-z6-G6I"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="多边形 1097" id="xWM-Bz-ByT">
-                                        <rect key="frame" x="47" y="42" width="9" height="6"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -135,9 +107,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="qns-nh-wKZ"/>
                     <connections>
+                        <outlet property="BgNavImage" destination="dRi-EX-Xii" id="GbZ-Zr-lOL"/>
                         <outlet property="HomePageTableView" destination="0rc-GS-w6s" id="rgr-8t-ePc"/>
-                        <outlet property="homeLocationLabel" destination="lDs-XO-cFR" id="tXg-vh-4t3"/>
-                        <outlet property="homeSearchField" destination="kAZ-z3-EPg" id="78p-L1-gzZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WSY-Y6-bDD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -834,9 +805,7 @@
         <image name="icon_resume" width="15" height="15"/>
         <image name="icon_scan" width="16" height="16"/>
         <image name="icon_set_up" width="17" height="16"/>
-        <image name="input_search" width="270" height="30"/>
         <image name="分享-5" width="20" height="20"/>
-        <image name="多边形 1097" width="9" height="5"/>
         <image name="顶部渐变色" width="375" height="64"/>
     </resources>
 </document>

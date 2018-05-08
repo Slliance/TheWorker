@@ -11,8 +11,9 @@
 #import "MatchMakingInformationView.h"
 #import "MatchMakingInformationController.h"
 #import <ZLSwipeableView.h>
+#import "ChooseMatchMakingCell.h"
 
-@interface ChooseMatchMakingController ()<ZLSwipeableViewDelegate, ZLSwipeableViewDataSource>
+@interface ChooseMatchMakingController ()<ZLSwipeableViewDelegate, ZLSwipeableViewDataSource,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *colors;
 @property (nonatomic) NSUInteger colorIndex;
 @property (nonatomic, strong) NSArray *titles;
@@ -21,10 +22,18 @@
 @property(nonatomic,strong)MatchMakingInformationView *matchView;
 @property(nonatomic,strong)UIButton *backBtn;
 @property(nonatomic,strong)UIButton *editBtn;
+@property(nonatomic,strong)UITableView *tableview;
 @end
 
 @implementation ChooseMatchMakingController
-
+-(UITableView *)tableview{
+    if (!_tableview) {
+        _tableview = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableview.delegate = self;
+        _tableview.dataSource = self;
+    }
+    return _tableview;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.bgImageView];
@@ -53,12 +62,6 @@
         make.right.equalTo(self.bgImageView).offset(-7);
         make.bottom.equalTo(self.bgImageView).offset(-7);
     }];
-//    [self.matchView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.backgroundImage).offset(38);
-//        make.right.equalTo(self.backgroundImage).offset(-38);
-//        make.bottom.equalTo(self.backgroundImage).offset(-38);
-//        make.top.equalTo(self.backgroundImage).offset(38);
-//    }];
     [self setZl];
 }
 

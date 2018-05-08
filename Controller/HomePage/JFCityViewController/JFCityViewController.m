@@ -13,6 +13,7 @@
 #import "JFAreaDataManager.h"
 #import "JFLocation.h"
 #import "JFSearchView.h"
+#import "JFCitySectionView.h"
 
 #define kCurrentCityInfoDefaults [NSUserDefaults standardUserDefaults]
 
@@ -37,7 +38,7 @@ JFSearchViewDelegate>
 @property (nonatomic, strong) JFLocation *locationManager;
 @property (nonatomic, strong) JFSearchView *searchView;
 /** 最近访问的城市*/
-@property (nonatomic, strong) NSMutableArray *historyCityMutableArray;
+//@property (nonatomic, strong) NSMutableArray *historyCityMutableArray;
 /** 热门城市*/
 @property (nonatomic, strong) NSArray *hotCityArray;
 /** 字母索引*/
@@ -46,20 +47,41 @@ JFSearchViewDelegate>
 @property (nonatomic, strong) NSMutableArray *cityMutableArray;
 /** 根据cityNumber在数据库中查到的区县*/
 @property (nonatomic, strong) NSMutableArray *areaMutableArray;
-
+@property(nonatomic,strong)UIImageView *imageView;
 @end
 
 @implementation JFCityViewController
-
+-(UIImageView *)imageView{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc]init];
+        _imageView.image = [UIImage imageNamed:@"顶部渐变色"];
+    }
+    return _imageView;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    _HeaderSectionTotal = 3;
+    [self.view addSubview:self.imageView];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.view);
+        make.height.mas_equalTo(20);
+    }];
+    _HeaderSectionTotal = 2;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chooseCityWithName:) name:JFCityTableViewCellDidChangeCityNotification object:nil];
-    
     [self.view addSubview:self.rootTableView];
-    self.rootTableView.tableHeaderView = self.headerView;
-    
+    self.rootTableView.backgroundColor = [UIColor whiteColor];
+    _rootTableView.tableHeaderView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.headerView];
+    [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.imageView.mas_bottom).offset(0);
+        make.height.mas_equalTo(44);
+    }];
+    [self.rootTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.headerView.mas_bottom);
+        make.bottom.equalTo(self.view);
+    }];
     [self backBarButtonItem];
     [self initWithJFAreaDataManaager];
     
@@ -85,7 +107,7 @@ JFSearchViewDelegate>
         });
     }
     
-    self.historyCityMutableArray = [NSKeyedUnarchiver unarchiveObjectWithData:[kCurrentCityInfoDefaults objectForKey:@"historyCity"]];
+//    self.historyCityMutableArray = [NSKeyedUnarchiver unarchiveObjectWithData:[kCurrentCityInfoDefaults objectForKey:@"historyCity"]];
 }
 
 - (void)backBarButtonItem {
@@ -138,7 +160,7 @@ JFSearchViewDelegate>
             [kCurrentCityInfoDefaults setObject:cityNumber forKey:@"cityNumber"];
         }];
         
-        [self historyCity:cityName];
+//        [self historyCity:cityName];
     }
     
     //销毁通知
@@ -155,10 +177,10 @@ JFSearchViewDelegate>
 
 - (JFCityHeaderView *)headerView {
     if (!_headerView) {
-        _headerView = [[JFCityHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 80)];
+        _headerView = [[JFCityHeaderView alloc] initWithFrame:CGRectMake(30, 0, ScreenWidth-60, 44)];
         _headerView.delegate = self;
         _headerView.backgroundColor = [UIColor whiteColor];
-        _headerView.buttonTitle = @"选择区县";
+        [_headerView.backBtn addTarget:self action:@selector(pressBackBtn:) forControlEvents:UIControlEventTouchUpInside];
         _headerView.cityName = [kCurrentCityInfoDefaults objectForKey:@"currentCity"] ? [kCurrentCityInfoDefaults objectForKey:@"currentCity"] : [kCurrentCityInfoDefaults objectForKey:@"locationCity"];
     }
     return _headerView;
@@ -180,12 +202,12 @@ JFSearchViewDelegate>
     _searchView = nil;
 }
 
-- (NSMutableArray *)historyCityMutableArray {
-    if (!_historyCityMutableArray) {
-        _historyCityMutableArray = [[NSMutableArray alloc] init];
-    }
-    return _historyCityMutableArray;
-}
+//- (NSMutableArray *)historyCityMutableArray {
+//    if (!_historyCityMutableArray) {
+//        _historyCityMutableArray = [[NSMutableArray alloc] init];
+//    }
+//    return _historyCityMutableArray;
+//}
 
 - (NSArray *)hotCityArray {
     if (!_hotCityArray) {
@@ -196,7 +218,7 @@ JFSearchViewDelegate>
 
 - (NSMutableArray *)characterMutableArray {
     if (!_characterMutableArray) {
-        _characterMutableArray = [NSMutableArray arrayWithObjects:@"!", @"#", @"$", nil];
+        _characterMutableArray = [NSMutableArray arrayWithObjects:@"", @"", @"", nil];
     }
     return _characterMutableArray;
 }
@@ -296,7 +318,7 @@ JFSearchViewDelegate>
         _rootTableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
         _rootTableView.delegate = self;
         _rootTableView.dataSource = self;
-        _rootTableView.sectionIndexColor = [UIColor colorWithRed:0/255.0f green:132/255.0f blue:255/255.0f alpha:1];
+        _rootTableView.sectionIndexColor = DSColorFromHex(0xCCCCCC);
         [_rootTableView registerClass:[JFCityTableViewCell class] forCellReuseIdentifier:@"cityCell"];
         [_rootTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cityNameCell"];
     }
@@ -314,17 +336,15 @@ JFSearchViewDelegate>
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section < _HeaderSectionTotal) {
         self.cell = [tableView dequeueReusableCellWithIdentifier:@"cityCell" forIndexPath:indexPath];
-        if (_HeaderSectionTotal == 4 && indexPath.section == 0) {
+        if (_HeaderSectionTotal == 3 && indexPath.section == 0) {
             _cell.cityNameArray = _areaMutableArray;
         }
-        if (indexPath.section == _HeaderSectionTotal - 3) {
+        if (indexPath.section == _HeaderSectionTotal -2 ) {
             NSString *locationCity = [kCurrentCityInfoDefaults objectForKey:@"locationCity"];
             _cell.cityNameArray = locationCity ? @[locationCity] : @[@"正在定位..."];
         }
-        if (indexPath.section == _HeaderSectionTotal - 2) {
-            _cell.cityNameArray = self.historyCityMutableArray;
-        }
-        if (indexPath.section == _HeaderSectionTotal - 1) {
+
+        if (indexPath.section == _HeaderSectionTotal-1) {
             _cell.cityNameArray = self.hotCityArray;
         }
     return _cell;
@@ -332,14 +352,14 @@ JFSearchViewDelegate>
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cityNameCell" forIndexPath:indexPath];
         NSArray *currentArray = _sectionMutableArray[0][_characterMutableArray[indexPath.section]];
         cell.textLabel.text = currentArray[indexPath.row];
-        cell.textLabel.textColor = [UIColor grayColor];
+        cell.textLabel.textColor = DSColorFromHex(0x4D4D4D);
         cell.textLabel.font = [UIFont systemFontOfSize:14];
         return cell;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (_HeaderSectionTotal == 4 && indexPath.section == 0) {
+    if (_HeaderSectionTotal == 3 && indexPath.section == 0) {
         return _cellHeight;
     }else {
         return indexPath.section == (_HeaderSectionTotal - 1) ? 200 : 44;
@@ -347,46 +367,60 @@ JFSearchViewDelegate>
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (_HeaderSectionTotal == 4 && section == 0) {
+    if (_HeaderSectionTotal == 2 && section == 2) {
         return 0;
     }else{
         return 40;
     }
 }
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (_HeaderSectionTotal == 3) {
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    JFCitySectionView *view = [[JFCitySectionView alloc]init];
+    if (_HeaderSectionTotal == 2) {
         switch (section) {
             case 0:
-                return @"定位城市";
+            {
+                 view.titleLabel.text = @"当前定位";
+                view.titleLabel.font = [UIFont systemFontOfSize:12];
+            }
                 break;
             case 1:
-                return @"最近访问的城市";
-                break;
-            case 2:
-                return @"热门城市";
+            {
+                view.titleLabel.text = @"国内热门城市";
+                view.titleLabel.font = [UIFont systemFontOfSize:12];
+            }
                 break;
             default:
-                return _characterMutableArray[section];
+            {
+                view.titleLabel.text =_characterMutableArray[section];
+                view.titleLabel.font = [UIFont systemFontOfSize:15];
+            }
                 break;
         }
     }else {
         switch (section) {
             case 1:
-                return @"定位城市";
+            {
+                view.titleLabel.text = @"定位城市";
+                view.titleLabel.font = [UIFont systemFontOfSize:12];
+            }
                 break;
             case 2:
-                return @"最近访问的城市";
-                break;
-            case 3:
-                return @"热门城市";
+            {
+                view.titleLabel.text = @"国内热门城市";
+                view.titleLabel.font = [UIFont systemFontOfSize:12];
+            }
                 break;
             default:
-                return _characterMutableArray[section];
+            {
+                view.titleLabel.text = _characterMutableArray[section];
+                view.titleLabel.font = [UIFont systemFontOfSize:15];
+            }
                 break;
         }
     }
+    return view;
 }
+
 
 //设置右侧索引的标题，这里返回的是一个数组哦！
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -403,7 +437,7 @@ JFSearchViewDelegate>
     if (self.delegate && [self.delegate respondsToSelector:@selector(cityName:)]) {
         [self.delegate cityName:cell.textLabel.text];
     }
-    [self historyCity:cell.textLabel.text];
+//    [self historyCity:cell.textLabel.text];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -427,7 +461,7 @@ JFSearchViewDelegate>
         //添加一行cell
         [_rootTableView endUpdates];
         [_characterMutableArray insertObject:@"*" atIndex:0];
-        _HeaderSectionTotal = 4;
+        _HeaderSectionTotal = 3;
         NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:0];
         [self.rootTableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
         [_rootTableView endUpdates];
@@ -437,7 +471,7 @@ JFSearchViewDelegate>
         //删除一行cell
         [_rootTableView endUpdates];
         [_characterMutableArray removeObjectAtIndex:0];
-        _HeaderSectionTotal = 3;
+        _HeaderSectionTotal = 2;
         NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:0];
         [self.rootTableView deleteSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
         [_rootTableView endUpdates];
@@ -455,7 +489,7 @@ JFSearchViewDelegate>
 - (void)searchResult:(NSString *)result {
     [_manager searchCityData:result result:^(NSMutableArray *result) {
         if ([result count] > 0) {
-            _searchView.backgroundColor = [UIColor whiteColor];
+            _searchView.backgroundColor = DSColorFromHex(0xCCCCCC);
             _searchView.resultMutableArray = result;
         }
     }];
@@ -471,7 +505,7 @@ JFSearchViewDelegate>
         [self.delegate cityName:nameStr];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
-    [self historyCity:[dic valueForKey:@"city"]];
+//    [self historyCity:[dic valueForKey:@"city"]];
 }
 
 - (void)touchViewToExit {
@@ -492,21 +526,21 @@ JFSearchViewDelegate>
         [kCurrentCityInfoDefaults setObject:cityNumber forKey:@"cityNumber"];
     }];
     _headerView.cityName = city;
-    [self historyCity:city];
+//    [self historyCity:city];
     [_rootTableView reloadData];
 }
 
-/// 添加历史访问城市
-- (void)historyCity:(NSString *)city {
-    //避免重复添加，先删除再添加
-    [_historyCityMutableArray removeObject:city];
-    [_historyCityMutableArray insertObject:city atIndex:0];
-    if (_historyCityMutableArray.count > 3) {
-        [_historyCityMutableArray removeLastObject];
-    }
-    NSData *historyCityData = [NSKeyedArchiver archivedDataWithRootObject:self.historyCityMutableArray];
-    [kCurrentCityInfoDefaults setObject:historyCityData forKey:@"historyCity"];
-}
+///// 添加历史访问城市
+//- (void)historyCity:(NSString *)city {
+//    //避免重复添加，先删除再添加
+//    [_historyCityMutableArray removeObject:city];
+//    [_historyCityMutableArray insertObject:city atIndex:0];
+//    if (_historyCityMutableArray.count > 3) {
+//        [_historyCityMutableArray removeLastObject];
+//    }
+//    NSData *historyCityData = [NSKeyedArchiver archivedDataWithRootObject:self.historyCityMutableArray];
+//    [kCurrentCityInfoDefaults setObject:historyCityData forKey:@"historyCity"];
+//}
 
 /// 拒绝定位
 - (void)refuseToUsePositioningSystem:(NSString *)message {
@@ -517,7 +551,9 @@ JFSearchViewDelegate>
 - (void)locateFailure:(NSString *)message {
     NSLog(@"%@",message);
 }
-
+-(void)pressBackBtn:(UIButton*)sender{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

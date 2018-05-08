@@ -13,6 +13,8 @@
 @interface JFCityCollectionViewCell ()
 
 @property (nonatomic, strong) UILabel *label;
+@property(nonatomic,strong)UIImageView *image;
+
 
 @end
 
@@ -20,13 +22,18 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        UILabel *label = [[UILabel alloc] initWithFrame:self.bounds];
+        self.backgroundColor = [UIColor whiteColor];
+        UILabel *label = [[UILabel alloc] init];
         label.backgroundColor = [UIColor whiteColor];
-        label.textColor = [UIColor grayColor];
+        label.textColor = DSColorFromHex(0x4D4D4D);
         label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont systemFontOfSize:14];
         [self addSubview:label];
         self.label = label;
+        UIImageView *image = [[UIImageView alloc]init];
+        image.image = [UIImage imageNamed:@"positioning_icon"];
+        [self addSubview:image];
+        self.image = image;
     }
     return self;    
 }
@@ -42,6 +49,33 @@
 
 - (void)setTitle:(NSString *)title {
     self.label.text = title;
+    if ([title isEqualToString:@"正在定位..."]) {
+        [_image mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(13);
+            make.centerY.equalTo(self);
+            make.width.mas_equalTo(12);
+            make.height.mas_equalTo(15);
+        }];
+        [_label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self);
+            make.left.equalTo(self.image.mas_right).offset(4);
+            make.right.equalTo(self).offset(-13);
+        }];
+        
+    }else{
+        
+        [_label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(13);
+            make.right.equalTo(self).offset(-13);
+            make.centerY.equalTo(self);
+        }];
+        [_image mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(13);
+            make.centerY.equalTo(self);
+            make.width.mas_equalTo(0);
+            make.height.mas_equalTo(0);
+        }];
+    }
 }
 
 @end

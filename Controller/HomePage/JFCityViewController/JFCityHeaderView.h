@@ -20,6 +20,7 @@
 
 @property (nonatomic, copy) NSString *cityName;
 @property (nonatomic, strong) NSString *buttonTitle;
+@property(nonatomic,strong)UIButton *backBtn;
 @property (nonatomic, weak) id<JFCityHeaderViewDelegate> delegate;
 
 /// 取消搜索

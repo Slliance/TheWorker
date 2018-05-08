@@ -18,6 +18,10 @@
 @property (nonatomic, strong) UILabel *currentCityLabel;
 @property (nonatomic, strong) JFButton *button;
 @property (nonatomic, strong) UISearchBar *searchBar;
+@property(nonatomic,strong)UIImageView *imageView;
+
+
+
 
 @end
 
@@ -26,12 +30,24 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSearchBar];
-        [self addLabels];
-        [self addJFButton];
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
-
+-(UIImageView *)imageView{
+    if (!_imageView) {
+        _imageView = [[UIImageView alloc]init];
+        _imageView.image = [UIImage imageNamed:@"顶部渐变色"];
+    }
+    return _imageView;
+}
+-(UIButton *)backBtn{
+    if (!_backBtn) {
+        _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_backBtn setImage:[UIImage imageNamed:@"positioning_arrow_left"] forState:UIControlStateNormal];
+    }
+    return _backBtn;
+}
 - (void)setCityName:(NSString *)cityName {
     self.currentCityLabel.text = cityName;
 }
@@ -44,23 +60,38 @@
     UISearchBar *searchBar = [[UISearchBar alloc] init];
     searchBar.delegate = self;
     searchBar.searchBarStyle = UISearchBarStyleMinimal;
-    searchBar.placeholder = @"输入城市名称";
+    searchBar.placeholder = @"城市名、拼音首字母...";
+    [searchBar.layer setMasksToBounds:YES];
+    [searchBar.layer setCornerRadius:15];
     [self addSubview:searchBar];
     self.searchBar = searchBar;
-    
+    [self addSubview:self.imageView];
+    [self addSubview:self.backBtn];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self).offset(-20);
+        make.height.mas_equalTo(20);
+    }];
+    [self.backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self);
+        make.top.equalTo(self);
+        make.bottom.equalTo(self);
+        make.width.mas_equalTo(30);
+    }];
     [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.offset(self.bounds.size.width - 10);
-        make.height.offset(40);
-        make.top.equalTo(self.mas_top).offset(0);
+        make.left.equalTo(self.backBtn.mas_right);
+        make.right.equalTo(self).offset(-20);
+        make.height.offset(30);
+        make.centerY.equalTo(self);
     }];
     
     UIView *separator = [[UIView alloc] init];
-    separator.backgroundColor = JFRGBAColor(155, 155, 155, 0.5);
+    separator.backgroundColor = [UIColor whiteColor];
     [self addSubview:separator];
     [separator mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.offset(self.bounds.size.width);
+        make.left.right.equalTo(self);
         make.height.offset(0.5);
-        make.top.equalTo(searchBar.mas_bottom).offset(0);
+        make.top.equalTo(self.mas_bottom).offset(0);
     }];
 }
 

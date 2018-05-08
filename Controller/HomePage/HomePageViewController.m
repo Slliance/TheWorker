@@ -31,18 +31,21 @@
 @interface HomePageViewController ()<JFLocationDelegate, JFCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *HomePageTableView;
 @property (nonatomic, retain) HomeHeaderView *headView;
-@property (weak, nonatomic) IBOutlet UILabel *homeLocationLabel;
+
+@property (strong, nonatomic)UIButton *homeLocationBtn;
+@property(strong,nonatomic)UIImageView *duobianImage;
 /** 城市定位管理器*/
 @property (nonatomic, strong) JFLocation *locationManager;
 /** 城市数据管理器*/
 @property (nonatomic, strong) JFAreaDataManager *manager;
-@property (weak, nonatomic) IBOutlet UITextField *homeSearchField;
+@property (strong, nonatomic) UITextField *homeSearchField;
 @property (nonatomic, retain)HomeViewModel      *viewModel;
 
 @property (nonatomic, retain) NSMutableArray        *bannerArr;
 @property (nonatomic, retain) NSMutableArray        *banneroneArr;
 @property (nonatomic, retain) NSMutableArray        *articleArr;
 @property (nonatomic, retain) MSWeakTimer           *bannerTimer;
+@property (weak, nonatomic) IBOutlet UIImageView *BgNavImage;
 @end
 
 @implementation HomePageViewController
@@ -59,10 +62,37 @@
     }
     return _manager;
 }
+-(UIButton *)homeLocationBtn{
+    if (!_homeLocationBtn) {
+        _homeLocationBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_homeLocationBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _homeLocationBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_homeLocationBtn addTarget:self action:@selector(pressHomeLocation:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _homeLocationBtn;
+}
+-(UIImageView *)duobianImage{
+    if (!_duobianImage) {
+        _duobianImage = [[UIImageView alloc]init];
+        _duobianImage.image = [UIImage imageNamed:@"多边形 1097"];
+    }
+    return _duobianImage;
+}
+-(UITextField *)homeSearchField{
+    if (!_homeSearchField) {
+        _homeSearchField = [[UITextField alloc]init];
+        [_homeSearchField setBackground:[UIImage imageNamed:@"input_search"]];
+        _homeSearchField.font = [UIFont systemFontOfSize:12];
+        _homeSearchField.textColor = DSColorFromHex(0x4D4D4D);
+    }
+    return _homeSearchField;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.BgNavImage.userInteractionEnabled = YES;
     self.locationManager = [[JFLocation alloc] init];
     _locationManager.delegate = self;
+    _homeLocationBtn.titleLabel.textAlignment = NSTextAlignmentLeft;
     self.tabBarController.delegate = self;
     self.bannerArr = [[NSMutableArray alloc] init];
     self.banneroneArr = [[NSMutableArray alloc] init];
@@ -174,6 +204,14 @@
 
 -(void)reloadUI{
     
+    [self.BgNavImage addSubview:self.homeLocationBtn];
+    [self.BgNavImage addSubview:self.duobianImage];
+    [self.BgNavImage addSubview:self.homeSearchField];
+    
+    self.homeLocationBtn.frame = CGRectMake(12, 20, 46, 44);
+    self.duobianImage.frame = CGRectMake(12+6+46, 39, 9, 6);
+    self.homeSearchField.frame = CGRectMake(12+12+46+9, 27, ScreenWidth-43-46-24-9, 30);
+
     //左视图默认是不显示的 设置为始终显示
     self.homeSearchField.leftViewMode= UITextFieldViewModeAlways;
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
@@ -200,17 +238,26 @@
 }
 
 ///定位
-- (IBAction)homeLocation:(id)sender {
+-(void)pressHomeLocation:(UIButton*)sender {
     JFCityViewController *cityViewController = [[JFCityViewController alloc] init];
     cityViewController.delegate = self;
-    cityViewController.title = @"城市";
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:cityViewController];
-    [self presentViewController:navigationController animated:YES completion:nil];
+    [self presentViewController:cityViewController animated:YES completion:nil];
 }
 #pragma mark - JFCityViewControllerDelegate
 
 - (void)cityName:(NSString *)name {
-    _homeLocationLabel.text = name;
+    
+    [_homeLocationBtn setTitle:name forState:UIControlStateNormal];
+    if (name.length>5) {
+        
+        self.homeLocationBtn.frame = CGRectMake(12, 20, 80, 44);
+        self.duobianImage.frame = CGRectMake(12+6+80, 39, 9, 6);
+        self.homeSearchField.frame = CGRectMake(12+12+80+9, 27, ScreenWidth-43-80-24-9, 30);
+    }else{
+        self.homeLocationBtn.frame = CGRectMake(12, 20, name.length*16, 44);
+        self.duobianImage.frame = CGRectMake(12+6+name.length*16, 39, 9, 6);
+        self.homeSearchField.frame = CGRectMake(12+12+name.length*16+9, 27, ScreenWidth-43-name.length*16-24-9, 30);
+    }
 }
 
 #pragma mark --- JFLocationDelegate
@@ -222,11 +269,11 @@
 //定位成功
 - (void)currentLocation:(NSDictionary *)locationDictionary {
     NSString *city = [locationDictionary valueForKey:@"City"];
-    if (![_homeLocationLabel.text isEqualToString:city]) {
+    if (![_homeLocationBtn.titleLabel.text isEqualToString:city]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"您定位到%@，确定切换城市吗？",city] preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            _homeLocationLabel.text = city;
+            _homeLocationBtn.titleLabel.text = city;
             [KCURRENTCITYINFODEFAULTS setObject:city forKey:@"locationCity"];
             [KCURRENTCITYINFODEFAULTS setObject:city forKey:@"currentCity"];
             [self.manager cityNumberWithCity:city cityNumber:^(NSString *cityNumber) {
@@ -380,26 +427,26 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 1) {
-//        InfoDetailViewController *vc = [[InfoDetailViewController alloc]init];
-//        ArticleModel *model = self.articleArr[indexPath.row];
-//        vc.articleModel = model;
-//        vc.bannerUrl = model.detail_url;
-//        vc.articleId = model.Id;
-//        vc.isCollect = [model.is_collect integerValue];
-//        vc.type = @(6);
-//        vc.articleModel = model;
-//        [vc setReturnReloadBlock:^{
-//            [self footerRefreshing];
-//        }];
-//
-//        [self.navigationController pushViewController: vc animated:YES];
-        ActivityDescriptionController *activityVC = [[ActivityDescriptionController alloc]init];
-        activityVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:activityVC animated:YES];
+        InfoDetailViewController *vc = [[InfoDetailViewController alloc]init];
+        ArticleModel *model = self.articleArr[indexPath.row];
+        vc.articleModel = model;
+        vc.bannerUrl = model.detail_url;
+        vc.articleId = model.Id;
+        vc.isCollect = [model.is_collect integerValue];
+        vc.type = @(6);
+        vc.articleModel = model;
+        [vc setReturnReloadBlock:^{
+            [self footerRefreshing];
+        }];
+
+        [self.navigationController pushViewController: vc animated:YES];
+//        ActivityDescriptionController *activityVC = [[ActivityDescriptionController alloc]init];
+//        activityVC.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:activityVC animated:YES];
     }else if (indexPath.section ==0){
-        ActivityDescriptionController *activityVC = [[ActivityDescriptionController alloc]init];
-        activityVC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:activityVC animated:YES];
+//        ActivityDescriptionController *activityVC = [[ActivityDescriptionController alloc]init];
+//        activityVC.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:activityVC animated:YES];
     }
 }
 
