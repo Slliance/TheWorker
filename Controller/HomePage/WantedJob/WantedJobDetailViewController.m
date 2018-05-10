@@ -10,7 +10,7 @@
 #import "FillApplicationViewController.h"
 #import "JobViewModel.h"
 #import "CollectViewModel.h"
-
+#import "UserModel.h"
 @interface WantedJobDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *btnIWantJob;
 @property (weak, nonatomic) IBOutlet UILabel *labelDescription;
@@ -60,7 +60,7 @@
     self.wagesLabel.text = [NSString stringWithFormat:@"%@-%@元/月",self.jobModel.min_wages,self.jobModel.max_wages];
     self.timeLabel.text = self.jobModel.updatetime;
     self.companyLabel.text = self.jobModel.name;
-    [self.btnClickCount setTitle:[NSString stringWithFormat:@"%@",self.jobModel.click_count] forState:UIControlStateNormal];
+    [self.btnClickCount setTitle:[NSString stringWithFormat:@"%@次",self.jobModel.click_count] forState:UIControlStateNormal];
     self.usefulTimeLabel.text = self.jobModel.valid_time;
     self.workTimeLabel.text = self.jobModel.work_time;
     self.workAddressLabel.text = self.jobModel.address;
@@ -75,7 +75,7 @@
     [self.introductionWebView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.jobModel.company_describale]]];
 //    [self.introductionWebView loadHTMLString:describale baseURL:[NSURL URLWithString:BaseUrl]];
 }
-
+//收藏
 - (IBAction)collectAction:(id)sender {
     if (![self isLogin]) {
         [self skiptoLogin];
@@ -102,6 +102,17 @@
         [viewModel userCollectWithToken:[self getToken] articleId:[NSString stringWithFormat:@"%@",self.jobModel.Id] collectType:@(3)];
     }
 
+}
+///分享
+- (IBAction)pressShareBtn:(id)sender {
+    if ([self isLogin]) {
+        NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+        UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
+        
+        [self shareWithPageUrl:userModel.share shareTitle:userModel.share_title shareDes:userModel.share_content thumImage:userModel.show_img];
+    }else{
+        [self skiptoLogin];
+    }
 }
 - (IBAction)backAction:(id)sender {
     NSInteger count = [self.jobModel.click_count integerValue] + 1;

@@ -12,6 +12,7 @@
 #import "MatchMakingInformationController.h"
 #import <ZLSwipeableView.h>
 #import "ChooseMatchMakingCell.h"
+#import "ChooseMatchMakingListController.h"
 
 @interface ChooseMatchMakingController ()<ZLSwipeableViewDelegate, ZLSwipeableViewDataSource,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSArray *colors;
@@ -22,25 +23,19 @@
 @property(nonatomic,strong)MatchMakingInformationView *matchView;
 @property(nonatomic,strong)UIButton *backBtn;
 @property(nonatomic,strong)UIButton *editBtn;
-@property(nonatomic,strong)UITableView *tableview;
+@property(nonatomic,strong)UIButton *listBtn;
+
 @end
 
 @implementation ChooseMatchMakingController
--(UITableView *)tableview{
-    if (!_tableview) {
-        _tableview = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
-        _tableview.delegate = self;
-        _tableview.dataSource = self;
-    }
-    return _tableview;
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.bgImageView];
     [self.bgImageView addSubview:self.backBtn];
     [self.bgImageView addSubview:self.editBtn];
     [self.bgImageView addSubview:self.backgroundImage];
-//    [self.backgroundImage addSubview:self.matchView];
+    [self.bgImageView addSubview:self.listBtn];
     [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
@@ -55,6 +50,12 @@
         make.bottom.equalTo(self.bgImageView.mas_top).offset(64);
         make.height.mas_equalTo(40);
         make.width.mas_equalTo(40);
+    }];
+    [self.listBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.editBtn.mas_left);
+        make.bottom.equalTo(self.bgImageView.mas_top).offset(64);
+        make.height.mas_equalTo(40);
+        make.width.mas_equalTo(80);
     }];
     [self.backgroundImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bgImageView).offset(7);
@@ -284,6 +285,14 @@
     }
     return _editBtn;
 }
+-(UIButton *)listBtn{
+    if (!_listBtn) {
+        _listBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_listBtn setTitle:@"列表查看" forState:UIControlStateNormal];
+        [_listBtn addTarget:self action:@selector(presslistBtn) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _listBtn;
+}
 -(void)pressInputBtn:(UIButton*)sender{
     MatchMakingInformationController *informationVC = [[MatchMakingInformationController alloc]init];
     [self.navigationController pushViewController:informationVC animated:YES];
@@ -294,6 +303,10 @@
 -(void)pressEditBtn{
     HandInHandInformationController *changeVc = [[HandInHandInformationController alloc]init];
     [self.navigationController pushViewController:changeVc animated:YES];
+}
+-(void)presslistBtn{
+    ChooseMatchMakingListController * listVC = [[ChooseMatchMakingListController alloc]init];
+    [self.navigationController pushViewController:listVC animated:YES];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -27,8 +27,11 @@
 #import "JFCityViewController.h"
 #import "MyResumeViewController.h"
 #import "ActivityDescriptionController.h"
+#import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
+
 #define KCURRENTCITYINFODEFAULTS [NSUserDefaults standardUserDefaults]
-@interface HomePageViewController ()<JFLocationDelegate, JFCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate,UITextFieldDelegate>
+@interface HomePageViewController ()<JFLocationDelegate, JFCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate,UITextFieldDelegate,CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *HomePageTableView;
 @property (nonatomic, retain) HomeHeaderView *headView;
 
@@ -46,6 +49,10 @@
 @property (nonatomic, retain) NSMutableArray        *articleArr;
 @property (nonatomic, retain) MSWeakTimer           *bannerTimer;
 @property (weak, nonatomic) IBOutlet UIImageView *BgNavImage;
+@property (nonatomic, strong) CLLocationManager *locationManagers;//定位管理
+@property (nonatomic, strong) NSString *latitude;//纬度
+@property (nonatomic, strong) NSString *longitude;//经度
+
 @end
 
 @implementation HomePageViewController
@@ -89,6 +96,17 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    ///定位
+    self.locationManagers = [[CLLocationManager alloc] init];
+    self.locationManagers.delegate = self;
+    self.locationManagers.desiredAccuracy = kCLLocationAccuracyBest;//选择定位经精确度
+    self.locationManagers.distanceFilter = kCLDistanceFilterNone;
+    //授权，定位功能必须得到用户的授权
+    [self.locationManagers requestAlwaysAuthorization];
+    [self.locationManagers requestWhenInUseAuthorization];
+    
+    [self.locationManagers startUpdatingLocation];
+    
     self.BgNavImage.userInteractionEnabled = YES;
     self.locationManager = [[JFLocation alloc] init];
     _locationManager.delegate = self;
@@ -116,7 +134,7 @@
                 case 0:
             {
                 WelfareViewController *vc = [[WelfareViewController alloc]init];
-               
+                vc.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
                 break;
@@ -124,13 +142,14 @@
             {
                 
                 WantedJobViewController *vc = [[WantedJobViewController alloc]init];
+                 vc.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
             }
                 break;
                 case 2:
             {
                 HandInHandSViewController *vc = [[HandInHandSViewController alloc]init];
-                
+                 vc.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 
             }
@@ -264,11 +283,13 @@
 //定位中...
 - (void)locating {
     NSLog(@"定位中...");
+    
 }
 
 //定位成功
 - (void)currentLocation:(NSDictionary *)locationDictionary {
     NSString *city = [locationDictionary valueForKey:@"City"];
+    [self.homeLocationBtn setTitle:city forState:UIControlStateNormal];
     if (![_homeLocationBtn.titleLabel.text isEqualToString:city]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"您定位到%@，确定切换城市吗？",city] preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
@@ -501,5 +522,61 @@
     return YES;
 }
 
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    CLLocation *loc = [locations firstObject];
+    
+    //获得地理位置，把经纬度赋给我们定义的属性
+    self.latitude = [NSString stringWithFormat:@"%f", loc.coordinate.latitude];
+    self.longitude = [NSString stringWithFormat:@"%f", loc.coordinate.longitude];
+    //也可以存入NSUserDefaults，方便在工程中方便获取
+    [[NSUserDefaults standardUserDefaults] setValue:self.latitude forKey:@"latitude"];
+    [[NSUserDefaults standardUserDefaults] setValue:self.longitude forKey:@"longitude"];
+    
+    //根据获取的地理位置，获取位置信息
+    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
+    
+    [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray<CLPlacemark *> *_Nullable placemarks, NSError * _Nullable error) {
+        
+        for (CLPlacemark *place in placemarks) {
+            
+            NSLog(@"name,%@",place.name);                      // 位置名
+            
+            NSLog(@"thoroughfare,%@",place.thoroughfare);      // 街道
+            
+            NSLog(@"subThoroughfare,%@",place.subThoroughfare);// 子街道
+            
+            NSLog(@"locality,%@",place.locality);              // 市
+            
+            NSLog(@"subLocality,%@",place.subLocality);        // 区
+            
+            NSLog(@"country,%@",place.country);                // 国家
+//            if ([JudgeIDAndBankCardisEmptyOrNull:_gpsCityName]) {
+//                _gpsCityName=@"定位失败";
+//            }
+//            WRITE_DATA(place.locality,@"CITY_JC_NAME");
+//            [self.mytableview reloadData];
+            [_homeLocationBtn setTitle:place.locality forState:UIControlStateNormal];
+             [kCurrentCityInfoDefaults setObject:place.locality forKey:@"locationCity"];
+        }
+        
+    }];
+    NSLog(@"纬度=%f，经度=%f",self.latitude,self.longitude);
+    [self.locationManagers stopUpdatingLocation];
+    
+    
+}
 
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if ([error code] == kCLErrorDenied)
+    {
+        //访问被拒绝
+        NSLog(@"拒绝访问");
+    }
+    if ([error code] == kCLErrorLocationUnknown) {
+        //无法获取位置信息
+        NSLog(@"无法获取位置信息");
+  }
+}
 @end

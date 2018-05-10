@@ -31,7 +31,7 @@
 //    [self.infoImageView setImageWithURL:[NSURL URLWithString:model.show_img] placeholderImage:[UIImage imageNamed:@"bg_no_pictures"]];
     self.labelTime.text = model.createtime;
     self.labelTitle.text = model.title;
-    [self.btnWatch setTitle:[NSString stringWithFormat:@"%@",model.click_count] forState:UIControlStateNormal];
+    [self.btnWatch setTitle:[NSString stringWithFormat:@"%@次",model.click_count] forState:UIControlStateNormal];
 }
 
 @end

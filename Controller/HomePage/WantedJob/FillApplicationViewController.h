@@ -7,7 +7,13 @@
 //
 
 #import "HYBaseViewController.h"
-
+typedef NS_ENUM(NSInteger,ResumeType) {
+    ResumeTypeCreate          = 0,
+    ResumeTypePreview        = 1,
+    ResumeTypeChange        = 2,
+    
+};
 @interface FillApplicationViewController : HYBaseViewController
 @property (nonatomic, retain) NSNumber *workId;
+@property(nonatomic,assign)ResumeType resumeType;
 @end

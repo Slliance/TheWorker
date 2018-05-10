@@ -20,8 +20,8 @@
 #import "NTESNotificationCenter.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "WXApi.h"
-
-
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 // 引入JPush功能所需头文件
 #import "JPUSHService.h"
 // iOS10注册APNs所需头文件
@@ -111,6 +111,9 @@
     return YES;
     
     //OG8zIB3HpuSnL4ZA74X43EhnxZgwZG5b百度key
+    
+   
+
 }
 
 - (void)requestAuthorizationForAddressBook {
@@ -446,7 +449,6 @@
         [HYNotification postWeixinPayResultNotification:@{@"weixinpay": wxPayResult,@"strMsg":strMsg}];
     }
 }
-
 
 
 

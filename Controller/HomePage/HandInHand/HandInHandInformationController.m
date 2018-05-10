@@ -9,12 +9,21 @@
 #import "HandInHandInformationController.h"
 #import "CommonChooseBtn.h"
 #import "ChooseMatchMakingController.h"
-
-@interface HandInHandInformationController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate>
+#import "PicModel.h"
+#import "UploadImgViewModel.h"
+#import "WorkerHandInViewModel.h"
+#import "HandInModel.h"
+#import "IDMPhoto.h"
+#import "IDMPhotoBrowser.h"
+#import "UIView+CTExtensions.h"
+#import "PGDatePickManager.h"
+#import "CZHAddressPickerView.h"
+@interface HandInHandInformationController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDelegate,PGDatePickerDelegate>
 {
     BOOL _isMale;
     BOOL _isFemale;
 }
+
 @property(nonatomic,strong)UIButton *finishBtn;
 @property(nonatomic,strong)UIScrollView *bgScrollow;
 ///昵称
@@ -30,15 +39,14 @@
 @property(nonatomic,strong)UIButton *tmpBtn;
 ///居住地
 @property(nonatomic,strong)UILabel *addressLabel;
-@property(nonatomic,strong)CommonChooseBtn *countyBtn;
+//@property(nonatomic,strong)CommonChooseBtn *countyBtn;
 @property(nonatomic,strong)CommonChooseBtn *cityBtn;
 
 
 ///出生日期
 @property(nonatomic,strong)UILabel *birthdayLabel;
 @property(nonatomic,strong)CommonChooseBtn *yearBtn;
-@property(nonatomic,strong)CommonChooseBtn *monthBtn;
-@property(nonatomic,strong)CommonChooseBtn *dayBtn;
+
 ///身高
 @property(nonatomic,strong)UILabel *heightLabel;
 ///
@@ -61,13 +69,34 @@
 @property(nonatomic,strong)UITextView *declarationLoveTextview;
 ///添加照片
 @property(nonatomic,strong)UILabel *photoLabel;
+@property(nonatomic,strong)UIView *photoView;
+@property (nonatomic, retain) NSMutableArray *imageUrlArray;
+@property (nonatomic, retain) NSMutableArray *imageArray;
+@property (nonatomic, assign) NSInteger imgOrImgUrl;//显示图片的方式
+@property (nonatomic, assign) NSInteger imageNums;
+@property (nonatomic, assign) NSInteger fateStatus;
+@property (nonatomic, copy) NSString *province;
+
+@property (nonatomic, copy) NSString *city;
+
+@property (nonatomic, copy) NSString *area;
 @end
 
 @implementation HandInHandInformationController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
+    self.imageNums = 0;
+    
+    self.imgOrImgUrl = 0;
+    self.imageArray = [[NSMutableArray alloc] init];
+    self.imageUrlArray = [[NSMutableArray alloc] init];
+    [self.imageArray addObject:@"1"];
+    
+    UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesBegan:withEvent:)];
+    [self.bgScrollow addGestureRecognizer:tapGR];
     [self.view addSubview:self.navView];
     self.navView.titleLabel.text = @"基本信息";
     [self.view addSubview:self.bgScrollow];
@@ -80,7 +109,7 @@
     [self.bgScrollow addSubview:self.femalemaleBtn];
     [self.bgScrollow addSubview:self.addressLabel];
     [self.bgScrollow addSubview:self.cityBtn];
-    [self.bgScrollow addSubview:self.countyBtn];
+    
     [self.bgScrollow addSubview:self.birthdayLabel];
     [self.bgScrollow addSubview:self.yearBtn];
     [self.bgScrollow addSubview:self.heightLabel];
@@ -96,84 +125,38 @@
     [self.bgScrollow addSubview:self.declarationLoveLabel];
     [self.bgScrollow addSubview:self.declarationLoveTextview];
     [self.bgScrollow addSubview:self.photoLabel];
+    [self.bgScrollow addSubview:self.photoView];
     [self setContentLayout];
 }
 
 -(void)setContentLayout{
-    [self.bgScrollow mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.left.right.equalTo(self.view);
-        make.top.mas_equalTo(self.view).offset(64);
-        make.bottom.equalTo(self.view).offset(49);
-    }];
+
     [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(self.view);
         make.height.mas_equalTo(64);
     }];
-    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.height.mas_equalTo(49);
-        make.bottom.equalTo(self.view);
-    }];
-    [self.nikeNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.bgScrollow).offset(24);
-        make.width.mas_equalTo(80);
-    }];
-    [self.sexLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.nikeNameLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.addressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.sexLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.birthdayLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.addressLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.heightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.birthdayLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.incomeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.heightLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.marriageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.incomeLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.declarationLoveLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.marriageLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
-    [self.declarationLoveTextview mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(92);
-        make.top.equalTo(self.marriageLabel.mas_bottom).offset(10);
-        make.width.mas_equalTo(ScreenWidth-104);
-        make.height.mas_equalTo(70);
-    }];
-    [self.photoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bgScrollow).offset(12);
-        make.height.mas_equalTo(40);
-        make.top.equalTo(self.declarationLoveTextview.mas_bottom).offset(10);
-        make.width.mas_equalTo(80);
-    }];
+    self.finishBtn.frame = CGRectMake(0, ScreenHeight-49, ScreenWidth, 49);
+
+    self.nikeNameLabel.frame = CGRectMake(12, 24, 80, 40);
+    self.sexLabel.frame = CGRectMake(12, self.nikeNameLabel.ctBottom+10, 80, 40);
+
+    self.addressLabel.frame = CGRectMake(12, self.sexLabel.ctBottom+10, 80, 40);
+
+    self.birthdayLabel.frame = CGRectMake(12, self.addressLabel.ctBottom+10, 80, 40);
+
+    self.heightLabel.frame = CGRectMake(12, self.birthdayLabel.ctBottom+10, 80, 40);
+
+    self.incomeLabel.frame = CGRectMake(12, self.heightLabel.ctBottom+10, 80, 40);
+
+    self.marriageLabel.frame = CGRectMake(12, self.incomeLabel.ctBottom+10, 80, 40);
+
+    self.declarationLoveLabel.frame = CGRectMake(12, self.marriageLabel.ctBottom+10, 80, 40);
+
+    self.declarationLoveTextview.frame = CGRectMake(92, self.marriageLabel.ctBottom+10, ScreenWidth-104, 70);
+
+    self.photoLabel.frame = CGRectMake(12, self.declarationLoveTextview.ctBottom+10, 80, 40);
+
+    self.photoView.frame = CGRectMake(92, self.declarationLoveTextview.ctBottom+10, ScreenWidth-92-12, 260);
     [self.nikeNameField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bgScrollow).offset(92);
         make.top.equalTo(self.bgScrollow).offset(24);
@@ -201,15 +184,10 @@
     [self.cityBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bgScrollow).offset(92);
         make.top.equalTo(self.maleBtn.mas_bottom).offset(10);
-        make.width.mas_equalTo(ScreenWidth/2-57);
+        make.width.mas_equalTo(ScreenWidth-104);
         make.height.mas_equalTo(40);
     }];
-    [self.countyBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.cityBtn.mas_right).offset(10);
-        make.top.equalTo(self.maleBtn.mas_bottom).offset(10);
-        make.width.mas_equalTo(ScreenWidth/2-57);
-        make.height.mas_equalTo(40);
-    }];
+    
     [self.yearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bgScrollow).offset(92);
         make.top.equalTo(self.cityBtn.mas_bottom).offset(10);
@@ -259,13 +237,17 @@
         make.width.mas_equalTo(55);
         make.height.mas_equalTo(40);
     }];
+    [self initScrollView];
 }
 -(UIScrollView *)bgScrollow{
     if (!_bgScrollow) {
         _bgScrollow = [[UIScrollView alloc]init];
         _bgScrollow.delegate = self;
         _bgScrollow.frame = CGRectMake(0, 64, ScreenWidth, ScreenHeight-64-49);
-        _bgScrollow.contentSize = CGSizeMake(ScreenWidth, ScreenHeight+100);
+        _bgScrollow.contentSize = CGSizeMake(0, ScreenHeight*2);
+        _bgScrollow.bounces = NO;
+        _bgScrollow.showsHorizontalScrollIndicator = NO;
+        _bgScrollow.showsVerticalScrollIndicator = NO;
     }
     return _bgScrollow;
 }
@@ -362,14 +344,7 @@
     }
     return _cityBtn;
 }
--(CommonChooseBtn *)countyBtn{
-    if (!_countyBtn) {
-        _countyBtn = [[CommonChooseBtn alloc]init];
-        _countyBtn.titleLabel.text = @"区/县";
-        [_countyBtn.selectedBtn addTarget:self action:@selector(pressCountyBtn:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _countyBtn;
-}
+
 -(UILabel *)birthdayLabel{
     if (!_birthdayLabel) {
         _birthdayLabel = [[UILabel alloc]init];
@@ -561,10 +536,21 @@
     }
     return _finishBtn;
 }
+-(UIView *)photoView{
+    if (!_photoView) {
+        _photoView = [[UIView alloc]init];
+//        _photoView.backgroundColor = [UIColor redColor];
+    }
+    return _photoView;
+}
 #pragma Action
 -(void)pressNikeNameBtn:(UIButton*)sender{
-     NSLog(@"");
+    
+    NSInteger num;
+    num = (arc4random() % 6) + 3;
+    self.nikeNameField.text = [self randomCreatChinese:num];
 }
+
 -(void)pressMaleOrFemaleBtn:(UIButton*)sender{
     if (_tmpBtn == nil){
         sender.selected = YES;
@@ -597,13 +583,27 @@
     }
 }
 -(void)pressCityBtn:(UIButton*)sednder{
-    NSLog(@"11");
+    CZHWeakSelf(self);
+    [CZHAddressPickerView areaPickerViewWithProvince:self.province city:self.city area:self.area areaBlock:^(NSString *province, NSString *city, NSString *area) {
+        CZHStrongSelf(self);
+        self.province = province;
+        self.city = city;
+        self.area = area;
+        
+        _cityBtn.titleLabel.text = [NSString stringWithFormat:@"%@ %@ %@",province,city,area];
+        _cityBtn.titleLabel.textColor = DSColorFromHex(0x4D4D4D);
+    }];
 }
--(void)pressCountyBtn:(UIButton *)sender{
-    NSLog(@"22");
-}
+
 -(void)pressYearBtn:(UIButton*)sednder{
-    NSLog(@"11");
+    PGDatePickManager *datePickManager = [[PGDatePickManager alloc]init];
+    datePickManager.isShadeBackgroud = true;
+    PGDatePicker *datePicker = datePickManager.datePicker;
+    datePicker.delegate = self;
+    datePicker.datePickerType = PGPickerViewType1;
+    datePicker.isHiddenMiddleText = false;
+    datePicker.datePickerMode = PGDatePickerModeDate;
+    [self presentViewController:datePickManager animated:false completion:nil];
 }
 
 -(void)pressFinishBtn:(UIButton*)sender{
@@ -612,6 +612,220 @@
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];
+}
+#pragma PGDatePickerDelegate
+- (void)datePicker:(PGDatePicker *)datePicker didSelectDate:(NSDateComponents *)dateComponents {
+    NSString *date = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)dateComponents.year ,(long)dateComponents.month,(long)dateComponents.day];
+    _yearBtn.titleLabel.text = date;
+    _yearBtn.titleLabel.textColor = DSColorFromHex(0x4D4D4D);
+}
+///随机生成汉字
+
+- (NSMutableString*)randomCreatChinese:(NSInteger)count{
+    
+    NSMutableString*randomChineseString =@"".mutableCopy;
+    
+    for(NSInteger i =0; i < count; i++){
+        
+        NSStringEncoding gbkEncoding =CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+        
+        //随机生成汉字高位
+        
+        NSInteger randomH =0xA1+arc4random()%(0xFE - 0xA1+1);
+        
+        //随机生成汉子低位
+        
+        NSInteger randomL =0xB0+arc4random()%(0xF7 - 0xB0+1);
+        
+        //组合生成随机汉字
+        
+        NSInteger number = (randomH<<8)+randomL;
+        
+        NSData*data = [NSData dataWithBytes:&number length:2];
+        
+        NSString*string = [[NSString alloc]initWithData:data encoding:gbkEncoding];
+        
+        [randomChineseString appendString:string];
+        
+        
+    }
+    
+    return randomChineseString;
+    
+}
+
+
+-(void)initScrollView{
+    
+    for (UIView *subview in self.photoView.subviews) {
+        if (subview.tag > 800) {
+            [subview removeFromSuperview];
+        }
+    }
+    
+    CGFloat w = 80;
+    CGFloat sw =80;
+    
+    NSInteger imgCount = self.imageArray.count == 10 ? 9 : self.imageArray.count;
+    CGRect picrect = self.declarationLoveTextview.frame;
+//    picrect.size.height =  30 + (imgCount - 1) / 3 * sw+sw;
+//    self.picView.frame = picrect;
+    
+//    CGRect myrect = self.myView.frame;
+//    myrect.origin.y = self.picView.frame.origin.y + self.picView.frame.size.height + 15.f;
+//    self.myView.frame = myrect;
+//    self.imageScrollView.contentSize = CGSizeMake(ScreenWidth, 0);
+//    [self.mainScrollView setContentSize:CGSizeMake(ScreenWidth, self.myView.frame.origin.y + self.myView.frame.size.height + 10)];
+    for (int i = 0; i < self.imageArray.count; i ++) {
+        if (i == 9 ) {
+            return;
+        }
+        
+        if (i == self.imageArray.count - 1) {
+            UIView *backview = [[UIView alloc] initWithFrame:CGRectMake(10*(i%3+1)+i % 3 * w, 10*(i/3+1)+i / 3 * w, w, w)];
+            backview.tag = 801 + i;
+            
+            
+            UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            addBtn.frame = CGRectMake(0, 0, w, w);
+            [addBtn setBackgroundImage:[UIImage imageNamed:@"icon_upload_picture"] forState:UIControlStateNormal];
+            addBtn.backgroundColor = [UIColor blueColor];
+            [addBtn addTarget:self action:@selector(addImageAction:) forControlEvents:UIControlEventTouchUpInside];
+            if (self.fateStatus != 0) {
+                [backview addSubview:addBtn];
+            }
+            
+            [self.photoView addSubview:backview];
+            
+        }
+        else{
+            
+            UIView *backview = [[UIView alloc] initWithFrame:CGRectMake(10*(i%3+1)+i % 3 * w, 10*(i/3+1)+i / 3 * w, w, w)];
+            backview.tag = 801 + i;
+            backview.backgroundColor = [UIColor blueColor];
+            UIImageView *imgview = [[UIImageView alloc] initWithFrame:CGRectMake(0 , 0, w, w )];
+            if (self.imgOrImgUrl == 0) {
+                [imgview setImage:self.imageArray[i + 1]];
+                
+            }else{
+                [imgview setImageWithString:self.imageUrlArray[i] placeHoldImageName:@"icon_increase"];
+                //                [imgview setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseUrl,self.imageUrlArray[i]]] placeholderImage:[UIImage imageNamed:@"bg_no_pictures"]];
+            }
+            
+            
+            [backview addSubview:imgview];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(lookPicture:)];
+            [backview addGestureRecognizer:tap];
+            
+            CGRect backRect = backview.frame;
+            UIButton *delBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [delBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 44 - 20, 44 - 27, 0)];
+            delBtn.frame = CGRectMake(backRect.origin.x + backRect.size.width - 34.f, backRect.origin.y - 15, 44, 44);
+            delBtn.tag = 801 + i;
+            [delBtn setImage:[UIImage imageNamed:@"icon_cancel1"] forState:UIControlStateNormal];
+            [delBtn addTarget:self action:@selector(deleteAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.photoView addSubview:backview];
+            if (self.fateStatus != 0) {
+                [self.photoView addSubview:delBtn];
+            }
+            
+        }
+    }
+    
+    
+}
+- (void)addImageAction:(id)sender {
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle: nil                                                                             message: nil                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
+    //添加Button
+    [alertController addAction: [UIAlertAction actionWithTitle: @"拍照" style: UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self uploadImgs:UIImagePickerControllerSourceTypeCamera];
+        
+    }]];
+    [alertController addAction: [UIAlertAction actionWithTitle: @"相册" style: UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self uploadImgs:UIImagePickerControllerSourceTypePhotoLibrary];
+        
+    }]];
+    
+    [alertController addAction: [UIAlertAction actionWithTitle: @"取消" style: UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController: alertController animated: YES completion: nil];
+}
+- (void)uploadImgs:(UIImagePickerControllerSourceType)xtype{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];//初始化
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = xtype;
+    [self presentViewController:picker animated:YES completion:^{
+        
+    }];
+    
+}
+
+-(void)uploadImgToService:(UIImage *)img{
+    //    __weak typeof(self) weakSelf = self;
+    UploadImgViewModel *viewModel = [[UploadImgViewModel alloc] init];
+    [viewModel setBlockWithReturnBlock:^(id returnValue) {
+        PicModel *model = [returnValue firstObject];
+        //        weakSelf.imgUrl = model.img_url;
+        [self.imageArray addObject:img];
+        [self.imageUrlArray addObject:model.img_url];
+        [self initScrollView];
+        //        self.iconImageView.image = img;
+        [self dissJGProgressLoadingWithTag:200];
+    } WithErrorBlock:^(id errorCode) {
+        [self dissJGProgressLoadingWithTag:200];
+    }];
+    [viewModel uploadImgWithImage:img];
+    [self showJGProgressLoadingWithTag:200];
+}
+#pragma mark - UIImagePickerControllerDelegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    
+    UIImage * image = [info objectForKey:UIImagePickerControllerEditedImage];
+    __weak typeof(self) weakSelf = self;
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+        //        [weakSelf.imageArray addObject:image];
+        [weakSelf uploadImgToService:image];
+        //        [weakSelf initScrollView];
+        
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+}
+-(void)deleteAction:(UIButton *)btn{
+    [self.imageArray removeObjectAtIndex:btn.tag - 800];
+    [self.imageUrlArray removeObjectAtIndex:btn.tag - 801];
+    [self initScrollView];
+}
+//查看图片
+-(void)lookPicture:(UITapGestureRecognizer *)ges{
+    NSInteger index = ges.view.tag - 801;
+    NSMutableArray *photosURL = [[NSMutableArray alloc] init];
+    
+    for ( int i = 0; i < self.imageUrlArray.count; i ++) {
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BaseUrl,self.imageUrlArray[i]]];
+        [photosURL addObject:url];
+    }
+    
+    // Create an array to store IDMPhoto objects
+    NSMutableArray *photos = [NSMutableArray new];
+    
+    for (NSURL *url in photosURL) {
+        IDMPhoto *photo = [IDMPhoto photoWithURL:url];
+        [photos addObject:photo];
+    }
+    
+    
+    IDMPhotoBrowser *browser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    [browser setInitialPageIndex:index];
+    [self presentViewController:browser animated:YES completion:nil];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

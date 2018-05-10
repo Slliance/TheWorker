@@ -20,9 +20,9 @@
 
     // Configure the view for the selected state
 }
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
         [self setContentLayout];
@@ -31,7 +31,6 @@
     
     return self;
 }
-
 
 -(void)setContentLayout{
     [self addSubview:self.bgView];
@@ -62,9 +61,9 @@
         make.width.mas_equalTo(70);
     }];
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.headImgae.mas_bottom).offset(10);
-        make.left.equalTo(self.headImgae.mas_bottom).offset(27);
-        make.right.equalTo(self.distenceLabel.mas_right).offset(-5);
+        make.top.equalTo(self.bgView).offset(10);
+        make.left.equalTo(self.headImgae.mas_right).offset(27);
+        make.right.equalTo(self.distenceLabel.mas_left).offset(-5);
     }];
     [self.yearLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.nameLabel.mas_bottom).offset(15);

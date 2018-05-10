@@ -14,5 +14,5 @@ extern NSString * const JFCityTableViewCellDidChangeCityNotification;
 @interface JFCityTableViewCell : UITableViewCell
 
 @property (nonatomic, copy) NSArray *cityNameArray;
-
+@property(nonatomic,copy)NSString *section;
 @end

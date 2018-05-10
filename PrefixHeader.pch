@@ -42,9 +42,16 @@
 #import <NIMAVChat/NIMAVChat.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 #import "NTESGlobalMacro.h"
-
+#import "UIView+CTExtensions.h"
 #import "NIMKit.h"
 #import <Masonry.h>
+#import <MJExtension.h>
+#import "AddressPickerHeader.h"
+#import "UserModel.h"
+#define DPSIGNATURE @"AwfZmc48uUWeTH4d83F6qUp9d88A9ekxexz"//加密key
+#define APPNAME @"i-theworker"
+#define kCurrentCityInfoDefaults [NSUserDefaults standardUserDefaults]
+
 //定义返回请求数据的block类型
 typedef void (^ReturnValueBlock) (id returnValue);
 typedef void (^ErrorCodeBlock) (id errorCode);

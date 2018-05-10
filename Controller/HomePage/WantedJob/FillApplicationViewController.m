@@ -15,28 +15,44 @@
 #import "UploadImgViewModel.h"
 #import "PicModel.h"
 #import "UIButton+WebCache.h"
+#import "MyResumeViewModel.h"
+#import "MyResumeModel.h"
+
 @interface FillApplicationViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *btnSubmit;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseEdu;
-///期望薪资
-@property (weak, nonatomic) IBOutlet UILabel *chooseEduLabel;
-@property (weak, nonatomic) IBOutlet UILabel *chooseNationLabel;
+@property(nonatomic,strong)UIButton *tmpBtn;
+@property (weak, nonatomic) IBOutlet UIButton *maleBtn;
+@property (weak, nonatomic) IBOutlet UIButton *femaleBtn;
 
+@property (weak, nonatomic) IBOutlet UILabel *sexLabel;
 
 @property (weak, nonatomic) IBOutlet UITextView *introduceTextView;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseSex;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseNation;
 @property (weak, nonatomic) IBOutlet UIButton *btnResume;
 @property (weak, nonatomic) IBOutlet UIScrollView *jobScrollView;
-@property (weak, nonatomic) IBOutlet UITextField *txtReferrer;//推荐人
-@property (weak, nonatomic) IBOutlet UITextField *expectationField;
-@property (weak, nonatomic) IBOutlet UITextField *txtName;
-@property (weak, nonatomic) IBOutlet UITextField *txtMobile;
-@property (weak, nonatomic) IBOutlet UITextField *txtIdCardNo;
-@property (weak, nonatomic) IBOutlet UITextField *txtInterest;
+///职位
 @property (weak, nonatomic) IBOutlet UITextField *txtContent;
+///推荐人
+@property (weak, nonatomic) IBOutlet UITextField *txtReferrer;
+///期望薪资
+@property (weak, nonatomic) IBOutlet UITextField *expectationField;
+///姓名
+@property (weak, nonatomic) IBOutlet UITextField *txtName;
+///电话
+@property (weak, nonatomic) IBOutlet UITextField *txtMobile;
+///身份证号
+@property (weak, nonatomic) IBOutlet UITextField *txtIdCardNo;
+///兴趣
+@property (weak, nonatomic) IBOutlet UITextField *txtInterest;
+///学历
+@property (weak, nonatomic) IBOutlet UILabel *chooseEduLabel;
+///民族
+@property (weak, nonatomic) IBOutlet UILabel *chooseNationLabel;
 @property (weak, nonatomic) IBOutlet UIButton *btnIdCardFirst;
 @property (weak, nonatomic) IBOutlet UIButton *btnIdCardSecond;
+///健康证号
 @property (weak, nonatomic) IBOutlet UITextField *txtHealthCardNO;
 @property (weak, nonatomic) IBOutlet UIButton *btnMajorCertificate;
 
@@ -52,14 +68,53 @@
 @property (nonatomic, copy) NSString *IdFirstImgUrl;
 @property (nonatomic, copy) NSString *IdSecondImgUrl;
 @property (nonatomic, assign) NSInteger imgType;//0身份证正面1身份证反面2技能证书
+@property(nonatomic,strong)MyResumeViewModel *viewModel;
+@property(nonatomic,strong)MyResumeModel*resultModel;
 @end
 
 @implementation FillApplicationViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.imgArray = [[NSMutableArray alloc] init];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.navView];
+    switch (self.resumeType) {
+        case ResumeTypeCreate:
+            self.navView.titleLabel.text = @"创建简历";
+            [self creatResumeUI];
+            break;
+        case ResumeTypePreview:
+            self.navView.titleLabel.text = @"预览";
+            [self previewUI];
+            [self requestData];
+            break;
+        case ResumeTypeChange:
+            self.navView.titleLabel.text = @"修改简历";
+            [self creatResumeUI];
+            [self requestData];
+            break;
+        default:
+            break;
+    }
+    
+//    [self requestSendResume];
 
+
+    
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view);
+        make.height.mas_equalTo(64);
+    }];
+    self.imgArray = [[NSMutableArray alloc] init];
+    [self.maleBtn addTarget:self action:@selector(pressSexBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [self.femaleBtn addTarget:self action:@selector(pressSexBtn:) forControlEvents:UIControlEventTouchUpInside];
+    
+}
+-(void)creatResumeUI{
+    self.btnIdCardFirst.enabled= YES;
+    self.btnIdCardSecond.enabled = YES;
+    self.btnMajorCertificate.enabled = YES;
+    self.btnSubmit.hidden = NO;
     self.btnSubmit.layer.masksToBounds = YES;
     self.btnSubmit.layer.cornerRadius = 4.f;
     [self.btnChooseEdu setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
@@ -101,7 +156,53 @@
     [self.txtContent.layer setBorderColor:[UIColor colorWithHexString:@"999999"].CGColor];
     [self.txtContent.layer setBorderWidth:1];
 }
-
+-(void)previewUI{
+    self.btnIdCardFirst.enabled= NO;
+    self.btnIdCardSecond.enabled = NO;
+//    self.btnMajorCertificate.enabled = NO;
+    self.btnSubmit.hidden = YES;
+    self.btnSubmit.layer.masksToBounds = YES;
+    self.btnSubmit.layer.cornerRadius = 4.f;
+    [self.btnChooseEdu setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
+    [self.btnChooseSex setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
+    [self.btnChooseNation setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
+    [self.btnResume setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
+    self.jobScrollView.contentSize = CGSizeMake(ScreenWidth, 875);
+    self.btnChooseEdu.layer.masksToBounds = YES;
+    [self.btnChooseEdu.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.btnChooseEdu.layer setBorderWidth:1];
+    self.btnChooseNation.layer.masksToBounds = YES;
+    [self.btnChooseNation.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.btnChooseNation.layer setBorderWidth:1];
+    self.expectationField.layer.masksToBounds = YES;
+    [self.expectationField.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.expectationField.layer setBorderWidth:1];
+    self.txtReferrer.layer.masksToBounds = YES;
+    [self.txtReferrer.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtReferrer.layer setBorderWidth:1];
+    self.txtName.layer.masksToBounds = YES;
+    [self.txtName.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtName.layer setBorderWidth:1];
+    self.txtMobile.layer.masksToBounds = YES;
+    [self.txtMobile.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtMobile.layer setBorderWidth:1];
+    self.txtIdCardNo.layer.masksToBounds = YES;
+    [self.txtIdCardNo.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtIdCardNo.layer setBorderWidth:1];
+    self.txtInterest.layer.masksToBounds = YES;
+    [self.txtInterest.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtInterest.layer setBorderWidth:1];
+    self.txtHealthCardNO.layer.masksToBounds = YES;
+    [self.txtHealthCardNO.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtHealthCardNO.layer setBorderWidth:1];
+    self.introduceTextView.layer.masksToBounds = YES;
+    [self.introduceTextView.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.introduceTextView.layer setBorderWidth:1];
+    self.txtContent.layer.masksToBounds = YES;
+    [self.txtContent.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.txtContent.layer setBorderWidth:1];
+    
+}
 -(void)initView{
     JobViewModel *viewModel = [[JobViewModel alloc]init];
     [viewModel setBlockWithReturnBlock:^(id returnValue) {
@@ -137,115 +238,23 @@
     [self backBtnAction:sender];
 }
 - (IBAction)submitAction:(id)sender {
-    [self applyResume];
-//    if (self.txtName.text.length == 0) {
-//        [self showJGProgressWithMsg:@"请填写姓名"];
-//        return;
-//    }
-//    if (self.txtMobile.text.length == 0) {
-//        [self showJGProgressWithMsg:@"请填写电话"];
-//        return;
-//    }
-//    if (self.txtIdCardNo.text.length == 0) {
-//        [self showJGProgressWithMsg:@"请填写身份证号"];
-//        return;
-//    }
-//    if (self.txtIdCardNo.text.length != 18) {
-//        [self showJGProgressWithMsg:@"请填写正确的身份证号"];
-//        return;
-//    }
-//    if (self.curEduStr.length == 0) {
-//        [self showJGProgressWithMsg:@"请选择学历"];
-//        return;
-//    }
-//    if (self.curSexStr.length == 0) {
-//        [self showJGProgressWithMsg:@"请选择性别"];
-//        return;
-//    }
-//    if (self.curNationStr.length == 0) {
-//        [self showJGProgressWithMsg:@"请选择民族"];
-//        return;
-//    }
-//    if (self.txtInterest.text.length == 0) {
-//        [self showJGProgressWithMsg:@"请填写兴趣"];
-//        return;
-//    }
-//    if (self.curResumeStr.length == 0) {
-//        [self showJGProgressWithMsg:@"请填写简历"];
-//        return;
-//    }
-//    NSInteger sex = 0;
-//    if ([self.curSexStr isEqualToString:@"男"]) {
-//        sex = 1;
-//    }
-//    JobViewModel *viewModel = [[JobViewModel alloc]init];
-//    [viewModel setBlockWithReturnBlock:^(id returnValue) {
-//        [self applyResume];
-//    } WithErrorBlock:^(id errorCode) {
-//        [self showJGProgressWithMsg:errorCode];
-//    }];
-//    [viewModel updateResumeWithName:self.txtName.text cradNo:self.txtIdCardNo.text edu:self.curEduStr nation:self.curNationStr interest:self.txtInterest.text resume:self.curResumeStr mobile:self.txtMobile.text sex:@(sex) recommendUser:self.txtReferrer.text token:[self getToken]];
-}
-//投递简历
--(void)applyResume{
-    
-    if (self.txtContent.text.length == 0) {
-        [self showJGProgressWithMsg:@"请填写职位"];
-        return;
-    }
-    if (self.txtName.text.length == 0) {
-        [self showJGProgressWithMsg:@"请填写姓名"];
-        return;
-    }
-    if (![CustomTool isValidtePhone:self.txtMobile.text]){
-        [self showJGProgressWithMsg:@"请填写正确的电话号码"];
-        return;
-    }
+    [self editMyResume];
 
-    if (self.txtIdCardNo.text.length == 0) {
-        [self showJGProgressWithMsg:@"请填写身份证号"];
-        return;
-    }
-    if (![CustomTool isValidateIdentityCard:self.txtIdCardNo.text]) {
-        [self showJGProgressWithMsg:@"请填写正确的身份证号"];
-        return;
-    }
-    NSInteger sex = 2;
-    if ([self.curSexStr isEqualToString:@"男"]) {
-        sex = 1;
-    }
-    if ([self.curSexStr isEqualToString:@"女"]) {
-        sex = 0;
-    }
-    [self.imgArray removeAllObjects];
-    if (self.IdFirstImgUrl.length > 1) {
-        [self.imgArray addObject:self.IdFirstImgUrl];
-    }
-    if (self.IdSecondImgUrl.length > 1) {
-        [self.imgArray addObject:self.IdSecondImgUrl];
-    }
-    
-    JobViewModel *viewModel = [[JobViewModel alloc]init];
-    [viewModel setBlockWithReturnBlock:^(id returnValue) {
-        ApplySuccessViewController *vc = [[ApplySuccessViewController alloc]init];
-        [self.navigationController pushViewController:vc animated:YES];
-    } WithErrorBlock:^(id errorCode) {
-        [self showJGProgressWithMsg:errorCode];
-    }];
-    [viewModel applyWorkWithId:self.workId token:[self getToken] job:self.txtContent.text cardImg:self.imgArray healthNo:self.txtHealthCardNO.text skillImg:self.skillImgUrl name:self.txtName.text cardno:self.txtIdCardNo.text edu:self.curEduStr nation:self.curNationStr interest:self.txtInterest.text resume:self.curResumeStr mobile:self.txtMobile.text sex:@(sex) recommendUser:self.txtReferrer.text];
 }
+
+
 
 - (IBAction)chooseEduction:(id)sender {
     [self txtResignFirstResponder];
     JobChooseViewController *vc = [[JobChooseViewController alloc]init];
 
     [vc setReturnText:^(NSString *textStr,NSInteger index) {
-        [self.btnChooseEdu setTitle:textStr forState:UIControlStateNormal];
-        [self.btnChooseEdu setTitleColor:[UIColor colorWithHexString:@"666666"] forState:UIControlStateNormal];
+        self.chooseEduLabel.text = textStr;
+        self.chooseEduLabel.textColor = [UIColor colorWithHexString:@"666666"];
         [self.btnChooseEdu setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
         self.curEduIndex = index;
         self.curEduStr = textStr;
-        [self CalculateTheIntegrity];
+//        [self CalculateTheIntegrity];
     }];
     vc.currentSelectIndex = self.curEduIndex;
     vc.currentSelectType = 0;
@@ -260,7 +269,7 @@
         [self.btnChooseSex setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
         self.curSexIndex = index;
         self.curSexStr = textStr;
-        [self CalculateTheIntegrity];
+//        [self CalculateTheIntegrity];
     }];
     vc.currentSelectIndex = self.curSexIndex;
     vc.currentSelectType = 1;
@@ -271,12 +280,12 @@
     [self txtResignFirstResponder];
     JobChooseViewController *vc = [[JobChooseViewController alloc]init];
     [vc setReturnText:^(NSString *textStr,NSInteger index) {
-        [self.btnChooseNation setTitle:textStr forState:UIControlStateNormal];
-        [self.btnChooseNation setTitleColor:[UIColor colorWithHexString:@"666666"] forState:UIControlStateNormal];
+        self.chooseNationLabel.text = textStr;
+        self.chooseNationLabel.textColor = [UIColor colorWithHexString:@"666666"];
         [self.btnChooseNation setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
         self.curNationIndex = index;
         self.curNationStr = textStr;
-        [self CalculateTheIntegrity];
+//        [self CalculateTheIntegrity];
     }];
     vc.currentSelectIndex = self.curNationIndex;
     vc.currentSelectType = 2;
@@ -290,7 +299,7 @@
         [self.btnResume setTitle:str forState:UIControlStateNormal];
         [self.btnResume setImagePositionWithType:SSImagePositionTypeRight spacing:5.f];
         self.curResumeStr = str;
-        [self CalculateTheIntegrity];
+//        [self CalculateTheIntegrity];
     }];
     [self.navigationController pushViewController:vc animated:YES];
 
@@ -310,7 +319,29 @@
     self.imgType = 2;
     [self showUploadTypeAlert];
 }
-
+-(void)pressBackBtn{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)pressSexBtn:(UIButton*)sender {
+    if (_tmpBtn == nil){
+        sender.selected = YES;
+        _tmpBtn = sender;
+    }
+    else if (_tmpBtn !=nil && _tmpBtn == sender){
+       sender.selected = YES;
+        
+    }
+    else if (_tmpBtn!= sender && _tmpBtn!=nil){
+        _tmpBtn.selected = NO;
+        sender.selected = YES;
+        _tmpBtn = sender;
+    }
+    if ([sender.titleLabel.text isEqualToString:@"男"]) {
+        self.curSexStr = @"1";
+    }else if ([sender.titleLabel.text isEqualToString:@"女"]){
+        self.curSexStr = @"2";
+    }
+}
 -(void)showUploadTypeAlert{
     UIAlertController * alertController = [UIAlertController alertControllerWithTitle: nil                                                                             message: nil                                                                       preferredStyle:UIAlertControllerStyleActionSheet];
     //添加Button
@@ -345,14 +376,20 @@
         if (weakSelf.imgType == 0) {
             weakSelf.IdFirstImgUrl = model.img_url;
             [weakSelf.btnIdCardFirst setBackgroundImage:img forState:UIControlStateNormal];
+            [weakSelf.btnIdCardFirst setImage:nil forState:UIControlStateNormal];
+            [weakSelf.btnIdCardFirst setTitle:nil forState:UIControlStateNormal];
         }else if (weakSelf.imgType == 1){
             weakSelf.IdSecondImgUrl = model.img_url;
             [weakSelf.btnIdCardSecond setBackgroundImage:img forState:UIControlStateNormal];
+            [weakSelf.btnIdCardSecond setImage:nil forState:UIControlStateNormal];
+            [weakSelf.btnIdCardSecond setTitle:nil forState:UIControlStateNormal];
         }else{
             weakSelf.skillImgUrl = model.img_url;
             [weakSelf.btnMajorCertificate setBackgroundImage:img forState:UIControlStateNormal];
+            [weakSelf.btnMajorCertificate setImage:nil forState:UIControlStateNormal];
+            [weakSelf.btnMajorCertificate setTitle:nil forState:UIControlStateNormal];
         }
-        [self CalculateTheIntegrity];
+//        [self CalculateTheIntegrity];
         [self dissJGProgressLoadingWithTag:200];
     } WithErrorBlock:^(id errorCode) {
         [self dissJGProgressLoadingWithTag:200];
@@ -393,7 +430,7 @@
     [self.txtHealthCardNO resignFirstResponder];
 }
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField{
-    [self CalculateTheIntegrity];
+//    [self CalculateTheIntegrity];
     return YES;
 }
 -(void)CalculateTheIntegrity{
@@ -423,5 +460,126 @@
         return 0;
     }
     return 1;
+}
+#pragma RequestData
+///我的简历
+-(void)requestData{
+    self.viewModel = [[MyResumeViewModel alloc]init];
+    [self.viewModel previewMyResumeToken:[self getToken]];
+    __weak __typeof(&*self) weakSelf = self;
+    [self.viewModel setBlockWithReturnBlock:^(id returnValue) {
+        _resultModel = [[MyResumeModel alloc]init];
+        _resultModel = returnValue;
+        [weakSelf reloadData];
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+}
+///投递简历
+-(void)requestSendResume{
+    self.viewModel = [[MyResumeViewModel alloc]init];
+    SendResumesReq *req = [[SendResumesReq alloc]init];
+    req.token = [self getToken];
+    req.id = @"2";
+    req.job = @"1";
+    req.name = @"1";
+    
+    [self.viewModel sendMyResumeParam:req];
+    
+    [self.viewModel setBlockWithReturnBlock:^(id returnValue) {
+        _resultModel = [[MyResumeModel alloc]init];
+        _resultModel = returnValue;
+        
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+}
+
+-(void)editMyResume{
+    self.viewModel = [[MyResumeViewModel alloc]init];
+    EditMyResumeReq *req = [[EditMyResumeReq alloc]init];
+    if (self.txtContent.text.length == 0) {
+        [self showJGProgressWithMsg:@"请填写职位"];
+        return;
+    }
+    if (self.txtName.text.length == 0) {
+        [self showJGProgressWithMsg:@"请填写姓名"];
+        return;
+    }
+    if (![CustomTool isValidtePhone:self.txtMobile.text]){
+        [self showJGProgressWithMsg:@"请填写正确的电话号码"];
+        return;
+    }
+    
+    if (self.txtIdCardNo.text.length == 0) {
+        [self showJGProgressWithMsg:@"请填写身份证号"];
+        return;
+    }
+    if (![CustomTool isValidateIdentityCard:self.txtIdCardNo.text]) {
+        [self showJGProgressWithMsg:@"请填写正确的身份证号"];
+        return;
+    }
+    
+    [self.imgArray removeAllObjects];
+    if (self.IdFirstImgUrl.length > 1) {
+        [self.imgArray addObject:self.IdFirstImgUrl];
+    }
+    if (self.IdSecondImgUrl.length > 1) {
+        [self.imgArray addObject:self.IdSecondImgUrl];
+    }
+    
+    req.token = [self getToken];
+    req.name =  self.txtName.text;
+    req.cardno = self.txtIdCardNo.text;
+    req.edu = self.chooseEduLabel.text;
+    req.nation = self.chooseNationLabel.text;
+    req.interest = self.txtInterest.text;
+    req.mobile = self.txtMobile.text;
+    req.sex = self.curSexStr;
+    req.recommend_user = self.txtReferrer.text;
+    req.job_name = self.txtContent.text;
+    req.salary = self.expectationField.text;
+    req.card_img = self.imgArray;
+    req.heathly_no = self.txtHealthCardNO.text;
+    req.skill_img = self.skillImgUrl;
+    req.introduction = self.introduceTextView.text;
+    [self.viewModel editMyResumeParam:req];
+    __weak __typeof(&*self) weakSelf = self;
+    [self.viewModel setBlockWithReturnBlock:^(id returnValue) {
+        weakSelf.resultModel = [[MyResumeModel alloc]init];
+        weakSelf.resultModel = returnValue;
+        NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+        UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
+        userModel.resume = @"1";
+        [UserDefaults writeUserDefaultObjectValue:[userModel dictionaryRepresentation] withKey:user_info];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+}
+-(void)reloadData{
+    self.txtContent.text = _resultModel.job_name;
+    self.txtReferrer.text = _resultModel.recommend_user;
+    self.expectationField.text = _resultModel.salary;
+    self.txtName.text = _resultModel.name;
+    self.txtMobile.text  = _resultModel.mobile;
+    self.txtIdCardNo.text = _resultModel.cardno;
+    self.txtInterest.text = _resultModel.interest;
+    self.chooseNationLabel.text = _resultModel.nation;
+    self.chooseEduLabel.text = _resultModel.edu;
+    self.txtHealthCardNO.text = _resultModel.heathly_no;
+    self.introduceTextView.text = _resultModel.introduction;
+    if (_resultModel.card_img.count ==1) {
+        [self.btnIdCardFirst setBackgroundImage:[UIImage imageNamed:_resultModel.card_img[0]] forState:UIControlStateNormal];
+        [self.btnIdCardFirst setImage:nil forState:UIControlStateNormal];
+        [self.btnIdCardFirst setTitle:nil forState:UIControlStateNormal];
+    }else if (_resultModel.card_img.count ==2){
+        [self.btnIdCardFirst setBackgroundImage:[UIImage imageNamed:_resultModel.card_img[0]] forState:UIControlStateNormal];
+        [self.btnIdCardFirst setImage:nil forState:UIControlStateNormal];
+        [self.btnIdCardFirst setTitle:nil forState:UIControlStateNormal];
+        [self.btnIdCardFirst setBackgroundImage:[UIImage imageNamed:_resultModel.card_img[1]] forState:UIControlStateNormal];
+        [self.btnIdCardSecond setImage:nil forState:UIControlStateNormal];
+        [self.btnIdCardSecond setTitle:nil forState:UIControlStateNormal];
+    }
 }
 @end

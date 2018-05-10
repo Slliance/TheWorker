@@ -63,6 +63,7 @@ static NSString *ID = @"cityCollectionViewCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JFCityCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ID forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
+    cell.sections = _section;
     cell.title = _cityNameArray[indexPath.row];
     
     return cell;
@@ -73,6 +74,8 @@ static NSString *ID = @"cityCollectionViewCell";
     NSDictionary *cityNameDic = @{@"cityName":cityName};
     [[NSNotificationCenter defaultCenter] postNotificationName:JFCityTableViewCellDidChangeCityNotification object:self userInfo:cityNameDic];
 }
-
+-(void)setSection:(NSString *)section{
+    _section = section;
+}
 
 @end

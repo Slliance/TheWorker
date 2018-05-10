@@ -11,8 +11,10 @@
 #define CODE_SUCCESS                        200
 
 //基础接口网址
-#define BaseUrl                                 @"http://47.92.83.233:3389/"
-//#define BaseUrl                                 @"http://47.92.83.233:8888/"
+//正式
+//#define BaseUrl                                 @"http://47.92.83.233:3389/"
+///测试
+#define BaseUrl                                 @"http://47.92.83.233:8888/"
 //#define BaseUrl                                 @"http://47.92.83.233/"
 
 //图片地址
@@ -343,6 +345,15 @@
 #define url_mine_system_msg                    @"index.php/index/index/sysMsg"
 //删除系统消息
 #define url_mine_system_msg_del                @"index.php/index/index/delMsg"
+
+///我的简历
+#define url_mine_resume    @"index.php/index/job/myResume"
+///修改、编辑简历
+#define url_mine_change_resume    @"index.php/index/job/resume"
+///投递简历
+#define url_mine_send_resume   @"index.php/index/job/applyFor"
+///删除简历
+#define url_mine_delete_resume     @"index.php/index/job/delResume"
 
 /*收藏*/
 //收藏//取消收藏

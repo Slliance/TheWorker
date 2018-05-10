@@ -22,7 +22,7 @@
 @property (nonatomic, retain) NSMutableArray        *bannerArr;
 @property (nonatomic, retain) NSMutableArray        *articleArr;
 @property (nonatomic, retain) WorkerWelfareViewModel *viewModel;
-@property (nonatomic, retain) MSWeakTimer *bannerTimer;
+@property (nonatomic, retain) MSWeakTimer  *bannerTimer;
 @end
 
 @implementation WelfareViewController
@@ -35,7 +35,15 @@
 
     self.itemTableView.tableHeaderView = self.headView;
     __weak typeof(self)weakSelf = self;
-    
+    [self.headView setEndDeceleratingBlock:^{
+        NSLog(@"");
+        weakSelf.bannerTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5 target:weakSelf.headView selector:@selector(timerStart) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
+    }];
+    [self.headView setBeginDraggingBlock:^{
+        NSLog(@"");
+        [weakSelf.bannerTimer invalidate];
+    }];
+     weakSelf.bannerTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5 target:weakSelf.headView selector:@selector(timerStart) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
     [self.headView setReturnTagBlock:^(NSInteger blockTag) {
         switch (blockTag) {
             case 0:{
@@ -79,7 +87,7 @@
         [weakSelf.itemTableView reloadData];
         if (weakSelf.bannerArr.count != 0) {
             [weakSelf.itemTableView setTableHeaderView:weakSelf.headView];
-            [weakSelf.headView initBannerViewWith:weakSelf.bannerArr];
+            [weakSelf.headView initBannerView:weakSelf.bannerArr];
         }
         [weakSelf.itemTableView.mj_header endRefreshing];
     } WithErrorBlock:^(id errorCode) {
@@ -180,7 +188,7 @@
         [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, -65)];
         [btn addTarget:self action:@selector(skipToEmplloyeeInfo) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *headImageView = [[UIImageView alloc]init];
-        headImageView.image = [UIImage imageNamed:@"icon_employee_information"];
+        headImageView.image = [UIImage imageNamed:@"welfare_icon_welfare"];
         headImageView.frame = CGRectMake(10, 9,15, 15);
         UILabel *label = [[UILabel alloc]init];
         label.frame = CGRectMake(35, 0, 60, 34);

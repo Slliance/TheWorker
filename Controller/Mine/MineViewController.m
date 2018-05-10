@@ -482,6 +482,7 @@
     if ([self isLogin]) {
         MyResumeViewController *vc = [[MyResumeViewController alloc] init];
         vc.hidesBottomBarWhenPushed = YES;
+        
         [self.navigationController pushViewController:vc animated:YES];
     }else{
         [self skiptoLogin];

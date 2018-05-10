@@ -46,10 +46,13 @@
     self.layer.borderColor = JFRGBAColor(155, 155, 165, 0.5).CGColor;
     self.layer.masksToBounds = YES;
 }
-
+-(void)setSections:(NSString *)sections{
+    _sections = sections;
+}
 - (void)setTitle:(NSString *)title {
     self.label.text = title;
-    if ([title isEqualToString:@"正在定位..."]) {
+    
+    if ([title isEqualToString:[kCurrentCityInfoDefaults objectForKey:@"locationCity"]]&&[_sections integerValue]== 0) {
         [_image mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self).offset(13);
             make.centerY.equalTo(self);

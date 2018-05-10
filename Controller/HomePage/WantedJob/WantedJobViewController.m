@@ -13,12 +13,14 @@
 #import "WantedJobDetailViewController.h"
 #import "MoreJobViewController.h"
 #import "JobViewModel.h"
+#import "MSWeakTimer.h"
 @interface WantedJobViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *itemTableView;
 @property (nonatomic, retain) JobHeaderView *headView;
 @property (nonatomic, retain) NSMutableArray        *bannerArr;
 @property (nonatomic, retain) NSMutableArray        *articleArr;
 @property (nonatomic, retain) JobViewModel *viewModel;
+@property (nonatomic, retain) MSWeakTimer *bannerTimer;
 @end
 
 @implementation WantedJobViewController
@@ -30,6 +32,14 @@
     self.articleArr = [[NSMutableArray alloc]init];
     self.headView = [[[NSBundle mainBundle] loadNibNamed:@"JobHeaderView" owner:self options:nil] firstObject];
     __weak typeof(self)weakSelf = self;
+    [self.headView setEndDeceleratingBlock:^{
+        NSLog(@"");
+        weakSelf.bannerTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5 target:weakSelf.headView selector:@selector(timerStart) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
+    }];
+    [self.headView setBeginDraggingBlock:^{
+        NSLog(@"");
+        [weakSelf.bannerTimer invalidate];
+    }];
     [self.headView setReturnTagBlock:^(NSInteger jobType) {
         NSLog(@"%ld",(long)jobType);
         JobWantedInfoViewController *vc = [[JobWantedInfoViewController alloc]init];
@@ -37,6 +47,7 @@
         vc.hidesBottomBarWhenPushed = YES;
         [weakSelf.navigationController pushViewController:vc animated:YES];
     }];
+     weakSelf.bannerTimer = [MSWeakTimer scheduledTimerWithTimeInterval:5 target:weakSelf.headView selector:@selector(timerStart) userInfo:nil repeats:YES dispatchQueue:dispatch_get_main_queue()];
     self.itemTableView.tableHeaderView = self.headView;
     [self.itemTableView registerNib:[UINib nibWithNibName:@"WantedJobTableViewCell" bundle:nil] forCellReuseIdentifier:@"WantedJobTableViewCell"];
     self.itemTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -50,7 +61,7 @@
         [weakSelf.bannerArr addObjectsFromArray:returnValue[0]];
         [weakSelf.articleArr addObjectsFromArray:returnValue[1]];
         [weakSelf.itemTableView reloadData];
-        [weakSelf.headView initViewWithData:weakSelf.bannerArr];
+        [weakSelf.headView initBannerView:weakSelf.bannerArr];
     } WithErrorBlock:^(id errorCode) {
         [weakSelf.itemTableView.mj_header endRefreshing];
         [weakSelf showJGProgressWithMsg:errorCode];

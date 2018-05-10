@@ -7,6 +7,9 @@
 //
 
 #import "MyResumeViewController.h"
+#import "FillApplicationViewController.h"
+#import "MyResumeViewModel.h"
+
 
 @interface MyResumeViewController ()
 @property(nonatomic,strong)UILabel *readyLabel;
@@ -15,21 +18,15 @@
 @property(nonatomic,strong)UIButton *previewBtn;
 @property(nonatomic,strong)UIButton *changeBtn;
 @property(nonatomic,strong)UIButton *deleteBtn;
+@property(nonatomic,strong)MyResumeViewModel *viewModel;
 @end
 
 @implementation MyResumeViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.navView];
-    [self.view addSubview:self.readyLabel];
-    [self.view addSubview:self.contentLabel];
-    [self.view addSubview:self.creatBtn];
-    [self.view addSubview:self.previewBtn];
-    [self.view addSubview:self.changeBtn];
-    [self.view addSubview:self.deleteBtn];
-    if (_isCreat) {
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+    UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
+    if ([userModel.resume isEqualToString:@"1"]) {
         self.previewBtn.hidden = NO;
         self.changeBtn.hidden = NO;
         self.deleteBtn.hidden = NO;
@@ -44,6 +41,18 @@
         self.contentLabel.hidden = NO;
         self.creatBtn.hidden = NO;
     }
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.navView];
+    [self.view addSubview:self.readyLabel];
+    [self.view addSubview:self.contentLabel];
+    [self.view addSubview:self.creatBtn];
+    [self.view addSubview:self.previewBtn];
+    [self.view addSubview:self.changeBtn];
+    [self.view addSubview:self.deleteBtn];
+    
     self.navView.titleLabel.text = @"我的简历";
     [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(self.view);
@@ -151,20 +160,37 @@
 }
 
 -(void)pressCreatBtn:(UIButton*)sender{
-     NSLog(@"");
+    FillApplicationViewController *VC = [[FillApplicationViewController alloc]init];
+    VC.resumeType = 0;
+    [self.navigationController pushViewController:VC animated:YES];
 }
 
 -(void)pressPreviewBtn:(UIButton*)sender{
-     NSLog(@"");
+    FillApplicationViewController *VC = [[FillApplicationViewController alloc]init];
+    VC.resumeType = 1;
+    [self.navigationController pushViewController:VC animated:YES];
+    
 }
 -(void)pressChangeBtn:(UIButton*)sender{
-     NSLog(@"");
+    FillApplicationViewController *VC = [[FillApplicationViewController alloc]init];
+    VC.resumeType = 2;
+    [self.navigationController pushViewController:VC animated:YES];
 }
 -(void)pressDeleteBtn:(UIButton*)sender{
-    NSLog(@"");
+       [self deleteMyResume];
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];
+}
+///删除简历
+-(void)deleteMyResume{
+    self.viewModel = [[MyResumeViewModel alloc]init];
+    [self.viewModel deleteResumeToken:[self getToken]];
+    [self.viewModel setBlockWithReturnBlock:^(id returnValue) {
+    
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

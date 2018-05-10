@@ -10,6 +10,8 @@
 #import "DetailMatchMakingHeadView.h"
 #import "DeclarationOfLoveView.h"
 #import "DetailMatchInformationView.h"
+#import "FriendViewModel.h"
+#import "RentPersonViewModel.h"
 
 @interface MatchMakingInformationController ()<UIScrollViewDelegate>
 @property(nonatomic,strong)UIScrollView *bgScrollow;
@@ -154,6 +156,29 @@
 }
 -(void)pressAddBtn:(UIButton*)sender{
     sender.selected = !sender.selected;
+    if (![self isLogin]) {
+        [self skiptoLogin];
+        return;
+    }
+    if (self.addFriendBtn.selected == YES) {
+        FriendViewModel *viewModel = [[FriendViewModel alloc] init];
+        [viewModel setBlockWithReturnBlock:^(id returnValue) {
+            self.addFriendBtn.selected = NO;
+            
+        } WithErrorBlock:^(id errorCode) {
+            [self showJGProgressWithMsg:errorCode];
+        }];
+//        [viewModel deleteFriendWithToken:[self getToken] Id:self.handInModel.uid];
+    }else{
+        RentPersonViewModel *viewModel = [[RentPersonViewModel alloc] init];
+        [viewModel setBlockWithReturnBlock:^(id returnValue) {
+            [self showJGProgressWithMsg:@"好友请求已发送"];
+        } WithErrorBlock:^(id errorCode) {
+            [self showJGProgressWithMsg:errorCode];
+        }];
+//        [viewModel addFriendWithToken:[self getToken] Id:[NSString stringWithFormat:@"%@",self.handInModel.uid]];
+    }
+    
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];

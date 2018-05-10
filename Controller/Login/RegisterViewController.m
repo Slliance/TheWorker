@@ -50,18 +50,18 @@
         self.btnRegisterOrBinding.hidden = NO;
     }
         self.btnRegister.layer.masksToBounds = YES;
-        self.btnRegister.layer.cornerRadius = 4.f;
+        self.btnRegister.layer.cornerRadius = 20.f;
         [self.btnCode.layer setMasksToBounds:YES];
         [self.btnCode.layer setBorderColor:[UIColor colorWithHexString:@"699cf1"].CGColor];
         [self.btnCode.layer setBorderWidth:1];
-        [self.btnCode.layer setCornerRadius:4.f];
-    [self setTextFieldLeftView:self.txtPhoneNum :@"icon_phone_number2" :30];
-    [self setTextFieldLeftView:self.txtPassword :@"icon_password2" :30];
-    [self setTextFieldLeftView:self.txtCode :@"icon_verification_code" :30];
+        [self.btnCode.layer setCornerRadius:20.f];
+    [self setTextFieldLeftView:self.txtPhoneNum :@"register_phone" :40];
+    [self setTextFieldLeftView:self.txtPassword :@"register_password" :40];
+    [self setTextFieldLeftView:self.txtCode :@"register_verification" :40];
         
         NSMutableAttributedString * noteStr = [[NSMutableAttributedString alloc]initWithString:self.labelProtocol.text];
         //    NSRange redRangeTwo = ;
-        [noteStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"699cf1"] range:NSMakeRange(18, 6)];
+        [noteStr addAttribute:NSForegroundColorAttributeName value:DSColorFromHex(0xFCDC05) range:NSMakeRange(18, 6)];
         [self.labelProtocol setAttributedText:noteStr];
         [self.labelProtocol sizeToFit];
     
@@ -72,8 +72,28 @@
     
     [self setTextFieldLeftView:self.txtBindingMobile :@"icon_phone_number2":30];
     [self setTextFieldLeftView:self.txtBindingCode :@"icon_verification_code":30];
+    self.txtPhoneNum.layer.cornerRadius = 20.f;
+    self.txtPhoneNum.layer.masksToBounds = YES;
+    [self.txtPhoneNum.layer setBorderColor:DSColorFromHex(0xFFFFFF).CGColor];
+    [self.txtPhoneNum.layer setBorderWidth:1];
+    self.txtPassword.layer.cornerRadius = 20.f;
+    self.txtPassword.layer.masksToBounds = YES;
+    [self.txtPassword.layer setBorderColor:DSColorFromHex(0xFFFFFF).CGColor];
+    [self.txtPassword.layer setBorderWidth:1];
+    self.txtCode.layer.cornerRadius = 20.f;
+    self.txtCode.layer.masksToBounds = YES;
+    [self.txtCode.layer setBorderColor:DSColorFromHex(0xFFFFFF).CGColor];
+    [self.txtCode.layer setBorderWidth:1];
     
-    
+    NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
+    attrs[NSForegroundColorAttributeName] = DSColorFromHex(0xFFFFFF);
+    //NSAttributedString:带有属性的文字（叫富文本，可以让你的文字丰富多彩）但是这个是不可变的带有属性的文字，创建完成之后就不可以改变了  所以需要可变的
+    NSMutableAttributedString *placeHolder = [[NSMutableAttributedString alloc]initWithString:@"手机号" attributes:attrs];
+    self.txtPhoneNum.attributedPlaceholder = placeHolder;
+    NSMutableAttributedString *codeplaceHolder = [[NSMutableAttributedString alloc]initWithString:@"验证码" attributes:attrs];
+    self.txtCode.attributedPlaceholder = codeplaceHolder;
+    NSMutableAttributedString *passplaceHolder = [[NSMutableAttributedString alloc]initWithString:@"密码" attributes:attrs];
+    self.txtPassword.attributedPlaceholder = passplaceHolder;
     [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) {
         NSLog(@"resCode : %d,registrationID: %@",resCode,registrationID);
         self.pushCode = registrationID;

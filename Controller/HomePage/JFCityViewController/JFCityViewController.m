@@ -15,7 +15,7 @@
 #import "JFSearchView.h"
 #import "JFCitySectionView.h"
 
-#define kCurrentCityInfoDefaults [NSUserDefaults standardUserDefaults]
+
 
 @interface JFCityViewController ()
 <UITableViewDelegate,
@@ -336,15 +336,18 @@ JFSearchViewDelegate>
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section < _HeaderSectionTotal) {
         self.cell = [tableView dequeueReusableCellWithIdentifier:@"cityCell" forIndexPath:indexPath];
+       
         if (_HeaderSectionTotal == 3 && indexPath.section == 0) {
             _cell.cityNameArray = _areaMutableArray;
         }
         if (indexPath.section == _HeaderSectionTotal -2 ) {
+            _cell.section = [NSString stringWithFormat:@"%ld",(long)indexPath.section];
             NSString *locationCity = [kCurrentCityInfoDefaults objectForKey:@"locationCity"];
             _cell.cityNameArray = locationCity ? @[locationCity] : @[@"正在定位..."];
         }
 
         if (indexPath.section == _HeaderSectionTotal-1) {
+            _cell.section = [NSString stringWithFormat:@"%ld",(long)indexPath.section];
             _cell.cityNameArray = self.hotCityArray;
         }
     return _cell;

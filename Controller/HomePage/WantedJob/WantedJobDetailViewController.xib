@@ -251,6 +251,9 @@
                             <state key="normal" title="分享" image="details_icon_share">
                                 <color key="titleColor" red="0.30196078430000001" green="0.30196078430000001" blue="0.30196078430000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <connections>
+                                <action selector="pressShareBtn:" destination="-1" eventType="touchUpInside" id="a8Y-V2-gCs"/>
+                            </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bv3-hD-v5Y">
                             <rect key="frame" x="112" y="5" width="1" height="38"/>
@@ -288,7 +291,7 @@
         <image name="details_icon_collection_selected" width="17" height="17"/>
         <image name="details_icon_money" width="15" height="15"/>
         <image name="details_icon_share" width="17" height="17"/>
-        <image name="icon_company" width="13" height="13"/>
+        <image name="icon_company" width="15" height="15"/>
         <image name="icon_return" width="7" height="13"/>
         <image name="welfare_icon_eye" width="12" height="12"/>
         <image name="顶部渐变色" width="375" height="64"/>
