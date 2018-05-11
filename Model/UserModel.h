@@ -48,8 +48,8 @@
 @property (nonatomic, copy) NSString *share_content;
 @property (nonatomic, copy) NSString *share_title;
 ///1:已经填写简历，0：未填写
-@property(nonatomic,copy)NSString *resume;
+@property(nonatomic,assign)NSInteger resume;
 ///1：已经填写牵手信息，0：未填写
-@property(nonatomic,copy)NSString*fate;
+@property(nonatomic,assign)NSInteger fate;
 
 @end

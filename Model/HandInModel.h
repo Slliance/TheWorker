@@ -14,7 +14,7 @@
 @property (nonatomic, copy) NSString        *nickname;
 @property (nonatomic, copy) NSString        *headimg;
 @property (nonatomic, copy) NSString        *uid;
-@property (nonatomic, retain) NSNumber        *sex  ;
+@property (nonatomic, assign) NSInteger       sex  ;
 @property (nonatomic, copy) NSString        *Id  ;
 @property (nonatomic, copy) NSString        *declaration;
 @property (nonatomic, copy) NSString        *introduce;

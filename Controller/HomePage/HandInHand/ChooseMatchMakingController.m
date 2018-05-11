@@ -12,9 +12,16 @@
 #import "MatchMakingInformationController.h"
 #import <ZLSwipeableView.h>
 #import "ChooseMatchMakingCell.h"
-#import "ChooseMatchMakingListController.h"
-
-@interface ChooseMatchMakingController ()<ZLSwipeableViewDelegate, ZLSwipeableViewDataSource,UITableViewDelegate,UITableViewDataSource>
+#import "HandWorkerListViewController.h"
+#import "V_SlideCard.h"
+#import "M_TanTan.h"
+#import "V_TanTan.h"
+@interface ChooseMatchMakingController ()<ZLSwipeableViewDelegate, ZLSwipeableViewDataSource,UITableViewDelegate,UITableViewDataSource,V_SlideCardDataSource, V_SlideCardDelegate, UICollectionViewDelegate>
+{
+    NSInteger _pageNo;//数据页码
+    CGFloat _buttonWidth;
+    CGFloat _buttonBorderWidth;
+}
 @property (nonatomic, strong) NSArray *colors;
 @property (nonatomic) NSUInteger colorIndex;
 @property (nonatomic, strong) NSArray *titles;
@@ -24,7 +31,8 @@
 @property(nonatomic,strong)UIButton *backBtn;
 @property(nonatomic,strong)UIButton *editBtn;
 @property(nonatomic,strong)UIButton *listBtn;
-
+@property (nonatomic, strong) V_SlideCard *slideCard;
+@property (nonatomic, strong) NSMutableArray *listData;
 @end
 
 @implementation ChooseMatchMakingController
@@ -63,167 +71,10 @@
         make.right.equalTo(self.bgImageView).offset(-7);
         make.bottom.equalTo(self.bgImageView).offset(-7);
     }];
-    [self setZl];
+     [self.view addSubview:self.slideCard];//加入滑动组件
+    
 }
 
--(void)setZl{
-    self.colorIndex = 0;
-    self.colors = @[
-                    @"Turquoise",
-                    @"Green Sea",
-                    @"Emerald",
-                    @"Nephritis",
-                    @"Peter River",
-                    @"Belize Hole",
-                    @"Amethyst",
-                    @"Wisteria",
-                    @"Wet Asphalt",
-                    @"Midnight Blue",
-                    @"Sun Flower",
-                    @"Orange",
-                    @"Carrot",
-                    @"Pumpkin",
-                    @"Alizarin",
-                    @"Pomegranate",
-                    @"Clouds",
-                    @"Silver",
-                    @"Concrete",
-                    @"Asbestos"
-                    ];
-    self.titles = @[
-                    @"Turquoise",
-                    @"Green Sea",
-                    @"Emerald",
-                    @"Nephritis",
-                    @"Peter River",
-                    @"Belize Hole",
-                    @"Amethyst",
-                    @"Wisteria",
-                    @"Wet Asphalt",
-                    @"Midnight Blue",
-                    @"Sun Flower",
-                    @"Orange",
-                    @"Carrot",
-                    @"Pumpkin",
-                    @"Alizarin",
-                    @"Pomegranate",
-                    @"Clouds",
-                    @"Silver",
-                    @"Concrete",
-                    @"Asbestos"
-                    ];
-    
-    
-    [self.backgroundImage addSubview:self.swipeableView];
-    ZLSwipeableView *swipeableView = _swipeableView;
-    // Required Data Source
-    self.swipeableView.dataSource = self;
-    
-    // Optional Delegate
-    self.swipeableView.delegate = self;
-    
-    self.swipeableView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    NSDictionary *metrics = @{};
-    // Adding constraints
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"|-30-[swipeableView]-30-|"
-                               options:0
-                               metrics:metrics
-                               views:NSDictionaryOfVariableBindings(
-                                                                    swipeableView)]];
-    
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"V:|-50-[swipeableView]-100-|"
-                               options:0
-                               metrics:metrics
-                               views:NSDictionaryOfVariableBindings(
-                                                                    swipeableView)]];
-//    [self.view addConstraints:[NSLayoutConstraint
-//                               constraintsWithVisualFormat:@"V:|-50-[swipeableView]-100-|"
-//                               options:0
-//                               metrics:metrics
-//                               views:NSDictionaryOfVariableBindings(
-//                                                                    swipeableView)]];
-    
-    
-    // `1` `2` `3` `4`
-//    NSArray *items = @[@"😢", @"😄", @"😢", @"😄"];
-//    for (NSInteger i = 0; i < 4; i++) {
-//        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-//        [self.view addSubview:button];
-//        button.frame = CGRectMake(50 + 60 * i, self.view.frame.size.height - 90, 50, 50);
-//        [button setTitle:items[i] forState:UIControlStateNormal];
-//        [button addTarget:self action:@selector(handle:) forControlEvents:UIControlEventTouchUpInside];
-//
-//    }
-//
-}
-// up down left right
-- (void)handle:(UIButton *)sender
-{
-    HandleDirectionType type = sender.tag;
-    switch (type) {
-        case HandleDirectionOn:
-            [self.swipeableView swipeTopViewToUp];
-            break;
-        case HandleDirectionDown:
-            [self.swipeableView swipeTopViewToDown];
-            break;
-        case HandleDirectionLeft:
-            [self.swipeableView swipeTopViewToLeft];
-            break;
-            
-        case HandleDirectionRight:
-            [self.swipeableView swipeTopViewToRight];
-            break;
-        default:
-            break;
-    }
-}
-- (ZLSwipeableView *)swipeableView
-{
-    if (_swipeableView == nil) {
-        _swipeableView = [[ZLSwipeableView alloc] initWithFrame:CGRectMake(37, 142, ScreenWidth-70, 538)];
-        
-    }
-    return _swipeableView;
-}
-- (void)viewDidLayoutSubviews {
-    [self.swipeableView loadViewsIfNeeded];
-}
-
-#pragma mark - ZLSwipeableViewDelegate
-
-- (void)swipeableView:(ZLSwipeableView *)swipeableView
-         didSwipeView:(UIView *)view
-          inDirection:(ZLSwipeableViewDirection)direction {
-    NSLog(@"did swipe in direction: %zd", direction);
-}
-
-- (void)swipeableView:(ZLSwipeableView *)swipeableView didCancelSwipe:(UIView *)view {
-    NSLog(@"did cancel swipe");
-}
-
-- (void)swipeableView:(ZLSwipeableView *)swipeableView
-  didStartSwipingView:(UIView *)view
-           atLocation:(CGPoint)location {
-    NSLog(@"did start swiping at location: x %f, y %f", location.x, location.y);
-}
-
-- (void)swipeableView:(ZLSwipeableView *)swipeableView
-          swipingView:(UIView *)view
-           atLocation:(CGPoint)location
-          translation:(CGPoint)translation {
-    NSLog(@"swiping at location: x %f, y %f, translation: x %f, y %f", location.x, location.y,
-          translation.x, translation.y);
-}
-
-- (void)swipeableView:(ZLSwipeableView *)swipeableView
-    didEndSwipingView:(UIView *)view
-           atLocation:(CGPoint)location {
-    NSLog(@"did end swiping at location: x %f, y %f", location.x, location.y);
-}
 
 #pragma mark - ZLSwipeableViewDataSource
 
@@ -239,6 +90,154 @@
     self.colorIndex++;
     return view;
 }
+
+#pragma mark - event response
+
+- (void)likeOrHateAction:(UIButton *)sender {
+    // 按钮点击缩放效果
+    CABasicAnimation*pulse = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    pulse.timingFunction= [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    pulse.duration = 0.08;
+    pulse.repeatCount= 1;
+    pulse.autoreverses= YES;
+    pulse.fromValue= [NSNumber numberWithFloat:0.9];
+    pulse.toValue= [NSNumber numberWithFloat:1.1];
+    [sender.layer addAnimation:pulse forKey:nil];
+    
+    if (sender.tag == 520) {
+        [self.slideCard animateTopCardToDirection:PanDirectionRight];
+    } else {
+        [self.slideCard animateTopCardToDirection:PanDirectionLeft];
+    }
+}
+
+#pragma mark - V_SlideCardDataSource
+- (void)loadNewDataInSlideCard:(V_SlideCard *)slideCard {
+    _pageNo ++;
+    self.listData = [self getDataSourceWithPageNo:_pageNo];
+    [self.slideCard reloadData];
+}
+
+- (void)slideCard:(V_SlideCard *)slideCard loadNewDataInCell:(V_SlideCardCell *)cell atIndex:(NSInteger)index {
+ 
+        V_TanTan *tantanCell = (V_TanTan *)cell;
+        M_TanTan *item = [self.listData objectAtIndex:index];
+        tantanCell.dataItem = item;
+   
+}
+
+- (NSInteger)numberOfItemsInSlideCard:(V_SlideCard *)slideCard {
+    return self.listData.count;
+}
+
+#pragma mark - V_SlideCardDelegate
+
+- (void)slideCard:(V_SlideCard *)slideCard topCell:(V_SlideCardCell *)cell didPanPercent:(CGFloat)percent withDirection:(PanDirection)direction atIndex:(NSInteger)index {
+        V_TanTan *tantanCell = (V_TanTan *)cell;
+        if (direction == PanDirectionRight) {
+            tantanCell.iv_like.alpha = percent;
+//            self.btn_like.layer.borderWidth = _buttonBorderWidth * (1 - percent);
+        } else {
+            tantanCell.iv_hate.alpha = percent;
+//            self.btn_hate.layer.borderWidth = _buttonBorderWidth * (1 - percent);
+        }
+    
+}
+
+- (void)slideCard:(V_SlideCard *)slideCard topCell:(V_SlideCardCell *)cell willScrollToDirection:(PanDirection)direction atIndex:(NSInteger)index {
+   
+        V_TanTan *tantanCell = (V_TanTan *)cell;
+        if (direction == PanDirectionRight) {
+            tantanCell.iv_like.alpha = 1;
+        } else {
+            tantanCell.iv_hate.alpha = 1;
+        }
+}
+
+- (void)slideCard:(V_SlideCard *)slideCard topCell:(V_SlideCardCell *)cell didChangedStateWithDirection:(PanDirection)direction atIndex:(NSInteger)index {
+   
+        V_TanTan *tantanCell = (V_TanTan *)cell;
+        [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.5 initialSpringVelocity:0.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//            self.btn_like.layer.borderWidth = _buttonBorderWidth;
+//            self.btn_hate.layer.borderWidth = _buttonBorderWidth;
+            tantanCell.iv_like.alpha = 0;
+            tantanCell.iv_hate.alpha = 0;
+        } completion:nil];
+   
+}
+
+- (void)slideCard:(V_SlideCard *)slideCard didResetFrameInCell:(V_SlideCardCell *)cell atIndex:(NSInteger)index {
+   
+        V_TanTan *tantanCell = (V_TanTan *)cell;
+        [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.5 initialSpringVelocity:0.0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//            self.btn_like.layer.borderWidth = _buttonBorderWidth;
+//            self.btn_hate.layer.borderWidth = _buttonBorderWidth;
+            tantanCell.iv_like.alpha = 0;
+            tantanCell.iv_hate.alpha = 0;
+        } completion:nil];
+}
+
+- (void)slideCard:(V_SlideCard *)slideCard didSelectCell:(V_SlideCardCell *)cell atIndex:(NSInteger)index {
+   
+        V_TanTan *tantanCell = (V_TanTan *)cell;
+        NSLog(@"tantan userName = %@", tantanCell.dataItem.userName);
+    
+}
+
+#pragma mark - private methods
+
+- (void)leftBarButtonClick {
+    if (self.navigationController.viewControllers.count > 1) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (void)rightBarButtonClick { }
+
+#pragma mark - getter
+
+- (V_SlideCard *)slideCard {
+    if (_slideCard == nil) {
+        _slideCard = [[V_SlideCard alloc] initWithFrame:CGRectMake(0, 95, ScreenWidth, ScreenHeight-64-60)];
+        _slideCard.cellScaleSpace = 0.06;
+        _slideCard.cellCenterYOffset = - 100;
+        
+        _slideCard.cellSize = CGSizeMake(ScreenWidth-67, ScreenHeight-64-60);
+        NSString *cellClassName = @"";
+        cellClassName = @"V_TanTan";
+        _slideCard.panDistance = 150;
+        [_slideCard registerCellClassName:cellClassName];
+        _slideCard.dataSource = self;
+        _slideCard.delegate = self;
+    }
+    return _slideCard;
+}
+
+- (NSMutableArray *)listData {
+    if (_listData == nil) {
+        _listData = [[NSMutableArray alloc] init];
+        _listData = [[self getDataSourceWithPageNo:0] copy];
+    }
+    return _listData;
+}
+
+- (NSMutableArray *)getDataSourceWithPageNo:(NSInteger)pageNo {
+    NSMutableArray *itemArray = [[NSMutableArray alloc] init];
+    
+    for (NSInteger i = 0; i < 10; i++) {
+        NSString *imageName = [NSString stringWithFormat:@"tantan%d%lu", 0,i];
+        NSString *nickName = [NSString stringWithFormat:@"姓名%lu%lu", pageNo,i];
+        
+        [itemArray addObject:[[M_TanTan alloc] initWithImage:imageName andName:nickName andConstellation:@"某星座" andJob:@"职位" andDistance:[NSString stringWithFormat:@"%lu%lukm", pageNo,i] andAge:@"23岁"]];
+    }
+    return itemArray;
+}
+
+
+
+
 
 
 
@@ -305,7 +304,7 @@
     [self.navigationController pushViewController:changeVc animated:YES];
 }
 -(void)presslistBtn{
-    ChooseMatchMakingListController * listVC = [[ChooseMatchMakingListController alloc]init];
+    HandWorkerListViewController * listVC = [[HandWorkerListViewController alloc]init];
     [self.navigationController pushViewController:listVC animated:YES];
 }
 - (void)didReceiveMemoryWarning {

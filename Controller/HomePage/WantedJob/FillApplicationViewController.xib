@@ -16,14 +16,15 @@
                 <outlet property="btnIdCardFirst" destination="sLN-ja-ei8" id="wsh-Vb-gcj"/>
                 <outlet property="btnIdCardSecond" destination="qiY-cf-tpG" id="min-eS-odA"/>
                 <outlet property="btnMajorCertificate" destination="nCv-8G-c2K" id="70l-lU-UNm"/>
-                <outlet property="btnSubmit" destination="Z4H-VE-dCf" id="PFY-GO-4MB"/>
                 <outlet property="chooseEduLabel" destination="o5o-BO-PaY" id="xqq-7b-j0h"/>
                 <outlet property="chooseNationLabel" destination="kMA-Yt-7OQ" id="plZ-eo-Dm2"/>
+                <outlet property="eduImage" destination="saF-Qu-JIP" id="vjN-lS-MuO"/>
                 <outlet property="expectationField" destination="xbP-Pb-IWR" id="U1h-qB-Qfm"/>
                 <outlet property="femaleBtn" destination="UhS-sf-XI8" id="xgE-ip-LTp"/>
                 <outlet property="introduceTextView" destination="O2C-jA-PKS" id="nOw-g7-Uic"/>
                 <outlet property="jobScrollView" destination="vLG-H9-3La" id="7Fo-vY-pXX"/>
                 <outlet property="maleBtn" destination="5oE-Wr-MzY" id="TB6-K2-pcU"/>
+                <outlet property="nationImage" destination="heN-PD-9rN" id="QOZ-eK-efZ"/>
                 <outlet property="sexLabel" destination="UYS-Z9-7XF" id="yPP-aW-BOY"/>
                 <outlet property="txtContent" destination="QSZ-6Q-8OE" id="TRx-LA-MEe"/>
                 <outlet property="txtHealthCardNO" destination="7kJ-2q-vSV" id="2mQ-gj-KzT"/>
@@ -61,7 +62,7 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Z4H-VE-dCf">
                     <rect key="frame" x="0.0" y="619" width="375" height="49"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="0.80784313730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <state key="normal" title="保存并提交">
@@ -72,7 +73,7 @@
                     </connections>
                 </button>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" id="vLG-H9-3La">
-                    <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                    <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" misplaced="YES" id="muq-4G-esL">
@@ -112,7 +113,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     <connections>
                                         <outlet property="delegate" destination="-1" id="sX2-zY-k35"/>
                                     </connections>
@@ -354,7 +355,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="兴趣：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="frj-6R-8Jp">
-                                    <rect key="frame" x="11" y="630" width="70" height="21"/>
+                                    <rect key="frame" x="11" y="630" width="70" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -370,8 +371,8 @@
                                         <outlet property="delegate" destination="-1" id="sEI-6c-CEF"/>
                                     </connections>
                                 </textField>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="自我介绍：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TeR-Qe-xOB">
-                                    <rect key="frame" x="11" y="680" width="72" height="80"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="自我介绍：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TeR-Qe-xOB">
+                                    <rect key="frame" x="11" y="677" width="72" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

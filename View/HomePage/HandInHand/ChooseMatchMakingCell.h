@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "HandInModel.h"
 @interface ChooseMatchMakingCell : UITableViewCell
 @property(nonatomic,strong)UIView *bgView;
 @property(nonatomic,strong)UIImageView *headImgae;
@@ -16,5 +16,5 @@
 @property(nonatomic,strong)UILabel *yearLabel;
 @property(nonatomic,strong)UILabel *contentLabel;
 @property(nonatomic,strong)UILabel *distenceLabel;
-
+@property(nonatomic,strong)HandInModel *handmodel;
 @end

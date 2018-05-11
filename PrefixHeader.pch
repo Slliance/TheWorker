@@ -51,7 +51,12 @@
 #define DPSIGNATURE @"AwfZmc48uUWeTH4d83F6qUp9d88A9ekxexz"//加密key
 #define APPNAME @"i-theworker"
 #define kCurrentCityInfoDefaults [NSUserDefaults standardUserDefaults]
+#define RESETFRAME      @"resetFrameNotification"
+#define MOVEACTION      @"moveActionNotification"
 
+#define PERCENTMAIN     @"PercentMain"
+#define PERCENTX        @"PercentX"
+#define DIRECTION        @"Direction"
 //定义返回请求数据的block类型
 typedef void (^ReturnValueBlock) (id returnValue);
 typedef void (^ErrorCodeBlock) (id errorCode);

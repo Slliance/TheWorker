@@ -18,6 +18,7 @@
         if ([publicModel.code integerValue] == CODE_SUCCESS) {
             NSDictionary *dic = publicModel.data;
             MyResumeModel *model = [[MyResumeModel alloc]initWithDict:dic];
+            model.card_img = [dic objectForKey:@"card_img"];
             self.returnBlock(model);
         }
         else{
@@ -34,8 +35,8 @@
     [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_mine_send_resume method:@"post" parameter:parameter success:^(NSDictionary *data) {
         PublicModel *publicModel = [self publicModelInitWithData:data];
         if ([publicModel.code integerValue] == CODE_SUCCESS) {
-            NSDictionary *dic = publicModel.data;
-            self.returnBlock(dic);
+          
+            self.returnBlock(data);
         }
         else{
             [self errorCodeWithDescribe:publicModel.message];
@@ -53,7 +54,7 @@
         PublicModel *publicModel = [self publicModelInitWithData:data];
         if ([publicModel.code integerValue] == CODE_SUCCESS) {
             
-            self.returnBlock(publicModel);
+            self.returnBlock(data);
         }
         else{
             [self errorCodeWithDescribe:publicModel.message];

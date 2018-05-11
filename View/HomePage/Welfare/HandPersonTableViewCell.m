@@ -40,9 +40,9 @@
     self.labelContent.text = model.declaration;
     [self.headImgView setImageWithString:model.headimg placeHoldImageName:placeholderImage_user_headimg];
 //    [self.headImgView setImageWithURL:[NSURL URLWithString:model.headimg] placeholderImage:[UIImage imageNamed:placeholderImage_home_banner]];
-    if ([model.sex integerValue] == 0) {
+    if (model.sex  == 0) {
         self.imgViewSex.image = [UIImage imageNamed:@"icon_gules_female_sex"];
-    }else if([model.sex integerValue] == 1){
+    }else if(model.sex  == 1){
         self.imgViewSex.image = [UIImage imageNamed:@"icon_gules_male_sex"];
     }else{
         self.imgViewSex.hidden = YES;

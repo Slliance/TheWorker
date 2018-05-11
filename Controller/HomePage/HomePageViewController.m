@@ -425,7 +425,7 @@
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section == 0) {
-        return 100.f;
+        return 80.f;
     }
     return 88.f;
 }
@@ -439,7 +439,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     if (section == 0) {
-        return 10.f;
+        return 5.f;
     }
     return 0.0001f;
     

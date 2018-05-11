@@ -14,6 +14,9 @@
 #import "WorkerDetailViewController.h"
 #import "WorkerHandInViewModel.h"
 #import "HandInModel.h"
+#import "ChooseMatchMakingCell.h"
+#import "MatchMakingInformationController.h"
+
 @interface HandWorkerListViewController (){
     NSInteger  curSelectSexIndex;
     NSInteger  curSelectCityIndex;
@@ -46,7 +49,7 @@
     [self.sexBtn setTitleColor:[UIColor colorWithHexString:@"333333"] forState:UIControlStateNormal];
     [self.cityBtn setTitleColor:[UIColor colorWithHexString:@"333333"] forState:UIControlStateNormal];
     [self.ageBtn setTitleColor:[UIColor colorWithHexString:@"333333"] forState:UIControlStateNormal];
-    [self.itemTableView registerNib:[UINib nibWithNibName:@"HandPersonTableViewCell" bundle:nil] forCellReuseIdentifier:@"HandPersonTableViewCell"];
+//    [self.itemTableView registerNib:[UINib nibWithNibName:@"HandPersonTableViewCell" bundle:nil] forCellReuseIdentifier:@"HandPersonTableViewCell"];
 
     [self.sexBtn setTitleColor:[UIColor colorWithHexString:@"ef5f7d"] forState:UIControlStateSelected];
     [self.cityBtn setTitleColor:[UIColor colorWithHexString:@"ef5f7d"] forState:UIControlStateSelected];
@@ -251,19 +254,24 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.itemArr.count;
-}
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.itemArr.count;
+}
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    HandPersonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HandPersonTableViewCell"];
-    [cell initCell:self.itemArr[indexPath.section]];
+    static NSString *identify = @"ChooseMatchMakingCell";
+    ChooseMatchMakingCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
+    if (!cell) {
+        cell = [[ChooseMatchMakingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+    }
+   HandInModel *model = self.itemArr[indexPath.section];
+    [cell setHandmodel:model];
     return cell;
 }
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 85.f;
+    return 95.f;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -278,9 +286,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    WorkerDetailViewController *detail = [[WorkerDetailViewController alloc] init];
-    HandInModel *model = self.itemArr[indexPath.section];
-    detail.handInId = model.Id;
+    MatchMakingInformationController *detail = [[MatchMakingInformationController alloc] init];
+//    HandInModel *model = self.itemArr[indexPath.section];
+//    detail.handInId = model.Id;
     [self.navigationController pushViewController:detail animated:YES];
 
 }

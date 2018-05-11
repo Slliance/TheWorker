@@ -539,6 +539,7 @@
 -(UIView *)photoView{
     if (!_photoView) {
         _photoView = [[UIView alloc]init];
+        _photoView.userInteractionEnabled = YES;
 //        _photoView.backgroundColor = [UIColor redColor];
     }
     return _photoView;
@@ -685,7 +686,7 @@
             UIView *backview = [[UIView alloc] initWithFrame:CGRectMake(10*(i%3+1)+i % 3 * w, 10*(i/3+1)+i / 3 * w, w, w)];
             backview.tag = 801 + i;
             
-            
+    
             UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             addBtn.frame = CGRectMake(0, 0, w, w);
             [addBtn setBackgroundImage:[UIImage imageNamed:@"icon_upload_picture"] forState:UIControlStateNormal];

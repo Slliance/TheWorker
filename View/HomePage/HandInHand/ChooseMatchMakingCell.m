@@ -7,7 +7,7 @@
 //
 
 #import "ChooseMatchMakingCell.h"
-
+#import "UIImageView+WebCache.h"
 @implementation ChooseMatchMakingCell
 
 - (void)awakeFromNib {
@@ -31,7 +31,26 @@
     
     return self;
 }
-
+-(void)setHandmodel:(HandInModel *)handmodel{
+    if (handmodel.name.length>0) {
+        self.nameLabel.text = handmodel.name;
+    }
+    if (handmodel.headimg.length >0) {
+        [self.headImgae setImageWithString:handmodel.headimg placeHoldImageName:@"avatar_defaul"];
+    }
+    if (handmodel.declaration.length>0) {
+        self.contentLabel.text = [NSString stringWithFormat:@"“%@”",handmodel.declaration];
+    }
+    if (handmodel.sex == 0) {
+        [_headBtn setImage:[UIImage imageNamed:@"icon_female"] forState:UIControlStateNormal
+         ] ;
+        _headBtn.backgroundColor = DSColorFromHex(0xF9E3EC);
+    }else if (handmodel.sex ==1){
+        [_headBtn setImage:[UIImage imageNamed:@"icon_male"] forState:UIControlStateNormal
+         ] ;
+        _headBtn.backgroundColor = DSColorFromHex(0xE3E3F9);
+    }
+}
 -(void)setContentLayout{
     [self addSubview:self.bgView];
     [self.bgView addSubview: self.headImgae];
@@ -79,7 +98,7 @@
 -(UIImageView *)headImgae{
     if (!_headImgae) {
         _headImgae = [[UIImageView alloc]init];
-        _headImgae.image = [UIImage imageNamed:@"avatar_defaul"];
+//        _headImgae.image = [UIImage imageNamed:@"avatar_defaul"];
         [_headImgae.layer setMasksToBounds:YES];
         [_headImgae.layer setCornerRadius:35];
     }
@@ -102,7 +121,7 @@
         _nameLabel.font = [UIFont systemFontOfSize:15];
         _nameLabel.textColor = DSColorFromHex(0x4D4D4D);
         _nameLabel.textAlignment = NSTextAlignmentLeft;
-        _nameLabel.text = @"猜我猜不猜谁";
+//        _nameLabel.text = @"猜我猜不猜谁";
     }
     return _nameLabel;
 }
@@ -112,7 +131,7 @@
         _yearLabel.font = [UIFont systemFontOfSize:12];
         _yearLabel.textColor = DSColorFromHex(0x4D4D4D);
         _yearLabel.textAlignment = NSTextAlignmentLeft;
-        _yearLabel.text = @"18岁";
+//        _yearLabel.text = @"18岁";
     }
     return _yearLabel;
 }
@@ -122,7 +141,7 @@
         _contentLabel.font = [UIFont systemFontOfSize:12];
         _contentLabel.textColor = DSColorFromHex(0x4D4D4D);
         _contentLabel.textAlignment = NSTextAlignmentLeft;
-        _contentLabel.text = @"“xdfshklsldaksldml;ld;asl;dsl;d;lds”";
+//        _contentLabel.text = @"“xdfshklsldaksldml;ld;asl;dsl;d;lds”";
     }
    
     return _contentLabel;
@@ -140,7 +159,7 @@
         _distenceLabel.font = [UIFont systemFontOfSize:12];
         _distenceLabel.textColor = DSColorFromHex(0x1C6AF2);
         _distenceLabel.textAlignment = NSTextAlignmentRight;
-        _distenceLabel.text = @"距离300m";
+//        _distenceLabel.text = @"距离300m";
     }
     return _distenceLabel;
 }

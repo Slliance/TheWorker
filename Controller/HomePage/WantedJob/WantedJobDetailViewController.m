@@ -11,6 +11,9 @@
 #import "JobViewModel.h"
 #import "CollectViewModel.h"
 #import "UserModel.h"
+#import "MyResumeViewModel.h"
+#import "SendResumesReq.h"
+
 @interface WantedJobDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *btnIWantJob;
 @property (weak, nonatomic) IBOutlet UILabel *labelDescription;
@@ -125,10 +128,38 @@
         [self skiptoLogin];
         return;
     }
-    FillApplicationViewController *vc = [[FillApplicationViewController alloc]init];
-    vc.workId = self.jobModel.Id;
-    [self.navigationController pushViewController:vc animated:YES];
+    NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+    UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
+    
+    if (userModel.resume == 1) {
+        [self requestSendResume];
+    }else{
+        FillApplicationViewController *vc = [[FillApplicationViewController alloc]init];
+        vc.workId = self.jobModel.Id;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
 }
+///投递简历
+-(void)requestSendResume{
+  MyResumeViewModel *viewModel = [[MyResumeViewModel alloc]init];
+    SendResumesReq *req = [[SendResumesReq alloc]init];
+    req.token = [self getToken];
+    req.id = [NSString stringWithFormat:@"%@",self.jobModel.Id];
+    req.name = self.jobModel.name;
+    [viewModel sendMyResumeParam:req];
+     __weak __typeof(&*self) weakSelf = self;
+    [viewModel setBlockWithReturnBlock:^(id returnValue) {
+        NSDictionary *dic = (NSDictionary*)returnValue;
+        if ([[dic objectForKey:@"code"] integerValue] ==200) {
+            [weakSelf showJGProgressWithMsg:@"投递成功"];
+        }
+        
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+}
+
 -(void)CaculateFrame{
 
     CGSize addressSize = [self.workAddressLabel.text sizeWithFont:[UIFont systemFontOfSize:14] maxSize:CGSizeMake(ScreenWidth-95, 40)];

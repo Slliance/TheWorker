@@ -26,7 +26,7 @@
     [super viewWillAppear:animated];
     NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
     UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
-    if ([userModel.resume isEqualToString:@"1"]) {
+    if (userModel.resume == 1) {
         self.previewBtn.hidden = NO;
         self.changeBtn.hidden = NO;
         self.deleteBtn.hidden = NO;
@@ -186,8 +186,32 @@
 -(void)deleteMyResume{
     self.viewModel = [[MyResumeViewModel alloc]init];
     [self.viewModel deleteResumeToken:[self getToken]];
+     __weak __typeof(&*self) weakSelf = self;
     [self.viewModel setBlockWithReturnBlock:^(id returnValue) {
-    
+        NSDictionary*dic = (NSDictionary*)returnValue;
+        if ([[dic objectForKey:@"code"] integerValue] ==200) {
+            NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+            UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
+            userModel.resume = 0;
+            [UserDefaults writeUserDefaultObjectValue:[userModel dictionaryRepresentation] withKey:user_info];
+            [weakSelf showJGProgressWithMsg:@"删除成功"];
+            if (userModel.resume == 1) {
+                weakSelf.previewBtn.hidden = NO;
+                weakSelf.changeBtn.hidden = NO;
+                weakSelf.deleteBtn.hidden = NO;
+                weakSelf.readyLabel.hidden = YES;
+                weakSelf.contentLabel.hidden = YES;
+                weakSelf.creatBtn.hidden = YES;
+            }else{
+                weakSelf.previewBtn.hidden = YES;
+                weakSelf.changeBtn.hidden = YES;
+                weakSelf.deleteBtn.hidden = YES;
+                weakSelf.readyLabel.hidden = NO;
+                weakSelf.contentLabel.hidden = NO;
+                weakSelf.creatBtn.hidden = NO;
+            }
+        }
+        
     } WithErrorBlock:^(id errorCode) {
         
     }];

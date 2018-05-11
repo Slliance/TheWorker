@@ -13,7 +13,7 @@
 #import "UIView+HYExtension.h"
 #import "BannerWebViewController.h"
 #import "HomePageViewController.h"
-#define img_height 100
+#define img_height 80
 static char arrchar;
 
 @implementation HomeScrollTableViewCell

@@ -24,17 +24,17 @@
 ///手机
 @property(nonatomic,copy)NSString *mobile;
 ///性别
-@property(nonatomic,copy)NSString *sex;
+@property(nonatomic,assign)NSInteger sex;
 ///推荐人
 @property(nonatomic,copy)NSString *recommend_user;
 ///职位
 @property(nonatomic,copy)NSString *job_name;
 ///期望工资
-@property(nonatomic,copy)NSString *salary;
+@property(nonatomic,assign)NSNumber *salary;
 ///身份证照片
 @property(nonatomic,copy)NSArray *card_img;
 ///健康证号
-@property(nonatomic,copy)NSString *heathly_no;
+@property(nonatomic,copy)NSString *health_no;
 ///技能证书
 @property(nonatomic,copy)NSString *skill_img;
 
