@@ -15,10 +15,13 @@
 #import "VertificateResultViewController.h"
 #import "IdentityVerificationViewController.h"
 #import "UserModel.h"
+#import <POP/POP.h>
+#import <pop/POPPropertyAnimation.h>
+#import "NSObject+AddKeyValueToObject.h"
 static NSString* const UMS_THUMB_IMAGE = @"https://mobile.umeng.com/images/pic/home/social/img-1.png";
 static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/social/img-1.png";
 @interface HYBaseViewController ()
-
+@property (nonatomic, strong) UIControl *controlPop;
 @end
 
 @implementation HYBaseViewController
@@ -469,6 +472,64 @@ static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/so
         VertificateDefeatViewController *vc = [[VertificateDefeatViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
+}
+- (void)popView:(UIView *)view withOffset:(CGFloat) offset {
+    [self hidPopView];
+    self.controlPop = [[UIControl alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.controlPop.backgroundColor = DSColorAlphaMake(0, 0, 0, 0.5);
+    [self.controlPop addTarget:self action:@selector(didClickCancel:) forControlEvents:UIControlEventTouchDown];
+    [self.controlPop addSubview:view];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    [window addSubview:self.controlPop];
+    
+    CGRect frame = CGRectMake((ScreenWidth - view.ctWidth) / 2, (ScreenHeight - view.ctHeight)/2 - offset, view.ctWidth, view.ctHeight);
+    //    view.frame = CGRectMake(0, 0, SCREENWIDTH, 0);
+    POPSpringAnimation *anim = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
+    anim.fromValue = [NSValue valueWithCGRect:frame];
+    anim.toValue = [NSValue valueWithCGRect:frame];
+    [view.layer pop_addAnimation:anim forKey:@"size"];
+    //传递数据
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic setValue:anim.toValue forKey:@"toValue"];
+    [dic setValue:anim.fromValue forKey:@"fromValue"];
+    [dic setValue:view forKey:@"view"];
+    [dic setValue:@2 forKey:@"type"];
+    [self.controlPop setObjectDSValue:dic];
+}
+
+- (void)hidPopView {
+    NSDictionary *dic = (NSDictionary *)self.controlPop.objectDSValue;
+    if ([dic[@"type"] integerValue] == 1) {
+        UIView *view = dic[@"view"];
+        [UIView animateWithDuration:0.3 animations:^{
+            view.frame = CGRectMake(0, ScreenHeight , view.ctWidth, view.ctHeight);
+        } completion:^(BOOL finished) {
+            [view removeFromSuperview];
+            [view.layer removeAllAnimations];
+            self.controlPop.backgroundColor = [UIColor clearColor];
+            [self.controlPop removeFromSuperview];
+            self.controlPop = nil;
+        }];
+    } else {
+        UIView *view = dic[@"view"];
+        [view.layer removeAllAnimations];
+        self.controlPop.backgroundColor = [UIColor clearColor];
+        [self.controlPop removeFromSuperview];
+        self.controlPop = nil;
+    }
+}
+- (void)didClickCancel:(UIControl *)control {
+    if (self.controlPop != nil) {
+        [self hiddenPopViewWithDoOtherThing];
+        [self hidPopView];
+    } else {
+//        [self hiddenBottomView];
+        [self hiddenPopViewWithDoOtherThing];
+        [self hidPopView];
+    }
+}
+- (void)hiddenPopViewWithDoOtherThing{
+    
 }
 @end
 

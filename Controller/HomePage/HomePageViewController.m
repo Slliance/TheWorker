@@ -29,6 +29,7 @@
 #import "ActivityDescriptionController.h"
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import "CommonAlertView.h"
 
 #define KCURRENTCITYINFODEFAULTS [NSUserDefaults standardUserDefaults]
 @interface HomePageViewController ()<JFLocationDelegate, JFCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate,UITextFieldDelegate,CLLocationManagerDelegate>
@@ -96,6 +97,9 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    CommonAlertView  *common = [[CommonAlertView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight/4)];
+//    common.commonType = CommonTypeLogin;
+//    [self popView:common withOffset:0];
     ///定位
     self.locationManagers = [[CLLocationManager alloc] init];
     self.locationManagers.delegate = self;

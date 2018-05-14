@@ -60,4 +60,7 @@ typedef enum
 -(NSString *)getToken;
 -(BOOL)isLogin;
 -(void)skipToRenZhenVC:(NSNumber *)auth;
+/**在屏幕中央弹出一个view*/
+- (void)popView:(UIView *)view withOffset:(CGFloat) offset;
+- (void)hidPopView;
 @end

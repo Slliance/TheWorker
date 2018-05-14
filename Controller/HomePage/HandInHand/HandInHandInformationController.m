@@ -89,7 +89,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     self.imageNums = 0;
-    
+     self.fateStatus = 1;
     self.imgOrImgUrl = 0;
     self.imageArray = [[NSMutableArray alloc] init];
     self.imageUrlArray = [[NSMutableArray alloc] init];
@@ -684,13 +684,21 @@
         
         if (i == self.imageArray.count - 1) {
             UIView *backview = [[UIView alloc] initWithFrame:CGRectMake(10*(i%3+1)+i % 3 * w, 10*(i/3+1)+i / 3 * w, w, w)];
+
             backview.tag = 801 + i;
             
     
             UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+           
             addBtn.frame = CGRectMake(0, 0, w, w);
-            [addBtn setBackgroundImage:[UIImage imageNamed:@"icon_upload_picture"] forState:UIControlStateNormal];
-            addBtn.backgroundColor = [UIColor blueColor];
+            [addBtn setImage: [UIImage imageNamed:@"icon_increase"] forState:UIControlStateNormal];
+            [addBtn setTitle:@"点击添加" forState:UIControlStateNormal];
+            [addBtn setTitleColor:DSColorFromHex(0x999999) forState:UIControlStateNormal];
+            addBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+            addBtn.backgroundColor = DSColorFromHex(0xEEEEEE);
+            addBtn.imageEdgeInsets = UIEdgeInsetsMake(-20, 0, 0, -60);
+            addBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -20, -30, 0);
+            
             [addBtn addTarget:self action:@selector(addImageAction:) forControlEvents:UIControlEventTouchUpInside];
             if (self.fateStatus != 0) {
                 [backview addSubview:addBtn];
