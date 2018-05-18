@@ -41,8 +41,11 @@
 #import "BaseDataViewModel.h"
 
 #import "SystemMsgListViewController.h"
-
-@interface MineViewController ()<UITextFieldDelegate>
+#import "CommonAlertView.h"
+#import "StartViewModel.h"
+#import "PGDatePickManager.h"
+#import "CGXPickerView.h"
+@interface MineViewController ()<UITextFieldDelegate,CommonAlertViewDelegate,UIPickerViewDelegate,PGDatePickerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *headBtn;
 @property (weak, nonatomic) IBOutlet UIButton *markBtn;//签到
@@ -74,11 +77,39 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *menuScrollView;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 
+@property(nonatomic,strong)CommonAlertView *chooseAlertView;
+@property(nonatomic,strong)CommonAlertView *checkUpAlertview;
+@property(nonatomic,strong)CommonAlertView *finishedAlertview;
 @property (nonatomic ,retain) UserModel *userModel;
+@property(nonatomic,retain)StartViewModel *startModel;
 @end
 
 @implementation MineViewController
 
+-(CommonAlertView *)chooseAlertView{
+    if (!_chooseAlertView) {
+        _chooseAlertView = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-351/2,190, 351, 250)];
+        [_chooseAlertView setCommonType:CommonTypeLogin];
+        _chooseAlertView.delegate = self;
+    }
+    return _chooseAlertView;
+}
+-(CommonAlertView *)checkUpAlertview{
+    if (!_checkUpAlertview) {
+        _checkUpAlertview = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-170,120, 340, 396)];
+        [_checkUpAlertview setCommonType:CommonTypeCoupon];
+        _checkUpAlertview.delegate = self;
+    }
+    return _checkUpAlertview;
+}
+-(CommonAlertView *)finishedAlertview{
+    if (!_finishedAlertview) {
+        _finishedAlertview = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-170,120, 340, 396)];
+        [_finishedAlertview setCommonType:CommonTypeCouponfinished];
+        _finishedAlertview.delegate = self;
+    }
+    return _finishedAlertview;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -144,6 +175,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+    
     self.userModel = [[UserModel alloc] initWithDict:userinfo];
     [self reloadView];
     if (userinfo) {
@@ -153,6 +185,9 @@
             self.userModel = returnValue;
             NSLog(@"%@",self.userModel.token);
             [self reloadView];
+            if (self.userModel.firstlog ==0) {
+                [self popView:self.chooseAlertView withOffset:0];
+            }
         } WithErrorBlock:^(id errorCode) {
             [self showJGProgressWithMsg:errorCode];
         }];
@@ -170,6 +205,57 @@
     self.markBtn.hidden = NO;
     self.txtMyRemark.hidden = NO;
     self.imgMySex.hidden = NO;
+}
+#pragma mark-CommonAlertViewDelegate
+-(void)selecteddismissBtn{
+    [self hidPopView];
+}
+-(void)selectedYearBtn{
+    NSDate *now = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    NSString *nowStr = [fmt stringFromDate:now];
+     __weak typeof(self) weakSelf = self;
+    [CGXPickerView showDatePickerWithTitle:@"出生年月" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01 00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
+        NSLog(@"%@",selectValue);
+        
+        weakSelf.chooseAlertView.yearBtn.titleLabel.text = selectValue;
+        weakSelf.chooseAlertView.yearBtn.titleLabel.textColor = DSColorFromHex(0x4D4D4D);
+    }];
+    
+    
+}
+
+-(void)commitCommonTypeLogin:(NSString *)year Sex:(NSString*)sex{
+    self.startModel = [[StartViewModel alloc]init];
+    if (sex.length<1) {
+        [self showJGProgressWithMsg:@"请选择性别"];
+        return;
+    }
+    if (year.length<1) {
+        [self showJGProgressWithMsg:@"请选择年龄"];
+        return;
+    }
+    [self.startModel addUserBaseWithToken:[self getToken] Sex:[sex integerValue] Birthday:year];
+     __weak typeof (self)weakSelf = self;
+    [self.startModel setBlockWithReturnBlock:^(id returnValue) {
+        PublicModel *publicModel = (PublicModel*)returnValue;
+        if ([publicModel.code integerValue] == CODE_SUCCESS) {
+            [weakSelf hidPopView];
+            [weakSelf popView:weakSelf.checkUpAlertview withOffset:0];
+        }else{
+            [weakSelf showJGProgressWithMsg:publicModel.message];
+        }
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+    
+}
+-(void)commitCommonTypeCoupon{
+     [self hidPopView];
+}
+-(void)commitCheckPackage{
+     [self hidPopView];
 }
 -(void)reloadViewLogOut{
     self.userModel = [[UserModel alloc]init];
@@ -600,5 +686,6 @@
         [self skiptoLogin];
     }
 }
+
 
 @end

@@ -57,7 +57,7 @@
     itemBtn.enabled = NO;
     itemBtn.frame = CGRectMake(15, 0, 200, 44);
     itemBtn.tag = 999 + indexPath.row;
-    itemBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    itemBtn.titleLabel.font = [UIFont systemFontOfSize:12];
     NSString *str = self.itemArr[indexPath.row][@"name"] ? self.itemArr[indexPath.row][@"name"] : self.itemArr[indexPath.row][@"title"];
     [itemBtn setTitle:str forState:UIControlStateNormal];
     itemBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -77,7 +77,7 @@
 
     }
     else{
-        [itemBtn setTitleColor:[UIColor colorWithHexString:@"333333"] forState:UIControlStateNormal];
+        [itemBtn setTitleColor:DSColorFromHex(0x4D4D4D) forState:UIControlStateNormal];
         [itemBtn setImage:[UIImage imageNamed:self.normalItemBtnImgStr] forState:UIControlStateNormal];
 
     }

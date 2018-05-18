@@ -96,6 +96,7 @@
 //    [self.noLoginView addSubview:button];
 //    [self.view addSubview:self.noLoginView];
     self.automaticallyAdjustsScrollViewInsets = NO;
+   
 }
 
 /**

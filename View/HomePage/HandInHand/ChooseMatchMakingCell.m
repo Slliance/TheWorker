@@ -49,6 +49,10 @@
         [_headBtn setImage:[UIImage imageNamed:@"icon_male"] forState:UIControlStateNormal
          ] ;
         _headBtn.backgroundColor = DSColorFromHex(0xE3E3F9);
+    }else{
+        [_headBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal
+         ] ;
+        _headBtn.backgroundColor = [UIColor clearColor];
     }
 }
 -(void)setContentLayout{
@@ -60,8 +64,9 @@
     [self.bgView addSubview:self.contentLabel];
     [self.bgView addSubview:self.distenceLabel];
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self);
-        make.bottom.equalTo(self).offset(-5);
+        make.left.right.equalTo(self);
+        make.top.equalTo(self).offset(5);
+        make.bottom.equalTo(self);
     }];
     [self.headImgae mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.bgView).offset(10);

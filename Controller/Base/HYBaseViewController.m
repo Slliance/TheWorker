@@ -520,8 +520,8 @@ static NSString* const UMS_IMAGE = @"https://mobile.umeng.com/images/pic/home/so
 }
 - (void)didClickCancel:(UIControl *)control {
     if (self.controlPop != nil) {
-        [self hiddenPopViewWithDoOtherThing];
-        [self hidPopView];
+//        [self hiddenPopViewWithDoOtherThing];
+//        [self hidPopView];
     } else {
 //        [self hiddenBottomView];
         [self hiddenPopViewWithDoOtherThing];

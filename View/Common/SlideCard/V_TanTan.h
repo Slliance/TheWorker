@@ -7,12 +7,12 @@
 //
 
 #import "V_SlideCardCell.h"
+#import "HandInModel.h"
 
-@class M_TanTan;
 
 @interface V_TanTan : V_SlideCardCell
 
-@property (nonatomic, strong) M_TanTan   *dataItem;
+@property (nonatomic, strong) HandInModel  *dataItem;
 
 @property (nonatomic, strong) UIImageView   *iv_like;
 @property (nonatomic, strong) UIImageView   *iv_hate;

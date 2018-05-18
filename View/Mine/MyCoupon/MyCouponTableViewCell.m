@@ -15,19 +15,27 @@
     
     // Initialization code
 }
--(void)initCellWithDataType:(CouponModel *)model{
-    [self.btnGet.layer setMasksToBounds:YES];
-    [self.btnGet.layer setCornerRadius:4.f];
-    
-    self.labelMoney.text = [NSString stringWithFormat:@"%@元",model.price];
-    self.labelName.text = model.name;
-    self.labelTime.text = [NSString stringWithFormat:@"%@ - %@",model.start_time,model.end_time];
-}
 
+-(void)initCellWithDataType:(CouponModel *)model{
+   
+    
+   
+    self.labelName.text = model.name;
+     self.labelTitle.text = [NSString stringWithFormat:@"%@元",model.price];
+    self.labelTime.text = [NSString stringWithFormat:@"%@ - %@",model.start_time,model.end_time];
+    self.labelcontent.text = @"";
+}
+-(void)setType:(NSInteger)type{
+    _type = type;
+    [self.btnGet.layer setMasksToBounds:YES];
+    [self.btnGet.layer setCornerRadius:10.f];
+}
 - (IBAction)getAction:(id)sender {
     
     self.getBlock();
     
+}
+- (IBAction)pressUsed:(id)sender {
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

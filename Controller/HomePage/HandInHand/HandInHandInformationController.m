@@ -18,7 +18,9 @@
 #import "UIView+CTExtensions.h"
 #import "PGDatePickManager.h"
 #import "CZHAddressPickerView.h"
-@interface HandInHandInformationController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDelegate,PGDatePickerDelegate>
+#import "CGXPickerView.h"
+
+@interface HandInHandInformationController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     BOOL _isMale;
     BOOL _isFemale;
@@ -244,7 +246,7 @@
         _bgScrollow = [[UIScrollView alloc]init];
         _bgScrollow.delegate = self;
         _bgScrollow.frame = CGRectMake(0, 64, ScreenWidth, ScreenHeight-64-49);
-        _bgScrollow.contentSize = CGSizeMake(0, ScreenHeight*2);
+        _bgScrollow.contentSize = CGSizeMake(0, ScreenHeight+200);
         _bgScrollow.bounces = NO;
         _bgScrollow.showsHorizontalScrollIndicator = NO;
         _bgScrollow.showsVerticalScrollIndicator = NO;
@@ -597,14 +599,18 @@
 }
 
 -(void)pressYearBtn:(UIButton*)sednder{
-    PGDatePickManager *datePickManager = [[PGDatePickManager alloc]init];
-    datePickManager.isShadeBackgroud = true;
-    PGDatePicker *datePicker = datePickManager.datePicker;
-    datePicker.delegate = self;
-    datePicker.datePickerType = PGPickerViewType1;
-    datePicker.isHiddenMiddleText = false;
-    datePicker.datePickerMode = PGDatePickerModeDate;
-    [self presentViewController:datePickManager animated:false completion:nil];
+    NSDate *now = [NSDate date];
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    NSString *nowStr = [fmt stringFromDate:now];
+    __weak typeof(self) weakSelf = self;
+    [CGXPickerView showDatePickerWithTitle:@"出生年月" DateType:UIDatePickerModeDate DefaultSelValue:nil MinDateStr:@"1900-01-01 00:00:00" MaxDateStr:nowStr IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
+        NSLog(@"%@",selectValue);
+        
+        weakSelf.yearBtn.titleLabel.text = selectValue;
+        weakSelf.yearBtn.titleLabel.textColor = DSColorFromHex(0x4D4D4D);
+    }];
+    
 }
 
 -(void)pressFinishBtn:(UIButton*)sender{
@@ -613,12 +619,6 @@
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];
-}
-#pragma PGDatePickerDelegate
-- (void)datePicker:(PGDatePicker *)datePicker didSelectDate:(NSDateComponents *)dateComponents {
-    NSString *date = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)dateComponents.year ,(long)dateComponents.month,(long)dateComponents.day];
-    _yearBtn.titleLabel.text = date;
-    _yearBtn.titleLabel.textColor = DSColorFromHex(0x4D4D4D);
 }
 ///随机生成汉字
 

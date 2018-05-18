@@ -13,8 +13,9 @@
 #import "UserModel.h"
 #import "MyResumeViewModel.h"
 #import "SendResumesReq.h"
+#import "CommonAlertView.h"
 
-@interface WantedJobDetailViewController ()
+@interface WantedJobDetailViewController ()<CommonAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *btnIWantJob;
 @property (weak, nonatomic) IBOutlet UILabel *labelDescription;
 @property (weak, nonatomic) IBOutlet UIView *jobView;
@@ -32,11 +33,19 @@
 @property (weak, nonatomic) IBOutlet UILabel *amountLabel;
 @property (weak, nonatomic) IBOutlet UIButton *btnCollect;
 @property (weak, nonatomic) IBOutlet UIWebView *introductionWebView;
+@property(nonatomic,strong)CommonAlertView *alertView;
 
 @end
 
 @implementation WantedJobDetailViewController
-
+-(CommonAlertView *)alertView{
+    if (!_alertView) {
+       _alertView = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-167,155, 334, 307)];
+        [_alertView setCommonType:CommonTypeApplyForJob];
+        _alertView.delegate = self;
+    }
+    return _alertView;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.btnIWantJob.layer.masksToBounds = YES;
@@ -112,7 +121,7 @@
         NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
         UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
         
-        [self shareWithPageUrl:userModel.share shareTitle:userModel.share_title shareDes:userModel.share_content thumImage:userModel.show_img];
+        [self shareWithPageUrl:self.jobModel.shared_address shareTitle:self.jobModel.name shareDes:self.jobModel.title thumImage:userModel.show_img];
     }else{
         [self skiptoLogin];
     }
@@ -150,16 +159,23 @@
     [viewModel sendMyResumeParam:req];
      __weak __typeof(&*self) weakSelf = self;
     [viewModel setBlockWithReturnBlock:^(id returnValue) {
-        NSDictionary *dic = (NSDictionary*)returnValue;
-        if ([[dic objectForKey:@"code"] integerValue] ==200) {
-            [weakSelf showJGProgressWithMsg:@"投递成功"];
+
+        PublicModel *publicModel = (PublicModel*)returnValue;
+    
+        if ([publicModel.code integerValue] == CODE_SUCCESS) {
+            [self popView:self.alertView withOffset:0];
+        }else{
+            [self showJGProgressWithMsg:publicModel.message];
         }
         
     } WithErrorBlock:^(id errorCode) {
         
     }];
 }
-
+-(void)selecteddismissBtn{
+   
+    [self hidPopView];
+}
 -(void)CaculateFrame{
 
     CGSize addressSize = [self.workAddressLabel.text sizeWithFont:[UIFont systemFontOfSize:14] maxSize:CGSizeMake(ScreenWidth-95, 40)];

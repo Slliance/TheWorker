@@ -8,6 +8,7 @@
 
 #import "HandInHandSViewController.h"
 #import "HandInHandInformationController.h"
+#import "ChooseMatchMakingController.h"
 
 @interface HandInHandSViewController ()
 @property(nonatomic,strong)UIImageView *bgImageView;
@@ -20,7 +21,7 @@
 -(UIImageView *)bgImageView{
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc]init];
-        _bgImageView.image = [UIImage imageNamed:@"handInhand_banner"];
+        _bgImageView.image = [UIImage imageNamed:@"hand_bg"];
         
     }
     return _bgImageView;
@@ -29,13 +30,10 @@
 -(UIButton *)startBtn{
     if (!_startBtn) {
         _startBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_startBtn setImage:[UIImage imageNamed:@"holdinghands_icon_heart"] forState:UIControlStateNormal];
-        [_startBtn setTitle:@"开始相亲吧" forState:UIControlStateNormal];
+        [_startBtn setImage:[UIImage imageNamed:@"hand_button"] forState:UIControlStateNormal];
         [_startBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_startBtn addTarget:self action:@selector(pressStartBtn:) forControlEvents:UIControlEventTouchUpInside];
-        _startBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-        _startBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
-        _startBtn.backgroundColor = DSColorFromHex(0xf98181);
+
     }
     return _startBtn;
 }
@@ -54,10 +52,10 @@
         make.top.equalTo(self.mas_topLayoutGuide).offset(44);
     }];
     [self.startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(150);
-        make.height.mas_equalTo(40);
+        make.width.mas_equalTo(227);
+        make.height.mas_equalTo(227);
         make.centerX.equalTo(self.bgImageView);
-        make.bottom.equalTo(self.bgImageView.mas_bottom).offset(-79);
+        make.bottom.equalTo(self.bgImageView.mas_bottom).offset(-220);
     }];
    
 }
@@ -65,13 +63,9 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 -(void)pressStartBtn:(UIButton *)sender{
-   BOOL is_finish = [UserDefaults readUserDefaultObjectValueForKey:@"handinhandFinish"];
-    if (is_finish ==YES) {
-        
-    }else if (is_finish ==NO){
-        HandInHandInformationController *informationVC  = [[HandInHandInformationController alloc]init];
-        [self.navigationController pushViewController:informationVC animated:YES];
-    }
+    ChooseMatchMakingController *informationVC  = [[ChooseMatchMakingController alloc]init];
+    [self.navigationController pushViewController:informationVC animated:YES];
+
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

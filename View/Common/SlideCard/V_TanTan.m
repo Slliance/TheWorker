@@ -36,77 +36,34 @@
 }
 
 
-- (void)setDataItem:(M_TanTan *)dataItem {
+//- (void)setDataItem:(HandInModel *)dataItem {
+//    _dataItem = dataItem;
+//    self.lb_name.text = dataItem.nickname;
+//    self.iv_user.image = [UIImage imageNamed:dataItem.imageName];
+//    self.lb_age.text = dataItem.age;
+//    self.lb_constellation.text = dataItem.constellationName;
+//    self.lb_jobOrDistance.text = dataItem.jobName.length ? dataItem.jobName : dataItem.distance;
+//}
+-(void)setDataItem:(HandInModel *)dataItem{
     _dataItem = dataItem;
-    self.lb_name.text = dataItem.userName;
-    self.iv_user.image = [UIImage imageNamed:dataItem.imageName];
-    self.lb_age.text = dataItem.age;
-    self.lb_constellation.text = dataItem.constellationName;
-    self.lb_jobOrDistance.text = dataItem.jobName.length ? dataItem.jobName : dataItem.distance;
+    if (dataItem.nickname.length>0) {
+        self.nameLabel.text = dataItem.nickname;
+    }
+    if (dataItem.headimg.length >0) {
+        [self.bgImageView setImageWithString:dataItem.headimg placeHoldImageName:@"avatar_defaul"];
+    }
+    if (dataItem.declaration.length>0) {
+        self.loveContentLabel.text = [NSString stringWithFormat:@"“%@”",dataItem.declaration];
+    }
+    if (dataItem.sex == 0) {
+        _sexImage.image = [UIImage imageNamed:@"icon_female"];
+    }else if (dataItem.sex ==1){
+        _sexImage.image = [UIImage imageNamed:@"icon_male"];
+    }else{
+       _sexImage.image = [UIImage imageNamed:@" "];
+    }
+    
 }
-
-//#pragma mark - getter
-//
-//- (UIImageView *)iv_user {
-//    if (_iv_user == nil) {
-//        _iv_user = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 70)];
-//    }
-//    return _iv_user;
-//}
-//
-//- (UIImageView *)iv_like {
-//    if (_iv_like == nil) {
-//        _iv_like = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, 60, 60)];
-//        _iv_like.image = [UIImage imageNamed:@"likeLine"];
-//        _iv_like.alpha = 0;
-//    }
-//    return _iv_like;
-//}
-//
-//- (UIImageView *)iv_hate {
-//    if (_iv_hate == nil) {
-//        _iv_hate = [[UIImageView alloc]  initWithFrame:CGRectMake(self.frame.size.width - 20 - 60, 20, 60, 60)];
-//        _iv_hate.image = [UIImage imageNamed:@"hateLine"];
-//        _iv_hate.alpha = 0;
-//    }
-//    return _iv_hate;
-//}
-//
-//- (UILabel *)lb_name {
-//    if (_lb_name == nil) {
-//        _lb_name = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.iv_user.frame), 100, 20)];
-//        _lb_name.font = [UIFont boldSystemFontOfSize:16];
-//        
-//    }
-//    return _lb_name;
-//}
-//
-//- (UILabel *)lb_age {
-//    if (_lb_age == nil) {
-//        _lb_age = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.lb_name.frame), 30, 20)];
-//        _lb_age.font = [UIFont systemFontOfSize:13];
-//        _lb_age.textColor = [UIColor redColor];
-//        
-//    }
-//    return _lb_age;
-//}
-//
-//- (UILabel *)lb_constellation {
-//    if (_lb_constellation == nil) {
-//        _lb_constellation = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.lb_age.frame), CGRectGetMaxY(self.lb_name.frame), 50, 20)];
-//        _lb_constellation.font = [UIFont systemFontOfSize:11];
-//        
-//    }
-//    return _lb_constellation;
-//}
-//
-//- (UILabel *)lb_jobOrDistance {
-//    if (_lb_jobOrDistance == nil) {
-//        _lb_jobOrDistance = [[UILabel alloc] initWithFrame:CGRectMake(10, CGRectGetMaxY(self.lb_age.frame), 30, 20)];
-//        _lb_jobOrDistance.font = [UIFont systemFontOfSize:11];
-//    }
-//    return _lb_jobOrDistance;
-//}
 
 -(void)setContentLayout{
     [self.contentView addSubview:self.bgImageView];
@@ -196,7 +153,6 @@
         _nameLabel.textColor =DSColorFromHex(0x4D4D4D);
         _nameLabel.font = [UIFont systemFontOfSize:15];
         _nameLabel.textAlignment = NSTextAlignmentLeft;
-        _nameLabel.text = @"猜猜我是谁";
     }
     return _nameLabel;
 }
@@ -207,7 +163,7 @@
         _yearLabel.textColor =DSColorFromHex(0x4D4D4D);
         _yearLabel.font = [UIFont systemFontOfSize:12];
         _yearLabel.textAlignment = NSTextAlignmentLeft;
-        _yearLabel.text = @"19岁  166cm  月收入5000元";
+//        _yearLabel.text = @"19岁  166cm  月收入5000元";
     }
     return _yearLabel;
 }
@@ -239,7 +195,7 @@
         _loveContentLabel.font = [UIFont systemFontOfSize:12];
         _loveContentLabel.textAlignment = NSTextAlignmentLeft;
         _loveContentLabel.numberOfLines = 5;
-        _loveContentLabel.text = @"sdfghjkl;'fghjklcvbnm,xcvbnm,.sdfghjlcdasdfghjkertyu";
+//        _loveContentLabel.text = @"sdfghjkl;'fghjklcvbnm,xcvbnm,.sdfghjlcdasdfghjkertyu";
     }
     return _loveContentLabel;
 }

@@ -42,8 +42,11 @@
 -(void)loginSuccessWithDic: (PublicModel *)publicModel
 {
     //对从后台获取的数据进行处理，然后传给ViewController层进行显示
-    UserModel *userModel = [[UserModel alloc] initWithDict:publicModel.data];    //保存登录成功后，返回的用户数据
+    UserModel *userModel = [[UserModel alloc] initWithDict:publicModel.data];
+    
+    //保存登录成功后，返回的用户数据
     [UserDefaults writeUserDefaultObjectValue:userModel.im_token withKey:im_token_key];
+    
     [UserDefaults writeUserDefaultObjectValue:publicModel.data withKey:user_info];
 
     NSDictionary *dic = [UserDefaults readUserDefaultObjectValueForKey:user_info];
@@ -156,7 +159,8 @@
     [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_user_register method:@"post" parameter:muparameter success:^(NSDictionary *data) {
         PublicModel *publicModel = [self publicModelInitWithData:data];
         if ([publicModel.code integerValue] == CODE_SUCCESS) {
-            [self loginSuccessWithDic:publicModel];
+            [self registerSuccessWithDic:publicModel];
+            
         }
         else{
             [self errorCodeWithDescribe:publicModel.message];
@@ -169,7 +173,8 @@
 -(void)registerSuccessWithDic: (PublicModel *)publicModel
 {
     //对从后台获取的数据进行处理，然后传给ViewController层进行显示
-    UserModel *userModel = [[UserModel alloc] initWithDict:publicModel.data];    //保存登录成功后，返回的用户数据
+    UserModel *userModel = [[UserModel alloc] initWithDict:publicModel.data];
+    userModel.firstlog = @"1";//保存登录成功后，返回的用户数据
     [UserDefaults writeUserDefaultObjectValue:userModel.im_token withKey:im_token_key];
     [UserDefaults writeUserDefaultObjectValue:[userModel dictionaryRepresentation] withKey:user_info];
     self.returnBlock(userModel);
@@ -193,6 +198,20 @@
         else{
             [self errorCodeWithDescribe:publicModel.message];
         }
+        
+    } fail:^(NSString *error) {
+        [self errorCodeWithDescribe:error];
+    }];
+
+}
+
+-(void)addUserBaseWithToken:(NSString *)token Sex:(NSInteger)sex Birthday:(NSString *)birthday{
+    NSDictionary *parameter = @{@"token":token,
+                                @"sex":@(sex),
+                                @"birthday":birthday};
+    [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_user_addbase method:@"post" parameter:parameter success:^(NSDictionary *data) {
+        PublicModel *publicModel = [self publicModelInitWithData:data];
+        self.returnBlock(publicModel);
         
     } fail:^(NSString *error) {
         [self errorCodeWithDescribe:error];

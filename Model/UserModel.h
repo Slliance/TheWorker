@@ -51,5 +51,7 @@
 @property(nonatomic,assign)NSInteger resume;
 ///1：已经填写牵手信息，0：未填写
 @property(nonatomic,assign)NSInteger fate;
+///是否第一次登录
+@property (nonatomic, assign) NSInteger firstlog;
 
 @end

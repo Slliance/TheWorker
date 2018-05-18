@@ -32,4 +32,7 @@
 
 //忘记密码
 -(void)forgetPasswordWithMobile:(NSString *)mobile password:(NSString *)password rePassword:(NSString *)rePassword code:(NSString *)code;
+///第一次进入填写性别
+-(void)addUserBaseWithToken:(NSString *)token Sex:(NSInteger)sex Birthday:(NSString *)birthday;
+
 @end

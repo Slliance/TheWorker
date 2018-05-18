@@ -34,14 +34,7 @@
     NSDictionary *parameter = (NSDictionary*)[req mj_keyValues];
     [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_mine_send_resume method:@"post" parameter:parameter success:^(NSDictionary *data) {
         PublicModel *publicModel = [self publicModelInitWithData:data];
-        if ([publicModel.code integerValue] == CODE_SUCCESS) {
-          
-            self.returnBlock(data);
-        }
-        else{
-            [self errorCodeWithDescribe:publicModel.message];
-        }
-        
+            self.returnBlock(publicModel);
     } fail:^(NSString *error) {
         [self errorCodeWithDescribe:error];
     }];

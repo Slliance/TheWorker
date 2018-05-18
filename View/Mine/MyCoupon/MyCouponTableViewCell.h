@@ -11,11 +11,14 @@
 @interface MyCouponTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *bgImageView;
 @property (weak, nonatomic) IBOutlet UIButton *btnGet;
-@property (weak, nonatomic) IBOutlet UILabel *labelMoney;
 @property (weak, nonatomic) IBOutlet UILabel *labelName;
+@property (weak, nonatomic) IBOutlet UILabel *labelTitle;
+@property (weak, nonatomic) IBOutlet UILabel *labelcontent;
 @property (weak, nonatomic) IBOutlet UILabel *labelTime;
 
 @property (nonatomic, copy) void(^getBlock)(void);
 
 -(void)initCellWithDataType:(CouponModel *)model;
+@property(nonatomic,assign)NSInteger type;
+
 @end

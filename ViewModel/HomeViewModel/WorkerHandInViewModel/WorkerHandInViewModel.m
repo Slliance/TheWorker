@@ -63,14 +63,13 @@
         [muParemeter setObject:max_age forKey:@"max_age"];
     }
     
-    if (zone_code) {
-        [muParemeter setObject:zone_code forKey:@"zone_code"];
-    }
+
     if (sex) {
         if ([sex integerValue] != 2) {
             [muParemeter setObject:sex forKey:@"sex"];
         }
     }
+    
     [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_worker_hand_in_list method:@"post" parameter:muParemeter success:^(NSDictionary *data) {
         PublicModel *publicModel = [self publicModelInitWithData:data];
         if ([publicModel.code integerValue] == CODE_SUCCESS) {
@@ -162,6 +161,24 @@
     NSArray *array = publicModel.data[@"imgs"];
     model.imgs = array;
     self.returnBlock(model);
+}
+//获取经纬度
+
+
+-(void)getAPositionWithToken:(NSString *)token Lon:(NSString *)lon Lat:(NSString *)lat{
+    NSDictionary *parameter = @{@"token":token,@"lon":lon,@"lat":lat};
+    [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_get_position method:@"post" parameter:parameter success:^(NSDictionary *data) {
+        PublicModel *publicModel = [self publicModelInitWithData:data];
+        if ([publicModel.code integerValue] == CODE_SUCCESS) {
+            
+            self.returnBlock(publicModel);
+        }
+        else{
+            [self errorCodeWithDescribe:publicModel.message];
+        }
+    } fail:^(NSString *error) {
+        [self errorCodeWithDescribe:error];
+    }];
 }
 
 @end

@@ -35,8 +35,7 @@
     self.selectType = 0;
     //    [self chooseNot:nil];
     [self.itemTableView registerNib:[UINib nibWithNibName:@"MyCouponTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCouponTableViewCell"];
-    [self.itemTableView registerNib:[UINib nibWithNibName:@"MyCouponGetTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCouponGetTableViewCell"];
-    [self.itemTableView registerNib:[UINib nibWithNibName:@"MyCouponUsedTableViewCell" bundle:nil] forCellReuseIdentifier:@"MyCouponUsedTableViewCell"];
+   
     self.itemTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     __weak typeof (self)weakSelf = self;
@@ -102,6 +101,10 @@
     [self backBtnAction:sender];
 }
 - (IBAction)chooseNot:(id)sender {
+    
+    self.btnNot.backgroundColor = DSColorFromHex(0xF8F8F8);
+    self.btnYet.backgroundColor = [UIColor whiteColor];
+    self.btnUsed.backgroundColor = [UIColor whiteColor];
     self.btnNot.selected = YES;
     self.btnYet.selected = NO;
     self.btnUsed.selected = NO;
@@ -116,6 +119,9 @@
     self.btnYet.selected = YES;
     self.btnNot.selected = NO;
     self.btnUsed.selected = NO;
+    self.btnYet.backgroundColor = DSColorFromHex(0xF8F8F8);
+    self.btnNot.backgroundColor = [UIColor whiteColor];
+    self.btnUsed.backgroundColor = [UIColor whiteColor];
     self.lineLabel.center = self.btnYet.center;
     CGRect rect = self.lineLabel.frame;
     rect.origin.y = 43;
@@ -127,6 +133,9 @@
     self.btnUsed.selected = YES;
     self.btnYet.selected = NO;
     self.btnNot.selected = NO;
+    self.btnUsed.backgroundColor = DSColorFromHex(0xF8F8F8);
+    self.btnNot.backgroundColor = [UIColor whiteColor];
+    self.btnYet.backgroundColor = [UIColor whiteColor];
     self.lineLabel.center = self.btnUsed.center;
     CGRect rect = self.lineLabel.frame;
     rect.origin.y = 43;
@@ -137,38 +146,43 @@
 }
 #pragma mark - UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.itemArr.count;
+//    return self.itemArr.count;
+    return 3;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+     MyCouponTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyCouponTableViewCell"];
     if (self.selectType == 0) {
-        MyCouponTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyCouponTableViewCell"];
+       
 //        __weak typeof (self)weakSelf = self;
         [cell setGetBlock:^{
 
         }];
-        [cell initCellWithDataType:self.itemArr[indexPath.section]];
+//        [cell initCellWithDataType:self.itemArr[indexPath.section]];
+//        [cell initCellWithDataType:0];
+        [cell setType:0];
         return cell;
     }else if(self.selectType == 1){
-        MyCouponGetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyCouponGetTableViewCell"];
-        [cell initCellWithDataType:self.itemArr[indexPath.section]];
+     
+//        [cell initCellWithDataType:self.itemArr[indexPath.section]];
+        [cell setType:1];
         return cell;
     }
-    MyCouponUsedTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyCouponUsedTableViewCell"];
-    [cell initCellWithDataType:self.itemArr[indexPath.section]];
+//    [cell initCellWithDataType:self.itemArr[indexPath.section]];
+      [cell setType:2];
     return cell;
 }
-#pragma mark - UITableViewDelegate
 
+#pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 130;
+    return 137;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 10;
+    return 0.0001f;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.0001f;

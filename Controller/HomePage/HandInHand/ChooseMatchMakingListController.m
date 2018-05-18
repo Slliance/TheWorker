@@ -10,6 +10,8 @@
 #import "ChooseMatchMakingCell.h"
 @interface ChooseMatchMakingListController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong)UITableView *tableview;
+@property(nonatomic,strong)UIButton *changeBtn;
+
 @end
 
 @implementation ChooseMatchMakingListController
@@ -20,6 +22,14 @@
         _tableview.dataSource = self;
     }
     return _tableview;
+}
+-(UIButton *)changeBtn{
+    if (!_changeBtn) {
+        _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_changeBtn setImage:[UIImage imageNamed:@"btn_switching_lists"] forState:UIControlStateNormal];
+        [_changeBtn addTarget:self action:@selector(pressChangeBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _changeBtn;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,6 +48,9 @@
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];
+}
+-(void)pressChangeBtn:(UIButton*)sender{
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 95;

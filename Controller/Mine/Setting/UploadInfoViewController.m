@@ -14,7 +14,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "SettingViewController.h"
-#import "HandInHandSViewController.h"
+#import "ChooseMatchMakingController.h"
 #import "RentSelfViewController.h"
 #define VIDEOCACHEPATH [NSTemporaryDirectory() stringByAppendingPathComponent:@"videoCache"]
 @interface UploadInfoViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDelegate>{
@@ -77,14 +77,14 @@
                 }else if([controller isKindOfClass:[RentSelfViewController class]]){
                     RentSelfViewController *vc =(RentSelfViewController *)controller;
                     [self.navigationController popToViewController:vc animated:NO];
-                }else if([controller isKindOfClass:[HandInHandSViewController class]]){
+                }else if([controller isKindOfClass:[ChooseMatchMakingController class]]){
                     for (UIViewController *conVC in self.navigationController.viewControllers) {
                         if([conVC isKindOfClass:[RentSelfViewController class]]){
                             RentSelfViewController *vc =(RentSelfViewController *)conVC;
                             [self.navigationController popToViewController:vc animated:NO];
                         }
                     }
-                    HandInHandSViewController *vc =(HandInHandSViewController *)controller;
+                    ChooseMatchMakingController *vc =(ChooseMatchMakingController *)controller;
                     [self.navigationController popToViewController:vc animated:NO];
                 }else{
                     tag = 1;

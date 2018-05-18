@@ -15,7 +15,7 @@
 #import "WelfareViewController.h"
 #import "CareViewController.h"
 #import "BusinessViewController.h"
-#import "HandInHandSViewController.h"
+#import "ChooseMatchMakingController.h"
 #import "WantedJobViewController.h"
 #import "HomeViewModel.h"
 #import "BaseDataViewModel.h"
@@ -30,6 +30,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import "CommonAlertView.h"
+#import "WorkerHandInViewModel.h"
 
 #define KCURRENTCITYINFODEFAULTS [NSUserDefaults standardUserDefaults]
 @interface HomePageViewController ()<JFLocationDelegate, JFCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITabBarControllerDelegate,UITextFieldDelegate,CLLocationManagerDelegate>
@@ -44,6 +45,7 @@
 @property (nonatomic, strong) JFAreaDataManager *manager;
 @property (strong, nonatomic) UITextField *homeSearchField;
 @property (nonatomic, retain)HomeViewModel      *viewModel;
+@property (nonatomic, retain)WorkerHandInViewModel   *workModel;
 
 @property (nonatomic, retain) NSMutableArray        *bannerArr;
 @property (nonatomic, retain) NSMutableArray        *banneroneArr;
@@ -95,10 +97,18 @@
     }
     return _homeSearchField;
 }
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.locationManagers startUpdatingLocation];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    CommonAlertView  *common = [[CommonAlertView alloc]initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight/4)];
-//    common.commonType = CommonTypeLogin;
+//    CommonAlertView  *common = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-351/2,190, 351, 250)];
+//    [common setCommonType:CommonTypeLogin];
+//    CommonAlertView  *common = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-170,120, 340, 396)];
+//    [common setCommonType:CommonTypeCoupon];
+//    CommonAlertView  *common = [[CommonAlertView alloc]initWithFrame:CGRectMake(ScreenWidth/2-167,155, 334, 307)];
+//    [common setCommonType:CommonTypeApplyForJob];
 //    [self popView:common withOffset:0];
     ///定位
     self.locationManagers = [[CLLocationManager alloc] init];
@@ -109,7 +119,7 @@
     [self.locationManagers requestAlwaysAuthorization];
     [self.locationManagers requestWhenInUseAuthorization];
     
-    [self.locationManagers startUpdatingLocation];
+    
     
     self.BgNavImage.userInteractionEnabled = YES;
     self.locationManager = [[JFLocation alloc] init];
@@ -152,7 +162,7 @@
                 break;
                 case 2:
             {
-                HandInHandSViewController *vc = [[HandInHandSViewController alloc]init];
+                ChooseMatchMakingController *vc = [[ChooseMatchMakingController alloc]init];
                  vc.hidesBottomBarWhenPushed = YES;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                 
@@ -238,7 +248,7 @@
     //左视图默认是不显示的 设置为始终显示
     self.homeSearchField.leftViewMode= UITextFieldViewModeAlways;
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
-    attrs[NSForegroundColorAttributeName] = DSColorFromHex(0x999999);
+    attrs[NSForegroundColorAttributeName] = [UIColor whiteColor];
     //NSAttributedString:带有属性的文字（叫富文本，可以让你的文字丰富多彩）但是这个是不可变的带有属性的文字，创建完成之后就不可以改变了  所以需要可变的
     NSMutableAttributedString *placeHolder = [[NSMutableAttributedString alloc]initWithString:@"请输入地区、职位关键字" attributes:attrs];
     self.homeSearchField.attributedPlaceholder = placeHolder;
@@ -565,11 +575,17 @@
         
     }];
     NSLog(@"纬度=%f，经度=%f",self.latitude,self.longitude);
+    self.workModel = [[WorkerHandInViewModel alloc]init];
+    [self.workModel getAPositionWithToken:[self getToken] Lon:self.longitude Lat:self.latitude];
+    [self.workModel setBlockWithReturnBlock:^(id returnValue) {
+        NSLog(@"%@",returnValue);
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
     [self.locationManagers stopUpdatingLocation];
     
     
 }
-
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {

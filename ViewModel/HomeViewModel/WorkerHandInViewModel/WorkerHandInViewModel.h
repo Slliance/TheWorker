@@ -24,4 +24,7 @@
 -(void)publishUserInfoWithDeclaration:(NSString *)declaration introduce:(NSString *)introduce imgs:(NSArray *)imgs token:(NSString *)token;
 //我的相亲详情
 -(void)fetchMyFateDetailWithToken:(NSString *)token;
+
+//获取当前经纬度
+-(void)getAPositionWithToken:(NSString *)token Lon:(NSString*)lon Lat:(NSString*)lat;
 @end

@@ -28,5 +28,9 @@
 @property (nonatomic, retain) NSNumber *Id;
 @property (nonatomic, retain) NSNumber *is_collect;
 @property (nonatomic, copy) NSString *company_describale;
+///
+//@property (nonatomic, copy) NSString *companys_describale;
 @property (nonatomic, copy) NSString *collect_id;
+///分享URL
+@property (nonatomic,copy)NSString *shared_address;
 @end

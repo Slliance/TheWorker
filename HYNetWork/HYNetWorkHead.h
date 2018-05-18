@@ -49,7 +49,8 @@
 #define url_user_verification_code              @"index.php/index/index/mobileCode"
 //忘记密码
 #define url_user_forgot_pwd                     @"index.php/index/user/forgotPwd"
-
+//填写性别
+#define url_user_addbase                     @"index.php/index/user/addbase"
 
 
 /**
@@ -82,6 +83,8 @@
 
 //首页
 #define url_worker_hand_in_hand_home            @"index.php/index/fate/index"
+//获取经纬度
+#define url_get_position                       @"index.php/index/fate/getWz"
 //相亲员工列表
 #define url_worker_hand_in_list                 @"index.php/index/fate/fateList"
 //相亲人员详情

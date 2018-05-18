@@ -13,41 +13,70 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     
     if (self = [super initWithFrame:frame]) {
-        self.layer.cornerRadius = 8;
-        self.clipsToBounds = YES;
-        self.backgroundColor = [UIColor whiteColor];
+        
+        
         
     }
     return self;
 }
 
 -(void)setCommonType:(CommonAlertViewType)commonType{
-    switch (self.commonType) {
+    _commonType = commonType;
+    switch (commonType) {
         case CommonTypeLogin:
         {
+            self.layer.cornerRadius = 8;
+            self.clipsToBounds = YES;
+            self.backgroundColor = [UIColor whiteColor];
             [self addSubview:self.sexLabel];
             [self addSubview:self.yearLabel];
             [self addSubview:self.maleBtn];
             [self addSubview:self.femalemaleBtn];
             [self addSubview:self.yearBtn];
             [self addSubview:self.sureBtn];
-            self.sexLabel.frame = CGRectMake(15, 15, 80, 40);
-            self.maleBtn.frame = CGRectMake(120, 15, 40, 40);
-            self.femalemaleBtn.frame = CGRectMake(180, 15, 40, 40);
-            self.yearLabel.frame = CGRectMake(15, 55, 80, 40);
-            self.yearBtn.frame = CGRectMake(120, 55, 150, 40);
-            self.sureBtn.frame = CGRectMake(120, 110, 100, 40);
-            
+            self.sexLabel.frame = CGRectMake(46, 48, 70, 14);
+            self.maleBtn.frame = CGRectMake(116, 48, 40, 14);
+            self.femalemaleBtn.frame = CGRectMake(180, 48, 40, 14);
+            self.yearLabel.frame = CGRectMake(46, 88, 70, 40);
+            self.yearBtn.frame = CGRectMake(116, 88, 189, 40);
+            self.sureBtn.frame = CGRectMake(101, 175, 150, 40);
+            [_sureBtn setTitle:@"确定" forState:UIControlStateNormal];
         }
             break;
         case CommonTypeCoupon:
         {
-            
+            [self addSubview:self.checkUpImge];
+            [self.checkUpImge addSubview:self.dismissBtn];
+            [self.checkUpImge addSubview:self.sureBtn];
+            self.checkUpImge.frame = CGRectMake(0, 0, 340, 396);
+            self.dismissBtn.frame = CGRectMake(325, 5, 20, 20);
+            self.sureBtn.frame = CGRectMake(95, 326, 150, 40);
+            [_sureBtn setTitle:@"一键领取" forState:UIControlStateNormal];
         }
             break;
-        case CommonTypeCouponFinished:
-        {
             
+        case CommonTypeCouponfinished:
+        {
+            _checkUpImge.image = [UIImage imageNamed:@"login_popuped"];
+            [self addSubview:self.checkUpImge];
+            [self.checkUpImge addSubview:self.dismissBtn];
+            [self.checkUpImge addSubview:self.sureBtn];
+            self.checkUpImge.frame = CGRectMake(0, 0, 340, 396);
+            self.dismissBtn.frame = CGRectMake(325, 5, 20, 20);
+            self.sureBtn.frame = CGRectMake(95, 289, 150, 40);
+            [_sureBtn setTitle:@"查看卡包" forState:UIControlStateNormal];
+        }
+            break;
+        case CommonTypeApplyForJob:
+        {
+            [self addSubview:self.checkUpImge];
+            [self.checkUpImge addSubview:self.dismissBtn];
+            [self.checkUpImge addSubview:self.sureBtn];
+            _checkUpImge.image = [UIImage imageNamed:@"jobsearch_popup"];
+            self.checkUpImge.frame = CGRectMake(0, 0, 334, 307);
+            self.dismissBtn.frame = CGRectMake(306, -10, 20, 20);
+            self.sureBtn.frame = CGRectMake(91, 214, 150, 40);
+            [_sureBtn setTitle:@"查看详情" forState:UIControlStateNormal];
         }
             break;
         default:
@@ -107,24 +136,91 @@
 -(CommonChooseBtn *)yearBtn{
     if (!_yearBtn) {
         _yearBtn = [[CommonChooseBtn alloc]init];
-        _yearBtn.titleLabel.text = @"2018-05-02";
         [_yearBtn.selectedBtn addTarget:self action:@selector(pressYearBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _yearBtn;
 }
+
+
+-(UIImageView *)checkUpImge{
+    if (!_checkUpImge) {
+        _checkUpImge = [[UIImageView alloc]init];
+        _checkUpImge.image = [UIImage imageNamed:@"login_popup"];
+        _checkUpImge.userInteractionEnabled = YES;
+    }
+    return _checkUpImge;
+}
+
+-(UIButton *)dismissBtn{
+    if (!_dismissBtn) {
+        _dismissBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dismissBtn setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+        [_dismissBtn addTarget:self action:@selector(dismissBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _dismissBtn;
+}
 -(UIButton *)sureBtn{
     if (!_sureBtn) {
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sureBtn.backgroundColor = DSColorFromHex(0xEEEEEE);
-        [_sureBtn setTitle:@"确定" forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _sureBtn.backgroundColor = DSColorFromHex(0xFFCE00);
+        _sureBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_sureBtn setTitleColor:DSColorFromHex(0x4D4D4D) forState:UIControlStateNormal];
         [_sureBtn addTarget:self action:@selector(pressSureBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _sureBtn;
 }
-
+-(void)pressYearBtn:(UIButton*)sender{
+    if ([self.delegate respondsToSelector:@selector(selectedYearBtn)]) {
+        [self.delegate selectedYearBtn];
+    }
+}
+-(void)dismissBtn:(UIButton*)sender{
+    if ([self.delegate respondsToSelector:@selector(selecteddismissBtn)]) {
+        [self.delegate selecteddismissBtn];
+    }
+}
 -(void)pressSureBtn:(UIButton*)sender{
-    
+    switch (self.commonType) {
+        case CommonTypeLogin:
+        {
+            NSString * sex ;
+            if (_tmpBtn == _maleBtn) {
+                sex = @"1";
+            }else if (_tmpBtn==_femalemaleBtn){
+                sex = @"0";
+            }else{
+               
+            }
+            if ([self.delegate respondsToSelector:@selector(commitCommonTypeLogin:Sex:)]) {
+                [self.delegate commitCommonTypeLogin:_yearBtn.titleLabel.text Sex:sex];
+            }
+        }
+            break;
+        case CommonTypeCoupon:
+        {
+            
+            if ([self.delegate respondsToSelector:@selector(commitCommonTypeCoupon)]) {
+                [self.delegate commitCommonTypeCoupon];
+            }
+        }
+            break;
+        case CommonTypeCouponfinished:
+        {
+            if ([self.delegate respondsToSelector:@selector(commitCheckPackage)]) {
+                [self.delegate commitCheckPackage];
+            }
+        }
+            break;
+        case CommonTypeApplyForJob:
+        {
+            if ([self.delegate respondsToSelector:@selector(commitApplyForJob)]) {
+                [self.delegate commitApplyForJob];
+            }
+        }
+            break;
+        default:
+            break;
+    }
 }
 -(void)pressMaleOrFemaleBtn:(UIButton*)sender{
     if (self.tmpBtn == nil){

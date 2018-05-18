@@ -18,6 +18,7 @@
 #import "MyResumeViewModel.h"
 #import "MyResumeModel.h"
 
+
 @interface FillApplicationViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDelegate,UITextFieldDelegate>
 @property (strong, nonatomic)  UIButton *btnSubmit;
 @property (weak, nonatomic) IBOutlet UIButton *btnChooseEdu;
@@ -72,6 +73,7 @@
 @property (nonatomic, assign) NSInteger imgType;//0身份证正面1身份证反面2技能证书
 @property(nonatomic,strong)MyResumeViewModel *viewModel;
 @property(nonatomic,strong)MyResumeModel*resultModel;
+
 @end
 
 @implementation FillApplicationViewController
