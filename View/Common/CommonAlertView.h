@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger,CommonAlertViewType) {
 
 
 @end
-@interface CommonAlertView : UIView
+@interface CommonAlertView : UIView<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,weak)id<CommonAlertViewDelegate>delegate;
 
@@ -38,11 +38,11 @@ typedef NS_ENUM(NSInteger,CommonAlertViewType) {
 @property(nonatomic,strong)CommonChooseBtn *yearBtn;
 ///领取优惠券、领取成功
 @property(nonatomic,strong)UIImageView *checkUpImge;
-
-
+@property(nonatomic,strong)UITableView *tableview;
 @property(nonatomic,strong)UIButton *dismissBtn;
 
 @property(nonatomic,strong)UIButton *sureBtn;
 
+@property(nonatomic,strong)NSArray *dataArr;
 
 @end

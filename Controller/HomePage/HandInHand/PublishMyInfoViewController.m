@@ -284,7 +284,7 @@
     } WithErrorBlock:^(id errorCode) {
         [self showJGProgressWithMsg:errorCode];
     }];
-    [viewModel publishUserInfoWithDeclaration:self.txtLove.text introduce:self.txtView.text imgs:self.imageUrlArray token:[self getToken]];
+//    [viewModel publishUserInfoWithDeclaration:self.txtLove.text introduce:self.txtView.text imgs:self.imageUrlArray token:[self getToken]];
 }
 
 -(void)deleteAction:(UIButton *)btn{

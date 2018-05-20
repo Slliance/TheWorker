@@ -16,4 +16,9 @@
 
 //使用优惠券
 -(void)useCoupon:(NSNumber *)Id token:(NSString *)token shopNO:(NSString *)shopNO;
+//新人领取优惠券列表
+-(void)getNewCouponListWithToken:(NSString *)token;
+
+///一键领取优惠券
+-(void)receiveNewCouponWithToken:(NSString*)token;
 @end

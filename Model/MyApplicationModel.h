@@ -24,4 +24,7 @@
 @property (nonatomic, copy) NSString *resume;
 @property (nonatomic, retain ) NSNumber *mobile;
 @property (nonatomic, retain) NSNumber *sex;
+@property (nonatomic, copy) NSString *introduction;
+@property (nonatomic, assign) NSInteger salary;
+@property (nonatomic, copy) NSString *health_no;
 @end

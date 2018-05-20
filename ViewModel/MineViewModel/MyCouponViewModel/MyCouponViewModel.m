@@ -59,7 +59,33 @@
     }];
     
 }
-
+///新人领取优惠券列表
+-(void)getNewCouponListWithToken:(NSString *)token{
+    NSDictionary *parameter = @{
+                                @"token":token};
+    [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_use_newcoupon method:@"post" parameter:parameter success:^(NSDictionary *data) {
+        PublicModel *publicModel = [self publicModelInitWithData:data];
+        if ([publicModel.code integerValue] == CODE_SUCCESS) {
+             [self handleMyCouponList:publicModel];
+        }
+        else{
+            self.errorBlock(publicModel.message);
+        }
+    } fail:^(NSString *error) {
+        [self errorCodeWithDescribe:error];
+    }];
+}
+///一键领取
+-(void)receiveNewCouponWithToken:(NSString *)token{
+    NSDictionary *parameter = @{
+                                @"token":token};
+    [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_use_receive_newcoupon method:@"post" parameter:parameter success:^(NSDictionary *data) {
+        PublicModel *publicModel = [self publicModelInitWithData:data];
+        self.returnBlock(publicModel);
+    } fail:^(NSString *error) {
+        [self errorCodeWithDescribe:error];
+    }];
+}
 //使用优惠券
 -(void)useCoupon:(NSNumber *)Id token:(NSString *)token shopNO:(NSString *)shopNO{
     NSDictionary *parameter = @{

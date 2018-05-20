@@ -45,6 +45,8 @@
 #import "StartViewModel.h"
 #import "PGDatePickManager.h"
 #import "CGXPickerView.h"
+#import "MyCouponViewModel.h"
+
 @interface MineViewController ()<UITextFieldDelegate,CommonAlertViewDelegate,UIPickerViewDelegate,PGDatePickerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *headBtn;
@@ -82,6 +84,8 @@
 @property(nonatomic,strong)CommonAlertView *finishedAlertview;
 @property (nonatomic ,retain) UserModel *userModel;
 @property(nonatomic,retain)StartViewModel *startModel;
+@property(nonatomic,retain)MyCouponViewModel *couponModel;
+
 @end
 
 @implementation MineViewController
@@ -186,6 +190,10 @@
             NSLog(@"%@",self.userModel.token);
             [self reloadView];
             if (self.userModel.firstlog ==0) {
+//                NSDictionary *userinfo = [UserDefaults readUserDefaultObjectValueForKey:user_info];
+//                UserModel *userModel = [[UserModel alloc] initWithDict:userinfo];
+//                userModel.firstlog = 0;
+//                [UserDefaults writeUserDefaultObjectValue:[userModel dictionaryRepresentation] withKey:user_info];
                 [self popView:self.chooseAlertView withOffset:0];
             }
         } WithErrorBlock:^(id errorCode) {
@@ -242,7 +250,7 @@
         PublicModel *publicModel = (PublicModel*)returnValue;
         if ([publicModel.code integerValue] == CODE_SUCCESS) {
             [weakSelf hidPopView];
-            [weakSelf popView:weakSelf.checkUpAlertview withOffset:0];
+            [weakSelf getNewCouponList];
         }else{
             [weakSelf showJGProgressWithMsg:publicModel.message];
         }
@@ -251,8 +259,35 @@
     }];
     
 }
+-(void)getNewCouponList{
+    self.couponModel = [[MyCouponViewModel alloc]init];
+    [self.couponModel getNewCouponListWithToken:[self getToken]];
+    __weak typeof (self)weakSelf = self;
+    [self.couponModel setBlockWithReturnBlock:^(id returnValue) {
+        NSArray*arr = (NSArray*)returnValue;
+        [weakSelf.checkUpAlertview setDataArr:arr];
+    [weakSelf popView:weakSelf.checkUpAlertview withOffset:0];
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+}
 -(void)commitCommonTypeCoupon{
-     [self hidPopView];
+       [self hidPopView];
+    __weak typeof (self)weakSelf = self;
+    [self.couponModel receiveNewCouponWithToken:[self getToken]];
+    [self.couponModel setBlockWithReturnBlock:^(id returnValue) {
+       
+        PublicModel *publicModel = (PublicModel*)returnValue;
+        if ([publicModel.code integerValue] == CODE_SUCCESS) {
+             [weakSelf popView:weakSelf.finishedAlertview withOffset:0];
+        }else{
+            [weakSelf showJGProgressWithMsg:publicModel.message];
+        }
+       
+    } WithErrorBlock:^(id errorCode) {
+        
+    }];
+    
 }
 -(void)commitCheckPackage{
      [self hidPopView];

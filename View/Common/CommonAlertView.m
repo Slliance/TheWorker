@@ -7,6 +7,7 @@
 //
 
 #import "CommonAlertView.h"
+#import "CommonAlertViewCell.h"
 
 @implementation CommonAlertView
 
@@ -48,7 +49,9 @@
             [self addSubview:self.checkUpImge];
             [self.checkUpImge addSubview:self.dismissBtn];
             [self.checkUpImge addSubview:self.sureBtn];
+            [self.checkUpImge addSubview:self.tableview];
             self.checkUpImge.frame = CGRectMake(0, 0, 340, 396);
+            self.tableview.frame = CGRectMake(25, 96, 290, 220);
             self.dismissBtn.frame = CGRectMake(325, 5, 20, 20);
             self.sureBtn.frame = CGRectMake(95, 326, 150, 40);
             [_sureBtn setTitle:@"一键领取" forState:UIControlStateNormal];
@@ -57,7 +60,7 @@
             
         case CommonTypeCouponfinished:
         {
-            _checkUpImge.image = [UIImage imageNamed:@"login_popuped"];
+           
             [self addSubview:self.checkUpImge];
             [self.checkUpImge addSubview:self.dismissBtn];
             [self.checkUpImge addSubview:self.sureBtn];
@@ -65,6 +68,7 @@
             self.dismissBtn.frame = CGRectMake(325, 5, 20, 20);
             self.sureBtn.frame = CGRectMake(95, 289, 150, 40);
             [_sureBtn setTitle:@"查看卡包" forState:UIControlStateNormal];
+             self.checkUpImge.image = [UIImage imageNamed:@"login_popuped"];
         }
             break;
         case CommonTypeApplyForJob:
@@ -92,6 +96,17 @@
         _sexLabel.textColor = DSColorFromHex(0x999999);
     }
     return _sexLabel;
+}
+-(UITableView *)tableview{
+    if (!_tableview) {
+        _tableview = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableview.delegate = self;
+        _tableview.dataSource = self;
+        _tableview.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableview.showsVerticalScrollIndicator = NO;
+        
+    }
+    return _tableview;
 }
 -(UIButton *)maleBtn{
     if (!_maleBtn) {
@@ -238,12 +253,36 @@
     }
     
 }
-//- (void)showInfo:(NSString *)info{
-//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
-//    hud.mode = MBProgressHUDModeText;
-//    hud.labelText = info;
-//    hud.yOffset = -45;
-//    [hud hide:YES afterDelay:2];
-//}
-
+-(void)setDataArr:(NSMutableArray *)dataArr{
+    _dataArr = dataArr;
+    [_tableview reloadData];
+    
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArr.count;
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 110;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *identify = @"CommonAlertViewCell";
+    CommonAlertViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identify];
+    if (!cell) {
+        cell = [[CommonAlertViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identify];
+    }
+    if (indexPath.row%2==0) {
+        cell.bgImage.image = [UIImage imageNamed:@"bg_voucher_1"];
+        cell.nameLabel.textColor = DSColorFromHex(0xF3B252);
+    }else{
+        cell.bgImage.image = [UIImage imageNamed:@"bg_voucher_2"];
+        cell.nameLabel.textColor = DSColorFromHex(0xFA8238);
+        
+    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setModel:self.dataArr[indexPath.row]];
+    return cell;
+}
 @end

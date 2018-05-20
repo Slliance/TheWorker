@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewModel.h"
-
+#import "AddFateReq.h"
 @interface WorkerHandInViewModel : BaseViewModel
 
 
@@ -21,7 +21,7 @@
 -(void)fetchWorkerHandInDetailWith:(NSString *)token Id:(NSString *)Id;
 
 //发布个人信息
--(void)publishUserInfoWithDeclaration:(NSString *)declaration introduce:(NSString *)introduce imgs:(NSArray *)imgs token:(NSString *)token;
+-(void)publishHandInHanInfoWithReq:(AddFateReq*)req;
 //我的相亲详情
 -(void)fetchMyFateDetailWithToken:(NSString *)token;
 

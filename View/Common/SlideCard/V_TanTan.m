@@ -49,8 +49,8 @@
     if (dataItem.nickname.length>0) {
         self.nameLabel.text = dataItem.nickname;
     }
-    if (dataItem.headimg.length >0) {
-        [self.bgImageView setImageWithString:dataItem.headimg placeHoldImageName:@"avatar_defaul"];
+    if (dataItem.imgs.count >0) {
+        [self.bgImageView setImageWithString:dataItem.imgs[0] placeHoldImageName:@""];
     }
     if (dataItem.declaration.length>0) {
         self.loveContentLabel.text = [NSString stringWithFormat:@"“%@”",dataItem.declaration];
@@ -62,7 +62,30 @@
     }else{
        _sexImage.image = [UIImage imageNamed:@" "];
     }
-    
+    if ([dataItem.ditance stringValue].length<=3&&[dataItem.ditance stringValue].length>0) {
+        self.distanceLabel.text = [NSString stringWithFormat:@"距离%@m",dataItem.ditance];
+    }else if ([dataItem.ditance stringValue].length>3){
+        self.distanceLabel.text = [NSString stringWithFormat:@"距离%fkm",[dataItem.ditance doubleValue]/1000];
+    }
+    if (dataItem.brithday.length<1) {
+        dataItem.brithday = @"";
+    }else{
+        dataItem.brithday = [NSString stringWithFormat:@"%@岁",dataItem.brithday];
+    }
+    NSString *height;
+    if ([dataItem.height stringValue].length<1) {
+        height = @"";
+    }else{
+        height = [NSString stringWithFormat:@"%@cm",dataItem.height];
+    }
+    NSString *income;
+    if ([dataItem.monthly_income stringValue].length<1) {
+        income = @"";
+    }else{
+        income = [NSString stringWithFormat:@"月收入%@元",dataItem.monthly_income];
+    }
+    self.yearLabel.text = [NSString stringWithFormat:@"%@  %@  %@",dataItem.brithday,height,income];
+    self.loveContentLabel.text = dataItem.declaration;
 }
 
 -(void)setContentLayout{
@@ -125,7 +148,7 @@
 -(UIImageView *)bgImageView{
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc]init];
-        _bgImageView.image =[UIImage imageNamed:@"photo"];
+//        _bgImageView.image =[UIImage imageNamed:@"photo"];
         _bgImageView.userInteractionEnabled = YES;
     }
     return _bgImageView;
@@ -173,7 +196,7 @@
         _distanceLabel.textColor =DSColorFromHex(0x1C6AF2);
         _distanceLabel.font = [UIFont systemFontOfSize:12];
         _distanceLabel.textAlignment = NSTextAlignmentLeft;
-        _distanceLabel.text = @"距离900m";
+//        _distanceLabel.text = @"距离900m";
     }
     return _distanceLabel;
 }

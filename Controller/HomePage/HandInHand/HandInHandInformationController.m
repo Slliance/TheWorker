@@ -19,6 +19,7 @@
 #import "PGDatePickManager.h"
 #import "CZHAddressPickerView.h"
 #import "CGXPickerView.h"
+#import "WorkerHandInViewModel.h"
 
 @interface HandInHandInformationController ()<UIScrollViewDelegate,UITextFieldDelegate,UITextViewDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
@@ -614,8 +615,52 @@
 }
 
 -(void)pressFinishBtn:(UIButton*)sender{
-    ChooseMatchMakingController *matchVC = [[ChooseMatchMakingController alloc]init];
-    [self.navigationController pushViewController:matchVC animated:YES];
+    [self comitData];
+}
+-(void)comitData{
+    WorkerHandInViewModel *viewmodel = [[WorkerHandInViewModel alloc]init];
+    AddFateReq *req = [[AddFateReq alloc]init];
+    req.token = [self getToken];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSNumber *income = [numberFormatter numberFromString:self.incomeField.text];
+    NSNumber *height = [numberFormatter numberFromString:self.heightField.text];
+    req.monthly_income = income;
+    req.height = height;
+    req.birthday = self.yearBtn.titleLabel.text;
+    req.nicheng = self.nikeNameField.text;
+    req.live_address = _cityBtn.titleLabel.text;
+    req.declaration = self.declarationLoveTextview.text;
+    if (_tmpBtn == _maleBtn) {
+        req.sex= @"1";
+    }else if (_tmpBtn ==_femalemaleBtn){
+        req.sex = @"0";
+    }else{
+        req.sex = @"2";
+    }
+    if (_marryBtn == _unmarriedBtn) {
+        req.marital_status= @"1";
+    }else if (_marryBtn ==_marriedBtn){
+        req.marital_status = @"0";
+    }else if(_marriedBtn ==_nurturedBtn){
+        req.marital_status = @"2";
+    }
+    
+    req.imgs = self.imageUrlArray;
+    [viewmodel publishHandInHanInfoWithReq:req];
+    [viewmodel setBlockWithReturnBlock:^(id returnValue) {
+        PublicModel *publicModel = (PublicModel*)returnValue;
+        if ([publicModel.code integerValue] == CODE_SUCCESS) {
+            [self showJGProgressWithMsg:@"保存成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            if (publicModel.message.length>0) {
+                 [self showJGProgressWithMsg:publicModel.message];
+            }
+        }
+    } WithErrorBlock:^(id errorCode) {
+         
+    }];
 }
 -(void)pressBackBtn{
     [self.navigationController popViewControllerAnimated:YES];

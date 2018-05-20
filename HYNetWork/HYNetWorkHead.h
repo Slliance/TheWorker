@@ -309,6 +309,10 @@
 #define url_get_coupon                          @"index.php/index/Coupon/receive"
 //使用优惠券
 #define url_use_coupon                          @"index.php/index/Coupon/apply"
+//新人领取优惠券
+#define url_use_newcoupon                          @"index.php/index/user/getnewcoupons"
+//一键领取
+#define url_use_receive_newcoupon                          @"index.php/index/user/new_coupons"
 //意见反馈
 #define url_user_feed_back                      @"index.php/index/index/feedback"
 /*钱包*/

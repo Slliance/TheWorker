@@ -122,24 +122,16 @@
 
 
 //发布相亲信息
--(void)publishUserInfoWithDeclaration:(NSString *)declaration introduce:(NSString *)introduce imgs:(NSArray *)imgs token:(NSString *)token{
-    NSDictionary *parameter = @{@"token":token,
-                                @"declaration":declaration,
-                                @"introduce":introduce,
-                                @"imgs":imgs};
+
+-(void)publishHandInHanInfoWithReq:(AddFateReq *)req{
+    NSDictionary *parameter = [req mj_keyValues];
     [[HYNetwork sharedHYNetwork] sendRequestWithURL:url_worker_hand_in_addfate method:@"post" parameter:parameter success:^(NSDictionary *data) {
         PublicModel *publicModel = [self publicModelInitWithData:data];
-        if ([publicModel.code integerValue] == CODE_SUCCESS) {
-            self.returnBlock(publicModel.message);
-        }
-        else{
-            [self errorCodeWithDescribe:publicModel.message];
-        }
+        self.returnBlock(publicModel);
     } fail:^(NSString *error) {
         [self errorCodeWithDescribe:error];
     }];
 }
-
 //我的相亲详情
 -(void)fetchMyFateDetailWithToken:(NSString *)token{
     NSDictionary *parameter = @{@"token":token};

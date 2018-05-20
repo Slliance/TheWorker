@@ -16,6 +16,7 @@
 @property (nonatomic, copy) NSString        *uid;
 @property (nonatomic, assign) NSInteger       sex  ;
 @property (nonatomic, copy) NSString        *Id  ;
+///爱情宣言
 @property (nonatomic, copy) NSString        *declaration;
 @property (nonatomic, copy) NSString        *introduce;
 @property (nonatomic, retain) NSArray *imgs;
@@ -27,4 +28,12 @@
 @property (nonatomic, copy) NSString *collect_id;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *createtime;
+///距离
+@property (nonatomic, copy) NSNumber *ditance;
+///月收入
+@property (nonatomic, copy) NSNumber *monthly_income;
+///身高
+@property (nonatomic, copy) NSNumber *height;
+///年龄
+@property (nonatomic, copy) NSString *brithday;
 @end

@@ -26,6 +26,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *resumeLabel;
 @property (weak, nonatomic) IBOutlet UIView *resumeBgView;
 @property (weak, nonatomic) IBOutlet UIView *stateBgView;
+@property (weak, nonatomic) IBOutlet UILabel *expectedLael;
+@property (weak, nonatomic) IBOutlet UILabel *expectedDetailLabel;
+@property (weak, nonatomic) IBOutlet UILabel *healthLabel;
+@property (weak, nonatomic) IBOutlet UILabel *detailHealthLabel;
 
 @end
 
@@ -50,6 +54,13 @@
     self.jobNameLabel.text = model.job_name;
     self.companyLabel.text = model.company;
     self.nameLabel.text = model.name;
+    if (model.salary!=0) {
+        self.expectedDetailLabel.text = [NSString stringWithFormat:@"%ld",(long)model.salary];
+    }
+    
+    self.resumeLabel.text = model.introduction;
+    self.detailHealthLabel.text = model.health_no;
+    
     self.mobileLabel.text = [NSString stringWithFormat:@"%@",model.mobile];
     if ([model.sex integerValue] == 0) {
         self.sexLabel.text = @"女";
@@ -89,7 +100,7 @@
     rect.size.height = size.height;
     self.resumeLabel.frame = rect;
     CGRect rectResume = self.resumeBgView.frame;
-    rectResume.size.height = rect.origin.y + rect.size.height + 10;
+    rectResume.size.height = rect.origin.y + rect.size.height + 60;
     self.resumeBgView.frame = rectResume;
     CGRect rectState = self.stateBgView.frame;
     rectState.origin.y = rectResume.origin.y + rectResume.size.height + 10;
